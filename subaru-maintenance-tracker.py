@@ -211,137 +211,84 @@ class MaintenanceScheduler:
 if HAS_STREAMLIT and st.runtime.exists():
     import base64
     import os
+    import urllib.request
 
-    # Self-contained SVG logo source codes for local offline access
-    STI_LOGO_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="200" height="100">
-  <defs>
-    <!-- Vibrant STI Pink Gradient -->
-    <linearGradient id="sti-pink-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF5CA3" />
-      <stop offset="50%" stop-color="#FF007F" />
-      <stop offset="100%" stop-color="#C2005F" />
-    </linearGradient>
-    <!-- Brushed Chrome / Metal Gradient for border -->
-    <linearGradient id="metal-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF" />
-      <stop offset="30%" stop-color="#D1D1D6" />
-      <stop offset="70%" stop-color="#8E8E93" />
-      <stop offset="100%" stop-color="#3A3A3C" />
-    </linearGradient>
-    <filter id="sti-glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3.5" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-  </defs>
-  <!-- Background panel to frame the logo beautifully -->
-  <g transform="skewX(-14) translate(15, 15)">
-    <!-- Outer metallic styled ring -->
-    <rect x="0" y="0" width="235" height="90" rx="14" fill="none" stroke="url(#metal-grad)" stroke-width="4.5" filter="url(#sti-glow)" />
-    <!-- Letter S (Italic paths for crisp resolution) -->
-    <path d="M 52,24 C 38,24 28,29 25,37 L 37,39 C 39,35 44,32 51,32 C 57,32 60,35 60,39 C 60,43 55,45 46,47 C 33,50 25,56 25,65 C 25,76 35,82 49,82 C 63,82 72,76 75,67 L 63,65 C 61,69 57,72 50,72 C 44,72 39,70 39,65 C 39,61 44,59 52,57 C 65,54 74,48 74,40 C 74,30 64,24 52,24 Z" fill="url(#sti-pink-grad)" />
-    <!-- Letter T -->
-    <path d="M 82,26 L 138,26 L 135,36 L 117,36 L 111,80 L 98,80 L 104,36 L 85,36 Z" fill="url(#sti-pink-grad)" />
-    <!-- Letter I -->
-    <path d="M 148,26 L 163,26 L 154,80 L 139,80 Z" fill="url(#sti-pink-grad)" />
-    <!-- Under accent line -->
-    <line x1="172" y1="52" x2="218" y2="52" stroke="url(#sti-pink-grad)" stroke-width="6" stroke-linecap="round" />
-  </g>
-</svg>"""
+    STI_FILE = "sti_logo.svg"
+    SUBARU_FILE = "subaru_logo.svg"
 
-    SUBARU_LOGO_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 120" width="280" height="140">
-  <defs>
-    <radialGradient id="blue-grad" cx="40%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#0066cc" />
-      <stop offset="40%" stop-color="#0033aa" />
-      <stop offset="85%" stop-color="#001166" />
-      <stop offset="100%" stop-color="#000833" />
-    </radialGradient>
-    <linearGradient id="silver-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="30%" stop-color="#e1e1e1"/>
-      <stop offset="70%" stop-color="#9d9d9d"/>
-      <stop offset="100%" stop-color="#696969"/>
-    </linearGradient>
-    <linearGradient id="chrome-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="50%" stop-color="#aaaaaa"/>
-      <stop offset="51%" stop-color="#777777"/>
-      <stop offset="100%" stop-color="#333333"/>
-    </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3.5" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
-  </defs>
-  <!-- Outer Bezel -->
-  <ellipse cx="250" cy="60" rx="242" ry="57" fill="url(#chrome-grad)"/>
-  <ellipse cx="250" cy="60" rx="238" ry="53" fill="#000822"/>
-  <!-- Blue Oval Body -->
-  <ellipse cx="250" cy="60" rx="230" ry="46" fill="url(#blue-grad)"/>
-  <!-- Silver Inner Accent Rim -->
-  <ellipse cx="250" cy="60" rx="222" ry="38" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
-  <!-- Symmetrical Constellation Stars -->
-  <g filter="url(#glow)">
-    <!-- Large Star (Main Left) -->
-    <g transform="translate(132, 60)">
-      <path d="M 0,-40 Q 0,0 40,0 Q 0,0 0,40 Q 0,0 -40,0 Q 0,0 0,-40 Z" fill="url(#silver-grad)"/>
-      <circle cx="0" cy="0" r="4" fill="#ffffff"/>
-    </g>
-    <!-- Five Small Stars (Clustered Right) -->
-    <g transform="translate(230, 42) scale(0.42)">
-      <path d="M 0,-40 Q 0,0 40,0 Q 0,0 0,40 Q 0,0 -40,0 Q 0,0 0,-40 Z" fill="url(#silver-grad)"/>
-      <circle cx="0" cy="0" r="3" fill="#ffffff"/>
-    </g>
-    <g transform="translate(270, 52) scale(0.45)">
-      <path d="M 0,-40 Q 0,0 40,0 Q 0,0 0,40 Q 0,0 -40,0 Q 0,0 0,-40 Z" fill="url(#silver-grad)"/>
-      <circle cx="0" cy="0" r="3" fill="#ffffff"/>
-    </g>
-    <g transform="translate(242, 72) scale(0.40)">
-      <path d="M 0,-40 Q 0,0 40,0 Q 0,0 0,40 Q 0,0 -40,0 Q 0,0 0,-40 Z" fill="url(#silver-grad)"/>
-      <circle cx="0" cy="0" r="3" fill="#ffffff"/>
-    </g>
-    <g transform="translate(285, 76) scale(0.48)">
-      <path d="M 0,-40 Q 0,0 40,0 Q 0,0 0,40 Q 0,0 -40,0 Q 0,0 0,-40 Z" fill="url(#silver-grad)"/>
-      <circle cx="0" cy="0" r="3" fill="#ffffff"/>
-    </g>
-    <g transform="translate(272, 94) scale(0.38)">
-      <path d="M 0,-40 Q 0,0 40,0 Q 0,0 0,40 Q 0,0 -40,0 Q 0,0 0,-40 Z" fill="url(#silver-grad)"/>
-      <circle cx="0" cy="0" r="3" fill="#ffffff"/>
-    </g>
-  </g>
-  <!-- Connecting links -->
-  <line x1="172" y1="60" x2="213" y2="42" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
-  <line x1="172" y1="60" x2="225" y2="72" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
-  <line x1="230" y1="42" x2="270" y2="52" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
-  <line x1="270" y1="52" x2="285" y2="76" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
-  <line x1="242" y1="72" x2="272" y2="94" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
-</svg>"""
+    # Direct GitHub raw URLs for both files based on the user's workspace repository
+    STI_URLS = [
+        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_logo.svg",
+        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_logo.svg.png"
+    ]
+    SUBARU_URLS = [
+        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/subaru_logo.svg",
+        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/subaru_logo.svg.png"
+    ]
 
-    # Write files to local disk so they exist alongside the application
-    for filename, content in [("sti_logo.svg", STI_LOGO_SVG), ("subaru_logo.svg", SUBARU_LOGO_SVG)]:
-        try:
-            if not os.path.exists(filename):
-                with open(filename, "w", encoding="utf-8") as f:
-                    f.write(content)
-        except Exception:
-            pass
+    def download_asset(urls, filepath):
+        for url in urls:
+            try:
+                req = urllib.request.Request(
+                    url,
+                    headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+                )
+                with urllib.request.urlopen(req, timeout=8) as response:
+                    data = response.read()
+                    if data:
+                        with open(filepath, "wb") as f:
+                            f.write(data)
+                        return True
+            except Exception:
+                continue
+        return False
 
-    # Read and encode to Base64 to render fully self-contained offline
+    # Download if they don't exist locally
+    if not os.path.exists(STI_FILE):
+        download_asset(STI_URLS, STI_FILE)
+    if not os.path.exists(SUBARU_FILE):
+        download_asset(SUBARU_URLS, SUBARU_FILE)
+
+    # Base64 loading logic with dynamic MIME-type detection
+    sti_src = ""
     try:
-        with open("sti_logo.svg", "r", encoding="utf-8") as f:
-            sti_svg_data = f.read()
+        if os.path.exists(STI_FILE):
+            with open(STI_FILE, "rb") as f:
+                sti_data = f.read()
+            sti_mime = "image/svg+xml" if (STI_FILE.endswith(".svg") or b"<svg" in sti_data[:100]) else "image/png"
+            sti_b64 = base64.b64encode(sti_data).decode("utf-8")
+            sti_src = f"data:{sti_mime};base64,{sti_b64}"
     except Exception:
-        sti_svg_data = STI_LOGO_SVG
-    sti_b64 = base64.b64encode(sti_svg_data.encode("utf-8")).decode("utf-8")
+        pass
 
+    subaru_src = ""
     try:
-        with open("subaru_logo.svg", "r", encoding="utf-8") as f:
-            subaru_svg_data = f.read()
+        if os.path.exists(SUBARU_FILE):
+            with open(SUBARU_FILE, "rb") as f:
+                subaru_data = f.read()
+            subaru_mime = "image/svg+xml" if (SUBARU_FILE.endswith(".svg") or b"<svg" in subaru_data[:100]) else "image/png"
+            subaru_b64 = base64.b64encode(subaru_data).decode("utf-8")
+            subaru_src = f"data:{subaru_mime};base64,{subaru_b64}"
     except Exception:
-        subaru_svg_data = SUBARU_LOGO_SVG
-    subaru_b64 = base64.b64encode(subaru_svg_data.encode("utf-8")).decode("utf-8")
+        pass
 
-    
+    # Clean minimal geometric text fallbacks in case of offline launch without files
+    if not sti_src:
+        sti_fallback = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" width="200" height="100">
+            <rect width="100%" height="100%" fill="#111111" rx="8"/>
+            <text x="50%" y="58%" font-family="'Montserrat', sans-serif" font-size="28" font-weight="800" fill="#FF007F" text-anchor="middle">STI</text>
+        </svg>"""
+        sti_b64 = base64.b64encode(sti_fallback.encode("utf-8")).decode("utf-8")
+        sti_src = f"data:image/svg+xml;base64,{sti_b64}"
+
+    if not subaru_src:
+        subaru_fallback = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 140" width="280" height="140">
+            <rect width="100%" height="100%" fill="#111111" rx="8"/>
+            <text x="50%" y="58%" font-family="'Montserrat', sans-serif" font-size="28" font-weight="800" fill="#0066cc" text-anchor="middle">SUBARU</text>
+        </svg>"""
+        subaru_b64 = base64.b64encode(subaru_fallback.encode("utf-8")).decode("utf-8")
+        subaru_src = f"data:image/svg+xml;base64,{subaru_b64}"
+
     # Set page layout config
     st.set_page_config(page_title="Subaru STI Maintenance Tracker", page_icon="🏎️", layout="wide")
 
@@ -496,7 +443,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             f"""
             <div style="display: flex; justify-content: flex-start; align-items: center; height: 140px;">
-                <img src="data:image/svg+xml;base64,{sti_b64}" width="200" height="100" style="object-fit: contain;"/>
+                <img src="{sti_src}" width="200" height="100" style="object-fit: contain;"/>
             </div>
             """,
             unsafe_allow_html=True
@@ -517,7 +464,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             f"""
             <div style="display: flex; justify-content: flex-end; align-items: center; height: 140px;">
-                <img src="data:image/svg+xml;base64,{subaru_b64}" width="280" height="140" style="object-fit: contain;"/>
+                <img src="{subaru_src}" width="280" height="140" style="object-fit: contain;"/>
             </div>
             """,
             unsafe_allow_html=True
