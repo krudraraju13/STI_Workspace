@@ -388,6 +388,14 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
+        /* Hide the link/anchor icons next to all titles */
+        h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+            display: none !important;
+        }
+        [data-testid="stHeaderActionElements"] {
+            display: none !important;
+        }
+
         /* Customize Streamlit Tabs with STI theme colors */
         button[data-baseweb="tab"] {
             font-family: 'Montserrat', sans-serif !important;
@@ -514,7 +522,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 st.rerun()
 
 
-    # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
+        # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
     logo_left_col, title_col, logo_right_col = st.columns([1.0, 3.4, 1.6], vertical_alignment="center")
     with logo_left_col:
         st.markdown(
