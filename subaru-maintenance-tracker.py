@@ -249,13 +249,26 @@ if HAS_STREAMLIT and st.runtime.exists():
     if not os.path.exists(SUBARU_FILE):
         download_asset(SUBARU_URLS, SUBARU_FILE)
 
-    # Base64 loading logic with dynamic MIME-type detection
+    # Base64 loading logic with content-first robust MIME-type detection
+    def determine_mime(filepath, file_data):
+        if file_data.startswith(b"\x89PNG") or file_data.startswith(b"\x89\x50\x4e\x47") or file_data.startswith(b"\x89PNG\r\n\x1a\n") or file_data.startswith(b"\x89PNG\r\n\x1a\n") or file_data[:4] == b"\x89PNG" or file_data[:4] == b"\x89\x50\x4e\x47":
+            return "image/png"
+        elif file_data.startswith(b"GIF8"):
+            return "image/gif"
+        elif b"<svg" in file_data[:500] or b"<SVG" in file_data[:500]:
+            return "image/svg+xml"
+        elif filepath.lower().endswith(".png"):
+            return "image/png"
+        elif filepath.lower().endswith(".svg"):
+            return "image/svg+xml"
+        return "image/png"
+
     sti_src = ""
     try:
         if os.path.exists(STI_FILE):
             with open(STI_FILE, "rb") as f:
                 sti_data = f.read()
-            sti_mime = "image/svg+xml" if (STI_FILE.endswith(".svg") or b"<svg" in sti_data[:100]) else "image/png"
+            sti_mime = determine_mime(STI_FILE, sti_data)
             sti_b64 = base64.b64encode(sti_data).decode("utf-8")
             sti_src = f"data:{sti_mime};base64,{sti_b64}"
     except Exception:
@@ -266,7 +279,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         if os.path.exists(SUBARU_FILE):
             with open(SUBARU_FILE, "rb") as f:
                 subaru_data = f.read()
-            subaru_mime = "image/svg+xml" if (SUBARU_FILE.endswith(".svg") or b"<svg" in subaru_data[:100]) else "image/png"
+            subaru_mime = determine_mime(SUBARU_FILE, subaru_data)
             subaru_b64 = base64.b64encode(subaru_data).decode("utf-8")
             subaru_src = f"data:{subaru_mime};base64,{subaru_b64}"
     except Exception:
@@ -443,7 +456,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             f"""
             <div style="display: flex; justify-content: flex-start; align-items: center; height: auto; min-height: 100px; max-height: 140px; width: 100%;">
-                <img src="{sti_src}" style="max-width: 100%; max-height: 100px; object-fit: contain; height: auto;"/>
+                <img src="{sti_src}" style="width: 100%; max-width: 200px; height: auto; max-height: 100px; object-fit: contain; display: block;"/>
             </div>
             """,
             unsafe_allow_html=True
@@ -464,7 +477,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             f"""
             <div style="display: flex; justify-content: flex-end; align-items: center; height: auto; min-height: 100px; max-height: 140px; width: 100%;">
-                <img src="{subaru_src}" style="max-width: 100%; max-height: 100px; object-fit: contain; height: auto;"/>
+                <img src="{subaru_src}" style="width: 100%; max-width: 280px; height: auto; max-height: 100px; object-fit: contain; display: block; margin-left: auto;"/>
             </div>
             """,
             unsafe_allow_html=True
