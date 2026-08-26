@@ -544,7 +544,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     with tab_checklist:
         if mileage is not None:
-            st.markdown("### 🔧 Symmetrical AWD Maintenance Checklist")
+            st.markdown("### 🔧 Maintenance Checklist")
             st.write("Check the items you have completed at your current mileage, then click **💾 Save Checked Services** at the bottom to log them.")
 
             # Categorize items by criticality
@@ -621,7 +621,8 @@ if HAS_STREAMLIT and st.runtime.exists():
                 "Rear Differential Oil Swap",
                 "Spark Plug Installation (DOHC Boxer)",
                 "Timing Belt (EJ257) Overview"
-            ]
+            ],
+            label_visibility="collapsed"
         )
         
         if proc_selection == "Engine Oil & Filter Swap":
@@ -956,7 +957,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # History Tab
     with tab_history:
-        st.subheader("📜 Maintenance & Service Log")
+        # st.subheader("📜 Maintenance & Service Log")
         
         history = load_history()
         
