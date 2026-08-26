@@ -317,68 +317,29 @@ if HAS_STREAMLIT and st.runtime.exists():
   <line x1="242" y1="72" x2="272" y2="94" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="3,3"/>
 </svg>"""
 
-    import urllib.request
-
-    STI_LOGO_URL = "https://upload.wikimedia.org/wikipedia/commons/7/70/STi_logo.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
-    SUBARU_LOGO_URL = "https://crystalpng.com/wp-content/uploads/2025/07/Subaru-Logo.png"
-
-    STI_FILE = "sti_logo.svg"
-    SUBARU_FILE = "subaru_logo.png"
-
-    # Define robust asset download function
-    def download_asset(url, filepath):
+    # Write files to local disk so they exist alongside the application
+    for filename, content in [("sti_logo.svg", STI_LOGO_SVG), ("subaru_logo.svg", SUBARU_LOGO_SVG)]:
         try:
-            req = urllib.request.Request(
-                url, 
-                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
-            )
-            with urllib.request.urlopen(req, timeout=5) as response:
-                data = response.read()
-                if data:
-                    with open(filepath, "wb") as f:
-                        f.write(data)
-                    return True
+            if not os.path.exists(filename):
+                with open(filename, "w", encoding="utf-8") as f:
+                    f.write(content)
         except Exception:
             pass
-        return False
 
-    # Check and download if missing
-    if not os.path.exists(STI_FILE):
-        download_asset(STI_LOGO_URL, STI_FILE)
-    if not os.path.exists(SUBARU_FILE):
-        download_asset(SUBARU_LOGO_URL, SUBARU_FILE)
-
-    # 1. Base64 loading logic for STI Logo (supporting local file cache)
+    # Read and encode to Base64 to render fully self-contained offline
     try:
-        if os.path.exists(STI_FILE):
-            with open(STI_FILE, "rb") as f:
-                sti_data = f.read()
-            # Check if it's SVG or PNG
-            sti_mime = "image/svg+xml" if (STI_FILE.endswith(".svg") or b"<svg" in sti_data[:100]) else "image/png"
-            sti_b64 = base64.b64encode(sti_data).decode("utf-8")
-            sti_src = f"data:{sti_mime};base64,{sti_b64}"
-        else:
-            raise ValueError()
+        with open("sti_logo.svg", "r", encoding="utf-8") as f:
+            sti_svg_data = f.read()
     except Exception:
-        # Fallback to hardcoded SVG
-        sti_b64 = base64.b64encode(STI_LOGO_SVG.encode("utf-8")).decode("utf-8")
-        sti_src = f"data:image/svg+xml;base64,{sti_b64}"
+        sti_svg_data = STI_LOGO_SVG
+    sti_b64 = base64.b64encode(sti_svg_data.encode("utf-8")).decode("utf-8")
 
-    # 2. Base64 loading logic for Subaru Logo
     try:
-        if os.path.exists(SUBARU_FILE):
-            with open(SUBARU_FILE, "rb") as f:
-                subaru_data = f.read()
-            # Check if it's SVG or PNG
-            subaru_mime = "image/svg+xml" if (SUBARU_FILE.endswith(".svg") or b"<svg" in subaru_data[:100]) else "image/png"
-            subaru_b64 = base64.b64encode(subaru_data).decode("utf-8")
-            subaru_src = f"data:{subaru_mime};base64,{subaru_b64}"
-        else:
-            raise ValueError()
+        with open("subaru_logo.svg", "r", encoding="utf-8") as f:
+            subaru_svg_data = f.read()
     except Exception:
-        # Fallback to hardcoded SVG
-        subaru_b64 = base64.b64encode(SUBARU_LOGO_SVG.encode("utf-8")).decode("utf-8")
-        subaru_src = f"data:image/svg+xml;base64,{subaru_b64}"
+        subaru_svg_data = SUBARU_LOGO_SVG
+    subaru_b64 = base64.b64encode(subaru_svg_data.encode("utf-8")).decode("utf-8")
 
     
     # Set page layout config
@@ -535,7 +496,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             f"""
             <div style="display: flex; justify-content: flex-start; align-items: center; height: 140px;">
-                <img src="{sti_src}" width="200" height="100" style="object-fit: contain;"/>
+                <img src="data:image/svg+xml;base64,{sti_b64}" width="200" height="100" style="object-fit: contain;"/>
             </div>
             """,
             unsafe_allow_html=True
@@ -556,7 +517,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             f"""
             <div style="display: flex; justify-content: flex-end; align-items: center; height: 140px;">
-                <img src="{subaru_src}" width="280" height="140" style="object-fit: contain;"/>
+                <img src="data:image/svg+xml;base64,{subaru_b64}" width="280" height="140" style="object-fit: contain;"/>
             </div>
             """,
             unsafe_allow_html=True
