@@ -442,8 +442,8 @@ if HAS_STREAMLIT and st.runtime.exists():
     with logo_left_col:
         st.markdown(
             f"""
-            <div style="display: flex; justify-content: flex-start; align-items: center; height: 140px;">
-                <img src="{sti_src}" width="200" height="100" style="object-fit: contain;"/>
+            <div style="display: flex; justify-content: flex-start; align-items: center; height: auto; min-height: 100px; max-height: 140px; width: 100%;">
+                <img src="{sti_src}" style="max-width: 100%; max-height: 100px; object-fit: contain; height: auto;"/>
             </div>
             """,
             unsafe_allow_html=True
@@ -463,8 +463,8 @@ if HAS_STREAMLIT and st.runtime.exists():
     with logo_right_col:
         st.markdown(
             f"""
-            <div style="display: flex; justify-content: flex-end; align-items: center; height: 140px;">
-                <img src="{subaru_src}" width="280" height="140" style="object-fit: contain;"/>
+            <div style="display: flex; justify-content: flex-end; align-items: center; height: auto; min-height: 100px; max-height: 140px; width: 100%;">
+                <img src="{subaru_src}" style="max-width: 100%; max-height: 100px; object-fit: contain; height: auto;"/>
             </div>
             """,
             unsafe_allow_html=True
