@@ -871,27 +871,27 @@ if HAS_STREAMLIT and st.runtime.exists():
                 "Capacity": "4.5 Quarts (4.3 Liters) with filter"
             },
             {
-                "Compartment": "Manual Transmission & Front Diff",
+                "Compartment": "Manual Transmission & Front Diff (6-Speed Transaxle)",
                 "Fluid Type / Specification": "API GL-5 High Performance Gear Oil (SAE 75W-90)",
-                "Capacity": "Dry Fill: 4.1 Quarts. Service Fill: ~3.5 Quarts"
+                "Capacity": "Dry Fill: 4.1 Quarts (4.1 Liters / 8.7 Pints) | Service Fill: ~3.5 Quarts (3.3 Liters)"
             },
             {
                 "Compartment": "Rear Differential",
                 "Fluid Type / Specification": "API GL-5 Hypoid Gear Oil (SAE 75W-90 / Motul 90PA for track)",
-                "Capacity": "1.0 Quart (0.95 Liters)"
+                "Capacity": "1.0 Quart (0.95 Liters / 2.1 Pints)"
             },
             {
                 "Compartment": "Engine Cooling System",
-                "Fluid Type / Specification": "Subaru Super Coolant (Pre-Mixed Blue) + Conditioner",
-                "Capacity": "8.1 Quarts (7.7 Liters)"
+                "Fluid Type / Specification": "Subaru Super Coolant (Pre-Mixed Blue)",
+                "Capacity": "8.1 Quarts (7.7 Liters / 2.025 Gallons)"
             },
             {
                 "Compartment": "Brake & Clutch Reservoirs",
-                "Fluid Type / Specification": "DOT 3 or DOT 4 Premium Synthetic",
-                "Capacity": "Fill to Max Line (~1.0 Liter system)"
+                "Fluid Type / Specification": "DOT 3 or DOT 4 Hydraulic Fluid",
+                "Capacity": "Fill to Max Reservoir Line (~1.0 Liter)"
             },
             {
-                "Compartment": "Power Steering System",
+                "Compartment": "Power Steering System (Hydraulic)",
                 "Fluid Type / Specification": "Dexron III / Subaru ATF-HP",
                 "Capacity": "~0.8 Liters (System capacity)"
             }
