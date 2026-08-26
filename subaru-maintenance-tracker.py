@@ -264,7 +264,58 @@ if HAS_STREAMLIT and st.runtime.exists():
             banner_local_found = path
             break
 
-    # Download if they don't exist locally
+    # Robust file size and semantic validation for assets
+    def is_valid_svg(filepath):
+        if not os.path.exists(filepath):
+            return False
+        try:
+            # SVG files should be at least 1KB
+            if os.path.getsize(filepath) < 1000:
+                return False
+            with open(filepath, "rb") as f:
+                content = f.read()
+            # If the file is actually a PNG (even with .svg extension), check PNG header
+            if content.startswith(b"\x89PNG") or content.startswith(b"\x89\x50\x4e\x47"):
+                return True
+            # For SVG files, must contain the closing tag
+            if b"</svg>" in content.lower():
+                return True
+            return False
+        except Exception:
+            return False
+
+    def is_valid_png(filepath):
+        if not os.path.exists(filepath):
+            return False
+        try:
+            if os.path.getsize(filepath) < 5000:
+                return False
+            with open(filepath, "rb") as f:
+                header = f.read(8)
+            if header.startswith(b"\x89PNG") or header.startswith(b"\x89\x50\x4e\x47"):
+                return True
+            return False
+        except Exception:
+            return False
+
+    # Force auto-heal of any corrupted, truncated, or failed local asset downloads
+    if os.path.exists(STI_FILE) and not is_valid_svg(STI_FILE):
+        try:
+            os.remove(STI_FILE)
+        except Exception:
+            pass
+    if os.path.exists(SUBARU_FILE) and not is_valid_svg(SUBARU_FILE):
+        try:
+            os.remove(SUBARU_FILE)
+        except Exception:
+            pass
+    if os.path.exists(BANNER_FILE) and not is_valid_png(BANNER_FILE) and not banner_local_found:
+        try:
+            os.remove(BANNER_FILE)
+        except Exception:
+            pass
+
+    # Download missing or validated-and-cleared corrupted files
     if not os.path.exists(STI_FILE):
         download_asset(STI_URLS, STI_FILE)
     if not os.path.exists(SUBARU_FILE):
