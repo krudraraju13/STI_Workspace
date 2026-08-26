@@ -215,7 +215,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     STI_FILE = "sti_logo.svg"
     SUBARU_FILE = "subaru_logo.svg"
-    BANNER_FILE = "rally_neon_banner.png"
+
 
     # Direct GitHub raw URLs for files based on the user's workspace repository
     STI_URLS = [
@@ -226,9 +226,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/subaru_logo.svg",
         "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/subaru_logo.svg.png"
     ]
-    BANNER_URLS = [
-        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/rally_neon_banner.png"
-    ]
+
 
     # Direct GitHub raw URLs for both files based on the user's workspace repository
     STI_URLS = [
@@ -257,12 +255,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 continue
         return False
 
-    # Search local paths first
-    banner_local_found = None
-    for path in [BANNER_FILE, os.path.join(os.path.dirname(os.path.abspath(__file__)), BANNER_FILE), "/workspace/artifacts/rally_neon_banner.png", "/workspace/out/rally_neon_banner.png"]:
-        if os.path.exists(path):
-            banner_local_found = path
-            break
+
 
     # Robust file size and semantic validation for assets
     def is_valid_svg(filepath):
@@ -309,19 +302,14 @@ if HAS_STREAMLIT and st.runtime.exists():
             os.remove(SUBARU_FILE)
         except Exception:
             pass
-    if os.path.exists(BANNER_FILE) and not is_valid_png(BANNER_FILE) and not banner_local_found:
-        try:
-            os.remove(BANNER_FILE)
-        except Exception:
-            pass
+
 
     # Download missing or validated-and-cleared corrupted files
     if not os.path.exists(STI_FILE):
         download_asset(STI_URLS, STI_FILE)
     if not os.path.exists(SUBARU_FILE):
         download_asset(SUBARU_URLS, SUBARU_FILE)
-    if not os.path.exists(BANNER_FILE) and not banner_local_found:
-        download_asset(BANNER_URLS, BANNER_FILE)
+
 
     # Base64 loading logic with content-first robust MIME-type detection
     def determine_mime(filepath, file_data):
@@ -359,17 +347,7 @@ if HAS_STREAMLIT and st.runtime.exists():
     except Exception:
         pass
 
-    banner_src = ""
-    try:
-        target_banner = banner_local_found if (banner_local_found and os.path.exists(banner_local_found)) else (BANNER_FILE if os.path.exists(BANNER_FILE) else None)
-        if target_banner:
-            with open(target_banner, "rb") as f:
-                banner_data = f.read()
-            banner_mime = determine_mime(target_banner, banner_data)
-            banner_b64 = base64.b64encode(banner_data).decode("utf-8")
-            banner_src = f"data:{banner_mime};base64,{banner_b64}"
-    except Exception:
-        pass
+
 
     # Clean minimal geometric text fallbacks in case of offline launch without files
     if not sti_src:
@@ -536,48 +514,39 @@ if HAS_STREAMLIT and st.runtime.exists():
                 st.rerun()
 
 
-    # Responsive Brand Logo Header Block with dynamic rally neon background image banner
-    banner_bg_style = f"background-image: linear-gradient(rgba(17, 24, 39, 0.82), rgba(17, 24, 39, 0.92)), url('{banner_src}');" if banner_src else "background: linear-gradient(135deg, #0f172a, #1e293b);"
-    
-    st.markdown(
-        f"""
-        <div style="
-            {banner_bg_style}
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            padding: 22px 30px;
-            margin-bottom: 22px;
-            border: 1px solid rgba(255, 0, 127, 0.25);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        ">
-            <!-- Left Logo Column -->
-            <div style="flex: 1; min-width: 150px; display: flex; justify-content: flex-start; align-items: center; height: auto; max-height: 90px;">
-                <img src="{sti_src}" style="width: auto; max-width: 180px; height: auto; max-height: 80px; object-fit: contain; display: block;"/>
+    # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
+    logo_left_col, title_col, logo_right_col = st.columns([1.0, 3.4, 1.6], vertical_alignment="center")
+    with logo_left_col:
+        st.markdown(
+            f"""
+            <div style="display: flex; justify-content: flex-start; align-items: center; height: auto; min-height: 100px; max-height: 140px; width: 100%;">
+                <img src="{sti_src}" style="width: 100%; max-width: 200px; height: auto; max-height: 100px; object-fit: contain; display: block;"/>
             </div>
-            
-            <!-- Central Title & Subtitle Column -->
-            <div style="flex: 2; min-width: 320px; text-align: center; padding: 5px 0;">
-                <h1 style="color: #FFFFFF; margin: 0; font-size: 2.1em; letter-spacing: -0.5px; font-family: 'Montserrat', sans-serif; font-weight: 800; text-shadow: 0 2px 5px rgba(0,0,0,0.95);">
-                    🏎️ Subaru STI Maintenance Tracker
-                </h1>
-                <p style="color: #FF007F; margin: 6px 0 0 0; font-size: 1.1em; font-family: 'Montserrat', sans-serif; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.9); letter-spacing: 0.2px;">
+            """,
+            unsafe_allow_html=True
+        )
+    with title_col:
+        st.markdown(
+            """
+            <div style='padding-top:10px; text-align: center;'>
+                <h1 style='color:var(--text-color);margin:0;font-size:2.2em;letter-spacing:-0.5px;'>🏎️ Subaru STI Maintenance Tracker</h1>
+                <p style='color:#FF007F;margin:5px 0 0 0;font-size:1.15em;font-family:"Montserrat",sans-serif;font-weight:700;'>
                     Symmetrical All-Wheel Drive Performance Suite &bull; Factory Specifications &bull; Interactive Log
                 </p>
             </div>
-
-            <!-- Right Logo Column -->
-            <div style="flex: 1; min-width: 180px; display: flex; justify-content: flex-end; align-items: center; height: auto; max-height: 95px;">
-                <img src="{subaru_src}" style="width: auto; max-width: 280px; height: auto; max-height: 90px; object-fit: contain; display: block; margin-left: auto;"/>
+            """,
+            unsafe_allow_html=True
+        )
+    with logo_right_col:
+        st.markdown(
+            f"""
+            <div style="display: flex; justify-content: flex-end; align-items: center; height: auto; min-height: 100px; max-height: 140px; width: 100%;">
+                <img src="{subaru_src}" style="width: 100%; max-width: 320px; height: auto; max-height: 115px; object-fit: contain; display: block; margin-left: auto;"/>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+            """,
+            unsafe_allow_html=True
+        )
+    st.markdown("<hr style='margin:10px 0 20px 0; border-color:#334155;'/>", unsafe_allow_html=True)
 
     # Tabs layout
     tab_checklist, tab_procedures, tab_parts, tab_fluids, tab_history, tab_manual = st.tabs([
