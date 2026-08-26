@@ -367,7 +367,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         subaru_src = f"data:image/svg+xml;base64,{subaru_b64}"
 
     # Set page layout config
-    st.set_page_config(page_title="Subaru STI Maintenance Tracker", page_icon="◆", layout="wide")
+    st.set_page_config(page_title="Subaru STI Maintenance Tracker", page_icon="⚙", layout="wide")
 
     # Global CSS customization for fonts, responsiveness, align, spacing, and colors
     st.markdown(
@@ -537,7 +537,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             """
             <div style='padding-top:10px; text-align: center;'>
-                <h1 style='color:var(--text-color);margin:0;font-size:2.2em;letter-spacing:-0.5px;'>◆ Subaru STI Maintenance Tracker</h1>
+                <h1 style='color:var(--text-color);margin:0;font-size:2.2em;letter-spacing:-0.5px;'>⚙ Subaru STI Maintenance Tracker</h1>
                 <p style='color:#FF007F;margin:5px 0 0 0;font-size:1.15em;font-family:"Montserrat",sans-serif;font-weight:700;'>
                     Symmetrical All-Wheel Drive Performance Suite &bull; Factory Specifications &bull; Interactive Log
                 </p>
@@ -558,16 +558,16 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # Tabs layout
     tab_checklist, tab_procedures, tab_parts, tab_fluids, tab_history, tab_manual = st.tabs([
-        "◆ Status",
-        "◆ Procedures",
-        "◆ OEM Parts",
-        "◆ Fluids & Grades",
-        "◆ Service Log",
-        "◆ Reference Guide"
+        "⌖ Status",
+        "⚙ Procedures",
+        "⎔ OEM Parts",
+        "⛢ Fluids & Grades",
+        "▤ Service Log",
+        "☰ Reference Guide"
     ])
 
     with tab_checklist:
-        st.markdown("### ◆ Odometer & Operating Conditions")
+        st.markdown("### ⌖ Odometer & Operating Conditions")
         st.markdown(
             """
             <style>
@@ -616,7 +616,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     with tab_checklist:
         if mileage is not None:
-            st.markdown("### ◆ Maintenance Checklist")
+            st.markdown("### ⌖ Maintenance Checklist")
             st.write("Check the items you have completed at your current mileage, then click **Save Checked Services** at the bottom to log them.")
 
             # Categorize items by criticality
@@ -681,7 +681,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # Procedures Tab
     with tab_procedures:
-        st.subheader("◆ Maintenance Procedures Guide")
+        st.subheader("⚙ Maintenance Procedures Guide")
         st.write("Step-by-step DIY instructions and crucial checks for WRX STI owners.")
         
         proc_selection = st.selectbox(
@@ -700,7 +700,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         if proc_selection == "Engine Oil & Filter Swap":
             st.markdown(
                 """
-                ### ◆ Engine Oil & Filter Swap Procedure
+                ### ⛢ Engine Oil & Filter Swap Procedure
                 **Target Thread Torque:** Drain plug: `33-34 ft-lb` (Ensure a new OEM metal crush washer P/N `11126AA000` is used).
                 
                 **Step-by-Step Instructions:**
@@ -715,7 +715,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         elif proc_selection == "Manual Transmission Gear Oil Replacement":
             st.markdown(
                 """
-                ### ◆ Manual Transmission Gear Oil Swap
+                ### ⚙ Manual Transmission Gear Oil Swap
                 **Target Thread Torque:** T70 Torx drain plug: `32.5 ft-lb`. Fill plug: `23.5 ft-lb`.
                 
                 **Step-by-Step Instructions:**
@@ -730,7 +730,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         elif proc_selection == "Rear Differential Oil Swap":
             st.markdown(
                 """
-                ### ◆ Rear Differential Oil Swap
+                ### ⚙ Rear Differential Oil Swap
                 **Target Thread Torque:** Fill and drain plugs: `36.2 ft-lb`.
                 
                 **Step-by-Step Instructions:**
@@ -745,7 +745,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         elif proc_selection == "Spark Plug Installation (DOHC Boxer)":
             st.markdown(
                 """
-                ### ◆ Spark Plug Replacement
+                ### ⌱ Spark Plug Replacement
                 **Target Thread Torque:** NGK Spark Plugs: `13–17 ft-lb` (Dry threads!).
                 
                 **Step-by-Step Instructions:**
@@ -759,7 +759,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         elif proc_selection == "Timing Belt (EJ257) Overview":
             st.markdown(
                 """
-                ### ◆ Timing Belt DOHC EJ257 Overview
+                ### ⚙ Timing Belt DOHC EJ257 Overview
                 The EJ257 utilizes a DOHC layout with four camshafts. A snapped or jumped timing belt will cause instant, catastrophic valve-to-piston contact.
                 
                 **Key Advice:**
@@ -773,7 +773,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # OEM Parts Tab
     with tab_parts:
-        st.subheader("◆ OEM Parts & Part Numbers Reference")
+        st.subheader("⎔ OEM Parts & Part Numbers Reference")
         st.write("Browse and search through the consolidated catalog of OEM parts, including pricing and real-time maintenance service requirements.")
         
         # Insert parts catalog
@@ -903,10 +903,10 @@ if HAS_STREAMLIT and st.runtime.exists():
         # Interactive search & filter controls
         col_search, col_cat = st.columns([2, 1])
         with col_search:
-            search_query = st.text_input("Search parts, categories, or notes:", "").strip().lower()
+            search_query = st.text_input("⌕ Search parts, categories, or notes:", "").strip().lower()
         with col_cat:
             category_list = ["All Categories"] + sorted(list(set(df_catalog["Category"].tolist())))
-            selected_category = st.selectbox("Filter by category:", category_list)
+            selected_category = st.selectbox("▤ Filter by category:", category_list)
         
         # Security Input Sanitization: strip HTML tags and hazardous characters to prevent XSS
         sanitized_query = "".join([c for c in search_query if c not in '<>"\'\\;']) if search_query else ""
@@ -933,7 +933,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.dataframe(display_df, use_container_width=True, hide_index=True)
     # Fluids Tab
     with tab_fluids:
-        st.subheader("◆ Subaru Recommended Fluids, Grades & Capacities")
+        st.subheader("⛢ Subaru Recommended Fluids, Grades & Capacities")
         st.write("Maintain exact fluid dynamics and thermal protection parameters for your symmetrical AWD drivetrain.")
         
         fluids_data = [
@@ -980,7 +980,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         history = load_history()
         
         # --- INDIVIDUAL ITEM COMPLETION LEDGER ---
-        st.markdown("### ◆ Individual Item Completion Ledger")
+        st.markdown("### ▤ Individual Item Completion Ledger")
         st.write("Scan the last logged date and mileage for each individual maintenance and inspection service. This ledger automatically indexes your entire history folder to prevent items from falling through the cracks.")
     
         ledger_data = []
@@ -1038,7 +1038,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         )
 
         st.markdown("<hr style='margin:15px 0; border-color:#eee;'/>", unsafe_allow_html=True)
-        st.markdown("### ◆ Chronological Service History Timeline")
+        st.markdown("### ▤ Chronological Service History Timeline")
         st.write("Below is a detailed timeline showing each completed service item in chronological order as logged from your checklist.")
     
         timeline_data = []
@@ -1065,16 +1065,16 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # Manual Tab
     with tab_manual:
-        st.subheader("◆ Official Subaru WRX STI Reference Manual")
+        st.subheader("☰ Official Subaru WRX STI Reference Manual")
         
         # Section 1: Specifications
-        with st.expander("◆ Subaru WRX STI Powertrain & Chassis Specifications"):
+        with st.expander("☰ Subaru WRX STI Powertrain & Chassis Specifications"):
             st.markdown(
                 """
-                ### ◆ Official 2016 Subaru WRX STI (GUS Model) Specifications
+                ### ☰ Official 2016 Subaru WRX STI (GUS Model) Specifications
                 *Based strictly on official 2016 US market specifications.*
 
-                ##### ◆ Engine & Powertrain
+                ##### ⚙ Engine & Powertrain
                 | Specification | Value / Detail |
                 | :--- | :--- |
                 | **Engine Manufacturer / Type** | Subaru flat-four horizontally opposed DOHC "Boxer" 4-cylinder, 16 valves (4 valves/cyl). |
@@ -1089,7 +1089,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 | **Specific Power Output** | 124.1 bhp/litre (125.9 PS/litre / 92.6 kW/litre). |
                 | **Specific Torque Output** | 159.95 N·m/litre. |
 
-                ##### ◆ Drivetrain & Transmission
+                ##### ⚙ Drivetrain & Transmission
                 | Component | Design Specification & Mechanical Parameters |
                 | :--- | :--- |
                 | **Gearbox Designation** | TY856 Series 6-speed manual, reinforced casing. Fully synchronized reverse. |
@@ -1099,7 +1099,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 | **Front Differential** | Helical limited-slip differential (LSD). |
                 | **Rear Differential** | Torsen limited-slip differential (LSD). |
 
-                ##### ◆ Dimensions & Weights
+                ##### ⌿ Dimensions & Weights
                 | Dimension / Parameter | Metric Value | Imperial / US Value |
                 | :--- | :--- | :--- |
                 | **Wheelbase** | 2649 mm. | 104.3 inches. |
@@ -1113,7 +1113,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 | **Power-to-weight ratio** | 198.57 bhp/tonne (0.2 bhp/kg). | |
                 | **Weight-to-power ratio** | 11.28 lb/bhp (6.75 kg/kW). | |
 
-                ##### ◆ Fluids, Capacities & Economy
+                ##### ⛢ Fluids, Capacities & Economy
                 | Parameter | Metric Value | Imperial / US Value |
                 | :--- | :--- | :--- |
                 | **Fuel Tank Capacity** | 60.2 litres. | 15.9 US Gallons (13.2 UK Gal). |
@@ -1121,7 +1121,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 | **Engine Oil Capacity** | 4.3 Liters. | 4.5 Quarts with filter. |
                 | **Engine Coolant Capacity** | 7.7 Liters. | 8.1 Quarts. |
 
-                ##### ◆ Chassis, Steering, Wheels & Brakes
+                ##### ⌾ Chassis, Steering, Wheels & Brakes
                 | Component | Design Specification & Mechanical Parameters |
                 | :--- | :--- |
                 | **Steering System** | Hydraulic power-assisted rack & pinion steering with 13.3:1 quick-ratio. |
@@ -1138,7 +1138,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             )
 
         # Section 2: Torque specs
-        with st.expander("◆ Critical DIY Torque Specifications (Factory & Corrected Specs)"):
+        with st.expander("⎔ Critical DIY Torque Specifications (Factory & Corrected Specs)"):
             st.markdown(
                 """
                 | Component Class | Fastener Description | Thread Spec | Torque Value (Imperial) | Torque Value (Metric) | Notes / Application |
@@ -1175,10 +1175,10 @@ if HAS_STREAMLIT and st.runtime.exists():
             )
 
         # Section 3: My Pro Street DIY Pitfall & Warning Guide
-        with st.expander("◆ My Pro Street DIY Pitfall & Warning Guide"):
+        with st.expander("▲ My Pro Street DIY Pitfall & Warning Guide"):
             st.markdown(
                 """
-                ### ◆ Why Torque Specs Matter on the Subaru STI (My Pro Street Guide)
+                ### ▲ Why Torque Specs Matter on the Subaru STI (My Pro Street Guide)
                 Improper torque on your horizontally opposed boxer engine is a major cause of mechanical failures due to its aluminum components, high vibration, and intense heat cycles. "Good-n-tight" is not an official Subaru engineering measurement—use calibrated torque wrenches to avoid expensive repairs!
                 
                 #### 1. Spark Plug Torque: Why It Matters
@@ -1214,12 +1214,12 @@ if HAS_STREAMLIT and st.runtime.exists():
             )
 
         # Section 4: Cylinder Head sequence
-        with st.expander("◆ DOHC EJ257 Cylinder Head Bolt Tightening Sequence"):
+        with st.expander("⎔ DOHC EJ257 Cylinder Head Bolt Tightening Sequence"):
             head_col, head_svg_col = st.columns([1.2, 1])
             with head_col:
                 st.markdown(
                     '''
-                    ### ◆ 10-Step Cylinder Head Elastic-Plastic Tightening Procedure
+                    ### ⎔ 10-Step Cylinder Head Elastic-Plastic Tightening Procedure
                     Always use brand new, clean, and dry OEM **Torque-To-Yield (TTY)** head bolts lightly lubricated with engine oil on the threads and flange faces prior to insertion. Tighten strictly in the designated cross-pattern sequence (center outward) as illustrated:
                     
                     1.  **Stage 1:** Torque all bolts in sequence to **40 N-m (29.5 ft-lbs)**.
@@ -1234,7 +1234,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                     10. **Stage 10:** Rotate center bolts (1 and 2 only) a final **40° to 45°**.
                     
                     <div class="warning-card">
-                        ◆ <b>TTY Fastener Warning:</b> Never reuse stretched Torque-To-Yield (TTY) head bolts. Reusing old bolts compromises clamping force, leading to immediate head gasket failure!
+                        ▲ <b>TTY Fastener Warning:</b> Never reuse stretched Torque-To-Yield (TTY) head bolts. Reusing old bolts compromises clamping force, leading to immediate head gasket failure!
                     </div>
                     ''',
                     unsafe_allow_html=True
@@ -1299,10 +1299,10 @@ if HAS_STREAMLIT and st.runtime.exists():
                 )
 
         # Section 5: Critical Vulnerabilities & Engineering Solutions
-        with st.expander("◆ Diagnostics of Critical Vulnerabilities & Field Engineering Solutions"):
+        with st.expander("⚙ Diagnostics of Critical Vulnerabilities & Field Engineering Solutions"):
             st.markdown(
                 """
-                ### ◆ EJ257 Engineering Vulnerabilities & Proven Fixes
+                ### ⚙ EJ257 Engineering Vulnerabilities & Proven Fixes
                 
                 #### 1. Cylinder 4 Overheating, Detonation, and Ringland Failure
                 *   **The Cause:** The coolant jacket flow routes sequentially but reaches a stagnation zone around Cylinder 4 (rear left). Localized coolant flow drops, causing a thermal spike that lowers Cylinder 4's knock threshold. Under high load, recurring detonation cracks the brittle cast-aluminum factory piston ringlands, causing compression loss, severe blow-by, and cylinder scoring.
@@ -1328,12 +1328,12 @@ if HAS_STREAMLIT and st.runtime.exists():
 
         
         # Section 7: Piston Ring Gap Alignment (Reworked and Illustrated)
-        with st.expander("⭕ EJ257 High-Performance Piston Ring End Gap Alignment"):
+        with st.expander("⌾ EJ257 High-Performance Piston Ring End Gap Alignment"):
             pist_col, pist_svg_col = st.columns([1.2, 1])
             with pist_col:
                 st.markdown(
                     '''
-                    ### ◆ Cylinder Wall Piston Ring End Gap Orientations
+                    ### ⌾ Cylinder Wall Piston Ring End Gap Orientations
                     When assembling or rebuilding an EJ257 high-performance engine block, spacing out your ring end gaps at specific offsets is mandatory to prevent exhaust blow-by, excessive oil consumption, and localized hot spots:
                     
                     *   **Gap A (Top Compression Ring):** Positioned at **45°** to the top-right relative to the wrist-pin axis, pointing toward the right-front of the cylinder deck.
@@ -1343,7 +1343,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                     *   **Gap F (Oil Control Spacer Expander):** Positioned directly on the lower wrist-pin vertical axis, offset from all scraper rails.
                     
                     <div class="custom-card">
-                        ◆ <b>Assembly Advice:</b> Confirm all top and second compression rings turn freely in the piston grooves prior to block insertion. Use a professional ring compressor to prevent micro-fracturing the delicate rings.
+                        ⚙ <b>Assembly Advice:</b> Confirm all top and second compression rings turn freely in the piston grooves prior to block insertion. Use a professional ring compressor to prevent micro-fracturing the delicate rings.
                     </div>
                     ''',
                     unsafe_allow_html=True
@@ -1412,10 +1412,10 @@ if HAS_STREAMLIT and st.runtime.exists():
                 )
 
         # Section 6: Engine Class Action Settlement & Recalls
-        with st.expander("◆ Regulatory Safety Recalls & The EJ257 Catastrophic Engine Settlement"):
+        with st.expander("☰ Regulatory Safety Recalls & The EJ257 Catastrophic Engine Settlement"):
             st.markdown(
                 """
-                ### ◆ EJ257 Settlement & Official Safety Recalls
+                ### ☰ EJ257 Settlement & Official Safety Recalls
                 
                 #### 1. The EJ257 Engine Failure Class Action Settlement (2018)
                 *   **Target Scope:** 2012–2017 Subaru WRX and WRX STI equipped with the 2.5-liter turbocharged EJ257 engine built between Oct. 11, 2011, and Nov. 16, 2016.
