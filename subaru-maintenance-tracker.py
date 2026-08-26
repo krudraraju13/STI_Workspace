@@ -861,6 +861,9 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.dataframe(display_df, use_container_width=True, hide_index=True)
     # Fluids Tab
     with tab_fluids:
+        st.subheader("🛢️ Subaru Recommended Fluids, Grades & Capacities")
+        st.write("Maintain exact fluid dynamics and thermal protection parameters for your symmetrical AWD drivetrain.")
+        
         fluids_data = [
             {
                 "Compartment": "Engine Crankcase (EJ257)",
@@ -897,6 +900,60 @@ if HAS_STREAMLIT and st.runtime.exists():
         import pandas as pd
         df_fluids = pd.DataFrame(fluids_data)
         st.dataframe(df_fluids, use_container_width=True, hide_index=True)
+        
+        st.write("")
+        col_tip, col_seals = st.columns([1.2, 1])
+        with col_tip:
+            st.info("💡 **The 5-Minute Dipstick Rule (NHTSA TSB):** Wait at least 5 minutes after turning off a warm engine on level ground. This allows oil suspended in the boxer layout to fully drain back into the pan for an accurate dipstick measurement.")
+            st.markdown(
+                '''
+                <div class="custom-card" style="margin-top:10px;">
+                    🔧 <b>API Shear Stability Recommendation:</b> EJ257 engines run high heat. Standard factory 5W-30 synthetic degrades to 20-weight viscosity under load. Builders advise <b>API Certified SN/SM full synthetic 5W-40 weight</b> (such as Motul 8100 or Shell Rotella T6) to protect crankshaft journals.
+                </div>
+                ''',
+                unsafe_allow_html=True
+            )
+        with col_seals:
+            st.markdown('''
+<svg viewBox="0 0 450 180" width="100%" height="90" style="max-width: 400px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128,128,128,0.2); padding: 10px;">
+  <!-- Left Starburst Seal -->
+  <g transform="translate(110, 90)">
+    <!-- Scalloped Starburst Base (using radial spikes) -->
+    <path d="M 0,-65 L 5,-60 L 15,-63 L 18,-55 L 28,-55 L 28,-45 L 37,-42 L 34,-32 L 42,-26 L 36,-17 L 42,-9 L 34,-2 L 37,8 L 28,11 L 28,21 L 18,21 L 15,29 L 5,26 L 0,31 L -5,26 L -15,29 L -18,21 L -28,21 L -28,11 L -37,8 L -34,-2 L -42,-9 L -36,-17 L -42,-26 L -34,-32 L -37,-42 L -28,-45 L -28,-55 L -18,-55 L -15,-63 L -5,-60 Z" fill="#ffffff" stroke="#003399" stroke-width="2"/>
+    <circle cx="0" cy="-15" r="50" fill="#ffffff" stroke="#003399" stroke-width="1.5"/>
+    <circle cx="0" cy="-15" r="42" fill="none" stroke="#003399" stroke-dasharray="2,2"/>
+    <text x="0" y="-30" fill="#003399" font-family="'Montserrat', sans-serif" font-size="8" font-weight="bold" text-anchor="middle">AMERICAN</text>
+    <text x="0" y="-20" fill="#003399" font-family="'Montserrat', sans-serif" font-size="8" font-weight="bold" text-anchor="middle">PETROLEUM</text>
+    <text x="0" y="-10" fill="#003399" font-family="'Montserrat', sans-serif" font-size="8" font-weight="bold" text-anchor="middle">INSTITUTE</text>
+    <text x="0" y="3" fill="#003399" font-family="'Montserrat', sans-serif" font-size="9" font-weight="800" text-anchor="middle">CERTIFIED</text>
+    <text x="0" y="16" fill="#003399" font-family="'Montserrat', sans-serif" font-size="7" font-weight="bold" text-anchor="middle">FOR GASOLINE</text>
+    <text x="0" y="24" fill="#003399" font-family="'Montserrat', sans-serif" font-size="7" font-weight="bold" text-anchor="middle">ENGINES</text>
+  </g>
+
+  <!-- Right Donut Seal -->
+  <g transform="translate(310, 90)">
+    <circle cx="0" cy="-15" r="52" fill="#ffffff" stroke="#000000" stroke-width="2.5"/>
+    <!-- Outer ring space -->
+    <circle cx="0" cy="-15" r="32" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <circle cx="0" cy="-15" r="14" fill="#ffffff" stroke="#000000" stroke-width="1.5"/>
+    
+    <!-- Texts -->
+    <text x="0" y="-38" fill="#000000" font-family="'Montserrat', sans-serif" font-size="8" font-weight="bold" text-anchor="middle">API SERVICE SM</text>
+    <!-- Center Viscosity weight -->
+    <text x="0" y="-11" fill="#000000" font-family="'Montserrat', sans-serif" font-size="9" font-weight="800" text-anchor="middle">5W-40</text>
+    <!-- Bottom Segment -->
+    <text x="0" y="8" fill="#000000" font-family="'Montserrat', sans-serif" font-size="7" font-weight="bold" text-anchor="middle">ENERGY</text>
+    <text x="0" y="16" fill="#000000" font-family="'Montserrat', sans-serif" font-size="7" font-weight="bold" text-anchor="middle">CONSERVING</text>
+  </g>
+</svg>''', unsafe_allow_html=True)
+            st.markdown(
+                '''
+                <div style='text-align:center; padding:10px; font-size:0.9em; color:#94a3b8;'>
+                    <i>Certification Symbols: Verify of oil canisters carrying the API Certified Starburst (on front) and the API Service Donut (on rear) to guarantee warranty validation.</i>
+                </div>
+                ''',
+                unsafe_allow_html=True
+            )
 
     # History Tab
     with tab_history:
