@@ -492,15 +492,11 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
     logo_left_col, title_col, logo_right_col = st.columns([1.0, 3.5, 1.4], vertical_alignment="center")
-    
-    STI_LOGO_URL = "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_logo.svg"
-    SUBARU_LOGO_URL = "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/subaru_logo.svg"
-
     with logo_left_col:
         st.markdown(
             f"""
             <div style="display: flex; justify-content: flex-start; align-items: center; height: 140px;">
-                <img src="{STI_LOGO_URL}" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,{sti_b64}';" width="200" height="100" style="object-fit: contain;"/>
+                <img src="data:image/svg+xml;base64,{sti_b64}" width="200" height="100" style="object-fit: contain;"/>
             </div>
             """,
             unsafe_allow_html=True
@@ -521,7 +517,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             f"""
             <div style="display: flex; justify-content: flex-end; align-items: center; height: 140px;">
-                <img src="{SUBARU_LOGO_URL}" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,{subaru_b64}';" width="280" height="140" style="object-fit: contain;"/>
+                <img src="data:image/svg+xml;base64,{subaru_b64}" width="280" height="140" style="object-fit: contain;"/>
             </div>
             """,
             unsafe_allow_html=True
