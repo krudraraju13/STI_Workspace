@@ -774,22 +774,27 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
 
 
-                /* Clickable image zoom-box system */
-        .img-zoom-box {
-            position: relative;
-            display: block;
-            width: 100%;
-            margin: auto;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        /* Direct image-clickable zoom-box system (v122) */
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor),
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor) {
+            position: relative !important;
         }
-        .img-zoom-box:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(255, 0, 127, 0.15);
+        
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor) svg,
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor) svg {
+            transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+            cursor: pointer !important;
         }
-        /* Make the stButton container fill the parent card completely */
-        .img-zoom-box div[data-testid="stButton"] {
+        
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor):hover svg,
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor):hover svg {
+            transform: scale(1.02) !important;
+            box-shadow: 0 10px 20px rgba(255, 0, 127, 0.15) !important;
+        }
+        
+        /* Position the stButton container absolutely to overlay the entire column */
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[data-testid="stButton"],
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor) div[data-testid="stButton"] {
             position: absolute !important;
             top: 0 !important;
             left: 0 !important;
@@ -797,10 +802,12 @@ if HAS_STREAMLIT and st.runtime.exists():
             height: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
-            z-index: 5 !important;
+            z-index: 10 !important;
         }
-        /* Style the stButton child button to be completely transparent but fully clickable */
-        .img-zoom-box div[data-testid="stButton"] button {
+        
+        /* Make the button transparent but clickable */
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[data-testid="stButton"] button,
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor) div[data-testid="stButton"] button {
             width: 100% !important;
             height: 100% !important;
             background-color: transparent !important;
@@ -812,12 +819,14 @@ if HAS_STREAMLIT and st.runtime.exists():
             padding: 0 !important;
             display: block !important;
         }
-        /* Soft, interactive hover tint */
-        .img-zoom-box div[data-testid="stButton"] button:hover {
+        
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[data-testid="stButton"] button:hover,
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor) div[data-testid="stButton"] button:hover {
             background-color: rgba(255, 0, 127, 0.05) !important;
         }
-        /* Prevent focus outline ring */
-        .img-zoom-box div[data-testid="stButton"] button:focus {
+        
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[data-testid="stButton"] button:focus,
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor) div[data-testid="stButton"] button:focus {
             outline: none !important;
             box-shadow: none !important;
         }
@@ -1826,7 +1835,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 )
             with head_svg_col:
                 st.write("")
-                st.markdown('<div class="img-zoom-box" style="max-width: 420px;">', unsafe_allow_html=True)
+                st.markdown('<div class="head-bolt-zoom-anchor"></div>', unsafe_allow_html=True)
                 st.markdown('''
 <svg viewBox="0 0 450 220" width="100%" height="100" style="max-width: 420px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px; cursor: pointer;">
   <!-- Cylinder block outline -->
@@ -1877,7 +1886,6 @@ if HAS_STREAMLIT and st.runtime.exists():
 </svg>''', unsafe_allow_html=True)
                 if st.button("", key="btn_expand_head_bolt", use_container_width=True):
                     expand_head_bolt_dialog()
-                st.markdown('</div>', unsafe_allow_html=True)
                 st.markdown(
                     '''
                     <div style='text-align:center; padding:10px; font-size:0.9em; color:#94a3b8;'>
@@ -1939,7 +1947,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 )
             with pist_svg_col:
                 st.write("")
-                st.markdown('<div class="img-zoom-box" style="max-width: 320px;">', unsafe_allow_html=True)
+                st.markdown('<div class="piston-ring-zoom-anchor"></div>', unsafe_allow_html=True)
                 st.markdown('''
 <svg viewBox="0 0 400 400" width="100%" height="100" style="max-width: 320px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px; cursor: pointer;">
   <!-- Cylinder Bore -->
@@ -1994,7 +2002,6 @@ if HAS_STREAMLIT and st.runtime.exists():
 </svg>''', unsafe_allow_html=True)
                 if st.button("", key="btn_expand_piston_ring", use_container_width=True):
                     expand_piston_ring_dialog()
-                st.markdown('</div>', unsafe_allow_html=True)
                 st.markdown(
                     '''
                     <div style='text-align:center; padding:10px; font-size:0.9em; color:#94a3b8;'>
