@@ -874,6 +874,28 @@ if HAS_STREAMLIT and st.runtime.exists():
             st.markdown("### ⌖ Maintenance Checklist")
             st.write("Check the items you have completed at your current mileage, then click **Save Checked Services** at the bottom to log them.")
 
+            # Filter schedule_items to only show those closest to their scheduled intervals (considering severe conditions)
+            filtered_items = []
+            if schedule_items:
+                distances = []
+                for item in schedule_items:
+                    interval = item["interval"]
+                    closest_milestone = max(1, round(mileage / interval)) * interval
+                    distance = abs(closest_milestone - mileage)
+                    distances.append(distance)
+                
+                min_distance = min(distances) if distances else 0
+                threshold = max(5000, min_distance)
+                
+                for item in schedule_items:
+                    interval = item["interval"]
+                    closest_milestone = max(1, round(mileage / interval)) * interval
+                    distance = abs(closest_milestone - mileage)
+                    if distance <= threshold:
+                        filtered_items.append(item)
+            else:
+                filtered_items = []
+
             # Categorize items by criticality
             high_crit_items = []
             med_crit_items = []
@@ -890,7 +912,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 "Replace Cabin Air Filter"
             }
 
-            for item in schedule_items:
+            for item in filtered_items:
                 if item["name"] in completed_items_at_current_mileage:
                     continue  # Skip already completed items
                 if item["name"] in high_names:
