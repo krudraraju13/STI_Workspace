@@ -115,8 +115,19 @@ def load_history():
             
     return sanitized_data
 
+def get_cached_history():
+    if not HAS_STREAMLIT:
+        return load_history()
+    if "history_cache" not in st.session_state:
+        st.session_state["history_cache"] = load_history()
+    return st.session_state["history_cache"]
+
 def save_history(entry):
     # Dynamic Google Sheets Integration via Apps Script API
+    if HAS_STREAMLIT:
+        if "history_cache" not in st.session_state:
+            st.session_state["history_cache"] = load_history()
+        st.session_state["history_cache"].append(entry)
     api_url = None
     if HAS_STREAMLIT:
         try:
@@ -155,7 +166,7 @@ class MaintenanceScheduler:
 
     def get_schedule(self):
         items = []
-        history = load_history()
+        history = get_cached_history()
         
         # Define standard intervals and info
         # Structure: (Name, Base Interval, Severe Interval, Part Number, Quantity, Description)
@@ -718,7 +729,7 @@ if HAS_STREAMLIT and st.runtime.exists():
     schedule_items = scheduler.get_schedule()
 
     # Load history to filter checked/completed items at the current mileage
-    history = load_history()
+    history = get_cached_history()
     completed_items_at_current_mileage = set()
     if history and mileage is not None:
         for entry in history:
@@ -1089,10 +1100,17 @@ if HAS_STREAMLIT and st.runtime.exists():
     with tab_history:
         # st.subheader("Maintenance & Service Log")
         
-        history = load_history()
+        history = get_cached_history()
         
         # --- INDIVIDUAL ITEM COMPLETION LEDGER ---
-        st.markdown("### ▤ Individual Item Completion Ledger")
+        col_hist_title, col_sync = st.columns([3, 1], vertical_alignment="center")
+        with col_hist_title:
+            st.markdown("### ▤ Individual Item Completion Ledger")
+        with col_sync:
+            if st.button("⛢ Sync Sheets", use_container_width=True, help="Force reload all service history directly from your Google Sheet"):
+                if HAS_STREAMLIT and "history_cache" in st.session_state:
+                    del st.session_state["history_cache"]
+                st.rerun()
         st.write("Scan the last logged date and mileage for each individual maintenance and inspection service. This ledger automatically indexes your entire history folder to prevent items from falling through the cracks.")
     
         ledger_data = []
