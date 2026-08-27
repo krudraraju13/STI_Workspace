@@ -885,7 +885,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                     distances.append(distance)
                 
                 min_distance = min(distances) if distances else 0
-                threshold = max(6000, min_distance)
+                threshold = max(3000 if severe else 6000, min_distance)
                 
                 for item in schedule_items:
                     interval = item["interval"]
