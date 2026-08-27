@@ -28,6 +28,16 @@ except ImportError:
 
 
 
+# ==============================================================================
+# DATABASE RETRIEVAL AND CACHE MANAGEMENT PIPELINE
+# ==============================================================================
+# load_history() implements a self-healing, double-sync cache engine.
+# It ensures local offline access while seamlessly integrating with Google Sheets.
+# 1. It reads local records from the physical JSON cache.
+# 2. It queries the Google Apps Script Web App API securely (bypassing browser cache).
+# 3. It runs a bi-directional deduplication merge on the lists.
+# 4. It sanitizes and normalizes all fields (Dates, Mileages, Timezones, Lists).
+# ==============================================================================
 def load_history():
     # 1. Load local records from HISTORY_FILE
     local_records = []
@@ -67,6 +77,13 @@ def load_history():
             pass
 
     # Helper function to check if two entries are equal
+    # ==========================================================================
+    # BI-DIRECTIONAL DEDUPLICATION ENGINE
+    # ==========================================================================
+    # Helper function to evaluate whether a local cache record matches a cloud record.
+    # Matches on normalized Date (YYYY-MM-DD), numeric Mileage, and sorting-insensitive
+    # list of completed maintenance items.
+    # ==========================================================================
     def are_entries_equal(e1, e2):
         # Date match
         d1 = str(e1.get("date", "")).split("T")[0].strip()
@@ -188,6 +205,14 @@ def load_history():
         entry["severe_mode"] = False
         
         # Ensure time exists in HH:MM format and clean up any mixed formats (e.g., JS Date stringification)
+        # ======================================================================
+        # FAILSAFE TIME SANITIZER & REGEX EXTRACTOR
+        # ======================================================================
+        # Google Sheets can return times formatted as JavaScript GMT dates
+        # (e.g. 'Sat Dec 30 1899 02:13:00 GMT-0800'). 
+        # This Regex extracts exactly the 'HH:MM' component, standardizing
+        # older entries to a clean HH:MM format and applying leading zeros.
+        # ======================================================================
         time_str = str(entry.get("time", "00:00")).strip()
         time_match = re.search(r'(\d{1,2}):(\d{2})', time_str)
         if time_match:
@@ -443,6 +468,8 @@ class MaintenanceScheduler:
 
 # --- STREAMLIT WEB APP RUNTIME ---
 if HAS_STREAMLIT and st.runtime.exists():
+    # OPTIMIZATION: st.set_page_config MUST be called as the first Streamlit command
+    st.set_page_config(page_title="Subaru STI Maintenance Tracker", page_icon="⚙", layout="wide")
     import base64
     import os
     import urllib.request
@@ -451,18 +478,7 @@ if HAS_STREAMLIT and st.runtime.exists():
     SUBARU_FILE = "subaru_logo.svg"
 
 
-    # Direct GitHub raw URLs for files based on the user's workspace repository
-    STI_URLS = [
-        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_logo.svg",
-        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_logo.svg.png"
-    ]
-    SUBARU_URLS = [
-        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/subaru_logo.svg",
-        "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/subaru_logo.svg.png"
-    ]
-
-
-    # Direct GitHub raw URLs for both files based on the user's workspace repository
+    # Direct GitHub raw URLs for fallback asset downloads (STI and Subaru logos)
     STI_URLS = [
         "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_logo.svg",
         "https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_logo.svg.png"
@@ -601,7 +617,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         subaru_src = f"data:image/svg+xml;base64,{subaru_b64}"
 
     # Set page layout config
-    st.set_page_config(page_title="Subaru STI Maintenance Tracker", page_icon="⚙", layout="wide")
+    
 
     # Global CSS customization for fonts, responsiveness, align, spacing, and colors
     st.markdown(
@@ -749,6 +765,14 @@ if HAS_STREAMLIT and st.runtime.exists():
                     current_time_est = datetime.datetime.now(ZoneInfo("US/Eastern")).strftime("%H:%M")
                 except Exception:
                     try:
+                # ======================================================================
+                # MATHEMATICAL US EASTERN TIME DST CALCULATOR
+                # ======================================================================
+                # Resolves ZoneInfoNotFoundError on lightweight cloud platforms by calculating
+                # US Eastern Standard/Daylight transitions manually from UTC:
+                # - DST starts: 2nd Sunday in March at 02:00 EST (07:00 UTC) -> Offset = UTC - 4 hrs
+                # - DST ends: 1st Sunday in November at 02:00 EDT (06:00 UTC) -> Offset = UTC - 5 hrs
+                # ======================================================================
                         now_utc = datetime.datetime.now(datetime.timezone.utc)
                         year = now_utc.year
                         mar1 = datetime.datetime(year, 3, 1, tzinfo=datetime.timezone.utc)
@@ -880,6 +904,16 @@ if HAS_STREAMLIT and st.runtime.exists():
             st.write("Check the items you have completed at your current mileage, then click **Save Checked Services** at the bottom to log them.")
 
             # Filter schedule_items to only show those closest to their scheduled intervals (considering severe conditions)
+            # ==========================================================================
+            # INTELLIGENT MILESTONE CHECKLIST FILTER
+            # ==========================================================================
+            # For maximum relevance, the checklist filters out far-off maintenance tasks.
+            # 1. Calculates nearest scheduled milestone (C_i) for each item:
+            #    Closest Milestone = round(Odometer / Interval) * Interval
+            # 2. Computes the minimum distance (d_min) to any upcoming task.
+            # 3. Establishes a search window threshold = max(3000 if severe else 6000, d_min).
+            # 4. Only shows items within this threshold window to prevent UI clutter.
+            # ==========================================================================
             filtered_items = []
             if schedule_items:
                 distances = []
