@@ -37,26 +37,79 @@ def load_history():
         except Exception:
             pass
             
+    raw_data = None
     if api_url:
         try:
             # Query the Google Sheets Web App
             response = requests.get(api_url, timeout=6)
             if response.status_code == 200:
-                data = response.json()
-                if isinstance(data, list):
-                    return data
+                raw_data = response.json()
         except Exception as e:
             # Fall back to local JSON on network timeout or DNS failure
             pass
             
-    # Local JSON Caching Fallback
-    if os.path.exists(HISTORY_FILE):
-        try:
-            with open(HISTORY_FILE, "r") as f:
-                return json.load(f)
-        except Exception:
-            return []
-    return []
+    # Local JSON Caching Fallback if API failed
+    if not isinstance(raw_data, list):
+        if os.path.exists(HISTORY_FILE):
+            try:
+                with open(HISTORY_FILE, "r") as f:
+                    raw_data = json.load(f)
+            except Exception:
+                raw_data = []
+        else:
+            raw_data = []
+
+    # Sanitize data to be extremely defensive against NoneType or non-iterable values
+    sanitized_data = []
+    if isinstance(raw_data, list):
+        for entry in raw_data:
+            if not isinstance(entry, dict):
+                continue
+            
+            # Ensure date exists and is a string
+            if "date" not in entry or not entry["date"]:
+                entry["date"] = datetime.date.today().isoformat()
+                
+            # Ensure mileage exists and is an int
+            try:
+                entry["mileage"] = int(entry.get("mileage", 0))
+            except (ValueError, TypeError):
+                entry["mileage"] = 0
+                
+            # Ensure severe_mode exists and is boolean
+            entry["severe_mode"] = bool(entry.get("severe_mode", False))
+            
+            # Ensure completed_items exists and is a proper list of strings
+            completed = entry.get("completed_items")
+            if completed is None:
+                entry["completed_items"] = []
+            elif isinstance(completed, str):
+                completed_strip = completed.strip()
+                if completed_strip.startswith("[") and completed_strip.endswith("]"):
+                    try:
+                        parsed = json.loads(completed_strip)
+                        if isinstance(parsed, list):
+                            entry["completed_items"] = [str(x) for x in parsed if x is not None]
+                        else:
+                            entry["completed_items"] = [completed_strip]
+                    except Exception:
+                        entry["completed_items"] = [completed_strip]
+                elif ";" in completed_strip:
+                    entry["completed_items"] = [x.strip() for x in completed_strip.split(";") if x.strip()]
+                elif "," in completed_strip:
+                    entry["completed_items"] = [x.strip() for x in completed_strip.split(",") if x.strip()]
+                elif completed_strip:
+                    entry["completed_items"] = [completed_strip]
+                else:
+                    entry["completed_items"] = []
+            elif isinstance(completed, list):
+                entry["completed_items"] = [str(x) for x in completed if x is not None]
+            else:
+                entry["completed_items"] = []
+            
+            sanitized_data.append(entry)
+            
+    return sanitized_data
 
 def save_history(entry):
     # Dynamic Google Sheets Integration via Apps Script API
