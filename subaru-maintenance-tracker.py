@@ -774,6 +774,54 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
 
 
+                /* Clickable image zoom-box system */
+        .img-zoom-box {
+            position: relative;
+            display: block;
+            width: 100%;
+            margin: auto;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .img-zoom-box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(255, 0, 127, 0.15);
+        }
+        /* Make the stButton container fill the parent card completely */
+        .img-zoom-box div[data-testid="stButton"] {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            z-index: 5 !important;
+        }
+        /* Style the stButton child button to be completely transparent but fully clickable */
+        .img-zoom-box div[data-testid="stButton"] button {
+            width: 100% !important;
+            height: 100% !important;
+            background-color: transparent !important;
+            border: none !important;
+            color: transparent !important;
+            box-shadow: none !important;
+            cursor: pointer !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: block !important;
+        }
+        /* Soft, interactive hover tint */
+        .img-zoom-box div[data-testid="stButton"] button:hover {
+            background-color: rgba(255, 0, 127, 0.05) !important;
+        }
+        /* Prevent focus outline ring */
+        .img-zoom-box div[data-testid="stButton"] button:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
         </style>
         """,
         unsafe_allow_html=True
@@ -1778,8 +1826,9 @@ if HAS_STREAMLIT and st.runtime.exists():
                 )
             with head_svg_col:
                 st.write("")
+                st.markdown('<div class="img-zoom-box" style="max-width: 420px;">', unsafe_allow_html=True)
                 st.markdown('''
-<svg viewBox="0 0 450 220" width="100%" height="100" style="max-width: 420px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px;">
+<svg viewBox="0 0 450 220" width="100%" height="100" style="max-width: 420px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px; cursor: pointer;">
   <!-- Cylinder block outline -->
   <rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#FF007F" stroke-width="2"/>
   <text x="225" y="24" fill="#FF007F" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
@@ -1826,8 +1875,9 @@ if HAS_STREAMLIT and st.runtime.exists():
     </marker>
   </defs>
 </svg>''', unsafe_allow_html=True)
-                if st.button("🔍 Click to Expand Diagram", key="btn_expand_head_bolt", use_container_width=True):
+                if st.button("", key="btn_expand_head_bolt", use_container_width=True):
                     expand_head_bolt_dialog()
+                st.markdown('</div>', unsafe_allow_html=True)
                 st.markdown(
                     '''
                     <div style='text-align:center; padding:10px; font-size:0.9em; color:#94a3b8;'>
@@ -1889,8 +1939,9 @@ if HAS_STREAMLIT and st.runtime.exists():
                 )
             with pist_svg_col:
                 st.write("")
+                st.markdown('<div class="img-zoom-box" style="max-width: 320px;">', unsafe_allow_html=True)
                 st.markdown('''
-<svg viewBox="0 0 400 400" width="100%" height="100" style="max-width: 320px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px;">
+<svg viewBox="0 0 400 400" width="100%" height="100" style="max-width: 320px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px; cursor: pointer;">
   <!-- Cylinder Bore -->
   <circle cx="200" cy="200" r="165" fill="none" stroke="rgba(128, 128, 128, 0.3)" stroke-width="4"/>
   <circle cx="200" cy="200" r="150" fill="rgba(128, 128, 128, 0.05)" stroke="rgba(128, 128, 128, 0.2)" stroke-width="2"/>
@@ -1941,8 +1992,9 @@ if HAS_STREAMLIT and st.runtime.exists():
     </marker>
   </defs>
 </svg>''', unsafe_allow_html=True)
-                if st.button("🔍 Click to Expand Diagram", key="btn_expand_piston_ring", use_container_width=True):
+                if st.button("", key="btn_expand_piston_ring", use_container_width=True):
                     expand_piston_ring_dialog()
+                st.markdown('</div>', unsafe_allow_html=True)
                 st.markdown(
                     '''
                     <div style='text-align:center; padding:10px; font-size:0.9em; color:#94a3b8;'>
