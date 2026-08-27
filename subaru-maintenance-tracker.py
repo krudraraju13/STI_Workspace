@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v126) */
+        /* Pure CSS modal system for image zoom (v128) */
         .css-modal {
             display: none;
             position: fixed;
@@ -784,7 +784,9 @@ if HAS_STREAMLIT and st.runtime.exists():
             top: 0;
             width: 100vw;
             height: 100vh;
-            background-color: rgba(10, 10, 10, 0.92) !important;
+            /* Adaptive transparent overlay background using CSS color-mix */
+            background-color: rgba(10, 10, 10, 0.85) !important; /* Fallback for older browsers */
+            background-color: color-mix(in srgb, var(--background-color) 85%, transparent) !important;
             backdrop-filter: blur(8px);
             align-items: center;
             justify-content: center;
@@ -794,7 +796,8 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
         .css-modal-content {
             position: relative;
-            background-color: #111525;
+            /* Adaptive container background matching dark/light mode */
+            background-color: var(--secondary-background-color) !important;
             padding: 24px;
             border: 1px solid rgba(255, 0, 127, 0.3) !important;
             width: 90%;
@@ -803,6 +806,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 30px rgba(255, 0, 127, 0.25);
             text-align: center;
             animation: modalFadeIn 0.25s ease-out;
+            color: var(--text-color) !important;
         }
         @keyframes modalFadeIn {
             from { opacity: 0; transform: scale(0.95); }
@@ -821,7 +825,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             z-index: 100000 !important;
         }
         .css-modal-close:hover {
-            color: #ffffff !important;
+            color: var(--text-color) !important;
         }
         
         /* Interactive Thumbnail hover effects */
@@ -1832,7 +1836,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 </defs>
 </svg>
 </div>
-<div style='text-align:center; padding-top:15px; font-size:1.15em; color:#ffffff; font-family:"Montserrat", sans-serif; font-weight:700;'>
+<div style='text-align:center; padding-top:15px; font-size:1.15em; color:var(--text-color) !important; font-family:"Montserrat", sans-serif; font-weight:700;'>
 DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 </div>
 </div>
@@ -2011,7 +2015,7 @@ DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 </defs>
 </svg>
 </div>
-<div style='text-align:center; padding-top:15px; font-size:1.15em; color:#ffffff; font-family:"Montserrat", sans-serif; font-weight:700;'>
+<div style='text-align:center; padding-top:15px; font-size:1.15em; color:var(--text-color) !important; font-family:"Montserrat", sans-serif; font-weight:700;'>
 EJ257 PISTON RING END GAP ALIGNMENT
 </div>
 </div>
