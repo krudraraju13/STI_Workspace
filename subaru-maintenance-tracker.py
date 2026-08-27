@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v128) */
+        /* Pure CSS modal system for image zoom (v130) */
         .css-modal {
             display: none;
             position: fixed;
@@ -784,8 +784,11 @@ if HAS_STREAMLIT and st.runtime.exists():
             top: 0;
             width: 100vw;
             height: 100vh;
-            /* Adaptive solid overlay background respecting dark/light mode */
-            background-color: var(--background-color) !important;
+            /* Translucent background overlay matching standard page color (70% opacity) */
+            background-color: color-mix(in srgb, var(--background-color) 70%, transparent) !important;
+            /* High fidelity blur effect behind the modal zoom box */
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
             align-items: center;
             justify-content: center;
         }
