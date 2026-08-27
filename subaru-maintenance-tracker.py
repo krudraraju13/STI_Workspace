@@ -784,10 +784,8 @@ if HAS_STREAMLIT and st.runtime.exists():
             top: 0;
             width: 100vw;
             height: 100vh;
-            /* Adaptive transparent overlay background using CSS color-mix */
-            background-color: rgba(10, 10, 10, 0.85) !important; /* Fallback for older browsers */
-            background-color: color-mix(in srgb, var(--background-color) 85%, transparent) !important;
-            backdrop-filter: blur(8px);
+            /* Adaptive solid overlay background respecting dark/light mode */
+            background-color: var(--background-color) !important;
             align-items: center;
             justify-content: center;
         }
