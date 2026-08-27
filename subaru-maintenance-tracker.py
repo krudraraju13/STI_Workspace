@@ -184,8 +184,8 @@ def load_history():
         except (ValueError, TypeError):
             entry["mileage"] = 0
             
-        # Ensure severe_mode exists and is boolean
-        entry["severe_mode"] = bool(entry.get("severe_mode", False))
+        # Ensure severe_mode exists and is boolean (always defaults to False as it is not recorded in Sheets/JSON anymore)
+        entry["severe_mode"] = False
         
         # Ensure time exists in HH:MM format
         if "time" not in entry or not entry["time"]:
@@ -760,7 +760,6 @@ if HAS_STREAMLIT and st.runtime.exists():
                     "date": datetime.date.today().isoformat(),
                     "time": current_time_est,
                     "mileage": mileage,
-                    "severe_mode": severe,
                     "completed_items": completed_list
                 }
                 save_history(new_entry)
