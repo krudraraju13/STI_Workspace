@@ -469,7 +469,35 @@ class MaintenanceScheduler:
 # --- STREAMLIT WEB APP RUNTIME ---
 if HAS_STREAMLIT and st.runtime.exists():
     # OPTIMIZATION: st.set_page_config MUST be called as the first Streamlit command
-    st.set_page_config(page_title="Subaru STI Maintenance Tracker", page_icon="⚙", layout="wide")
+    # Create a self-healing local SVG file of the boxer piston icon for st.set_page_config
+    BOXER_ICON_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "boxer_piston_icon.svg")
+    BOXER_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Central Crankshaft -->
+  <circle cx="50" cy="50" r="14" fill="none" stroke="#FF007F" stroke-width="4"/>
+  <circle cx="50" cy="50" r="7" fill="#FF007F"/>
+  
+  <!-- Left Connecting Rod & Piston -->
+  <rect x="20" y="46" width="20" height="8" fill="#FF007F" rx="2"/>
+  <rect x="6" y="36" width="14" height="28" fill="#FF007F" rx="3"/>
+  <!-- Left Cylinder wall lines -->
+  <line x1="4" y1="32" x2="24" y2="32" stroke="#94a3b8" stroke-width="3"/>
+  <line x1="4" y1="68" x2="24" y2="68" stroke="#94a3b8" stroke-width="3"/>
+
+  <!-- Right Connecting Rod & Piston -->
+  <rect x="60" y="46" width="20" height="8" fill="#FF007F" rx="2"/>
+  <rect x="80" y="36" width="14" height="28" fill="#FF007F" rx="3"/>
+  <!-- Right Cylinder wall lines -->
+  <line x1="76" y1="32" x2="96" y2="32" stroke="#94a3b8" stroke-width="3"/>
+  <line x1="76" y1="68" x2="96" y2="68" stroke="#94a3b8" stroke-width="3"/>
+</svg>"""
+    try:
+        with open(BOXER_ICON_FILE, "w") as f:
+            f.write(BOXER_SVG)
+    except Exception:
+        pass
+        
+    st_icon = BOXER_ICON_FILE if os.path.exists(BOXER_ICON_FILE) else "⚙"
+    st.set_page_config(page_title="Subaru STI Maintenance Tracker", page_icon=st_icon, layout="wide")
     import base64
     import os
     import urllib.request
@@ -821,7 +849,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             """
             <div style='padding-top:10px; text-align: center;'>
-                <h1 style='color:var(--text-color);margin:0;font-size:2.2em;letter-spacing:-0.5px;'>⚙ Subaru STI Maintenance Tracker</h1>
+                <h1 style='color:var(--text-color);margin:0;font-size:2.2em;letter-spacing:-0.5px;'><svg viewBox='0 0 100 100' width='36' height='36' style='vertical-align: middle; margin-right: 10px; display: inline-block;'><circle cx='50' cy='50' r='14' fill='none' stroke='#FF007F' stroke-width='4'/><circle cx='50' cy='50' r='7' fill='#FF007F'/><rect x='20' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='6' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='4' y1='32' x2='24' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='4' y1='68' x2='24' y2='68' stroke='#94a3b8' stroke-width='3'/><rect x='60' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='80' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='76' y1='32' x2='96' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='76' y1='68' x2='96' y2='68' stroke='#94a3b8' stroke-width='3'/></svg>Subaru STI Maintenance Tracker</h1>
                 <p style='color:#FF007F;margin:5px 0 0 0;font-size:1.15em;font-family:"Montserrat",sans-serif;font-weight:700;'>
                     Symmetrical All-Wheel Drive Performance Suite &bull; Factory Specifications &bull; Interactive Log
                 </p>
