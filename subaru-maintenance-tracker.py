@@ -1212,14 +1212,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         history = get_cached_history()
         
         # --- INDIVIDUAL ITEM COMPLETION LEDGER ---
-        col_hist_title, col_sync = st.columns([3, 1], vertical_alignment="center")
-        with col_hist_title:
-            st.markdown("### ▤ Individual Item Completion Ledger")
-        with col_sync:
-            if st.button("⛢ Sync Sheets", use_container_width=True, help="Force reload all service history directly from your Google Sheet"):
-                if HAS_STREAMLIT and "history_cache" in st.session_state:
-                    del st.session_state["history_cache"]
-                st.rerun()
+        st.markdown("### ▤ Individual Item Completion Ledger")
         st.write("Scan the last logged date and mileage for each individual maintenance and inspection service. This ledger automatically indexes your entire history folder to prevent items from falling through the cracks.")
     
         ledger_data = []
@@ -1285,13 +1278,11 @@ if HAS_STREAMLIT and st.runtime.exists():
             for entry in history:
                 date_val = entry.get("date", "")
                 mi_val = entry.get("mileage", 0)
-                source_val = entry.get("_source_of_data", "▤ Local")
                 for item in entry.get("completed_items", []):
                     timeline_data.append({
                         "Date": date_val,
                         "Odometer Mileage (mi)": mi_val,
-                        "Completed Service Item": item,
-                        "Data Source": source_val
+                        "Completed Service Item": item
                     })
         
             df_timeline = pd.DataFrame(timeline_data)
@@ -1299,19 +1290,13 @@ if HAS_STREAMLIT and st.runtime.exists():
                 df_timeline = df_timeline.sort_values(by=["Date", "Odometer Mileage (mi)"], ascending=[False, False])
                 df_timeline["Odometer Mileage (mi)"] = df_timeline["Odometer Mileage (mi)"].apply(lambda x: f"{x:,} mi")
                 
-                # Reorder columns to place Data Source neatly at the end
-                df_timeline = df_timeline[["Date", "Odometer Mileage (mi)", "Completed Service Item", "Data Source"]]
+                # Reorder columns
+                df_timeline = df_timeline[["Date", "Odometer Mileage (mi)", "Completed Service Item"]]
                 
                 st.dataframe(
                     df_timeline, 
                     use_container_width=True, 
-                    hide_index=True,
-                    column_config={
-                        "Data Source": st.column_config.TextColumn(
-                            "Data Source",
-                            help="☁ Cloud: Pulled directly from Google Sheets. ▤ Local: Fallback loaded from local cache file."
-                        )
-                    }
+                    hide_index=True
                 )
             else:
                 st.info("No timeline items logged yet.")
