@@ -29,102 +29,195 @@ except ImportError:
 
 
 def load_history():
-    # Dynamic Google Sheets Integration via Apps Script API
+    # 1. Load local records from HISTORY_FILE
+    local_records = []
+    if os.path.exists(HISTORY_FILE):
+        try:
+            with open(HISTORY_FILE, "r") as f:
+                local_records = json.load(f)
+        except Exception:
+            pass
+            
+    # Normalize local_records list structure
+    if not isinstance(local_records, list):
+        local_records = []
+
+    # 2. Get API URL from secrets
     api_url = None
     if HAS_STREAMLIT:
         try:
             api_url = st.secrets.get("gsheets_api_url")
         except Exception:
             pass
-            
-    raw_data = None
+
+    cloud_records = None
     loaded_from_cloud = False
     if api_url:
         try:
             # Prevent caching by appending a unique Unix timestamp query parameter
             import time
             cb_url = f"{api_url}&_={int(time.time())}" if "?" in api_url else f"{api_url}?_={int(time.time())}"
-            # Query the Google Sheets Web App
             response = requests.get(cb_url, timeout=6)
             if response.status_code == 200:
-                raw_data = response.json()
-                if isinstance(raw_data, list):
+                cloud_records = response.json()
+                if isinstance(cloud_records, list):
                     loaded_from_cloud = True
-                    # Auto-sync: Save healthy cloud data back to local JSON copy immediately
-                    try:
-                        with open(HISTORY_FILE, "w") as f:
-                            json.dump(raw_data, f, indent=4)
-                    except Exception:
-                        pass
         except Exception as e:
-            # Fall back to local JSON on network timeout or DNS failure
             print(f"Error fetching Google Sheets history: {str(e)}")
             pass
-            
-    # Local JSON Caching Fallback if API failed
-    if not isinstance(raw_data, list):
-        if os.path.exists(HISTORY_FILE):
-            try:
-                with open(HISTORY_FILE, "r") as f:
-                    raw_data = json.load(f)
-            except Exception:
-                raw_data = []
-        else:
-            raw_data = []
 
-    # Sanitize data to be extremely defensive against NoneType or non-iterable values
-    sanitized_data = []
-    if isinstance(raw_data, list):
-        for entry in raw_data:
-            if not isinstance(entry, dict):
-                continue
+    # Helper function to check if two entries are equal
+    def are_entries_equal(e1, e2):
+        # Date match
+        d1 = str(e1.get("date", "")).split("T")[0].strip()
+        d2 = str(e2.get("date", "")).split("T")[0].strip()
+        if d1 != d2:
+            return False
             
-            # Ensure date exists and is a string
-            if "date" not in entry or not entry["date"]:
-                entry["date"] = datetime.date.today().isoformat()
-                
-            # Ensure mileage exists and is an int
-            try:
-                entry["mileage"] = int(entry.get("mileage", 0))
-            except (ValueError, TypeError):
-                entry["mileage"] = 0
-                
-            # Ensure severe_mode exists and is boolean
-            entry["severe_mode"] = bool(entry.get("severe_mode", False))
+        # Mileage match
+        try:
+            m1 = int(e1.get("mileage", 0))
+        except Exception:
+            m1 = 0
+        try:
+            m2 = int(e2.get("mileage", 0))
+        except Exception:
+            m2 = 0
+        if m1 != m2:
+            return False
             
-            # Set dynamic source indicator for app memory display (not written to Sheet)
-            entry["_source_of_data"] = "☁ Cloud (Sheets)" if loaded_from_cloud else "📂 Local (JSON)"
-            
-            # Ensure completed_items exists and is a proper list of strings
-            completed = entry.get("completed_items")
-            if completed is None:
-                entry["completed_items"] = []
-            elif isinstance(completed, str):
-                completed_strip = completed.strip()
-                if completed_strip.startswith("[") and completed_strip.endswith("]"):
+        # Completed items match
+        def clean_items(it):
+            if it is None:
+                return []
+            if isinstance(it, str):
+                it_strip = it.strip()
+                if it_strip.startswith("[") and it_strip.endswith("]"):
                     try:
-                        parsed = json.loads(completed_strip)
+                        import json
+                        parsed = json.loads(it_strip)
                         if isinstance(parsed, list):
-                            entry["completed_items"] = [str(x) for x in parsed if x is not None]
-                        else:
-                            entry["completed_items"] = [completed_strip]
+                            return sorted([str(x).strip() for x in parsed if x is not None])
                     except Exception:
+                        pass
+                if ";" in it_strip:
+                    return sorted([x.strip() for x in it_strip.split(";") if x.strip()])
+                if "," in it_strip:
+                    return sorted([x.strip() for x in it_strip.split(",") if x.strip()])
+                return [it_strip] if it_strip else []
+            if isinstance(it, list):
+                return sorted([str(x).strip() for x in it if x is not None])
+            return []
+            
+        return clean_items(e1.get("completed_items")) == clean_items(e2.get("completed_items"))
+
+    merged_data = []
+    if loaded_from_cloud:
+        # Merge local and cloud records
+        matched_cloud_indices = set()
+        
+        # 1. Process local records and check if they exist in cloud
+        for local_entry in local_records:
+            if not isinstance(local_entry, dict):
+                continue
+                
+            # Find matching entry in cloud
+            match_index = None
+            for idx, cloud_entry in enumerate(cloud_records):
+                if idx in matched_cloud_indices:
+                    continue
+                if are_entries_equal(local_entry, cloud_entry):
+                    match_index = idx
+                    break
+                    
+            if match_index is not None:
+                # Exists in BOTH local and cloud -> Indicator should be shown as Cloud!
+                matched_cloud_indices.add(match_index)
+                entry_copy = dict(local_entry)
+                entry_copy["_source_of_data"] = "☁ Cloud (Sheets)"
+                merged_data.append(entry_copy)
+            else:
+                # Exists ONLY in local
+                entry_copy = dict(local_entry)
+                entry_copy["_source_of_data"] = "📂 Local (JSON)"
+                merged_data.append(entry_copy)
+                
+        # 2. Add remaining cloud records that do not exist in local (or have been auto-synced)
+        for idx, cloud_entry in enumerate(cloud_records):
+            if idx not in matched_cloud_indices:
+                if isinstance(cloud_entry, dict):
+                    entry_copy = dict(cloud_entry)
+                    entry_copy["_source_of_data"] = "☁ Cloud (Sheets)"
+                    merged_data.append(entry_copy)
+                    
+        # Update local file with the newly merged and synced list
+        try:
+            with open(HISTORY_FILE, "w") as f:
+                import json
+                json.dump(merged_data, f, indent=4)
+        except Exception:
+            pass
+    else:
+        # We are offline or cloud fetch failed, so we use local_records directly
+        for local_entry in local_records:
+            if not isinstance(local_entry, dict):
+                continue
+            entry_copy = dict(local_entry)
+            # If the entry was previously marked as synced, keep it! Otherwise fall back to Local
+            if "_source_of_data" not in entry_copy:
+                entry_copy["_source_of_data"] = "📂 Local (JSON)"
+            merged_data.append(entry_copy)
+
+    # Sanitize merged_data before returning to the UI to ensure robust display
+    sanitized_data = []
+    for entry in merged_data:
+        if not isinstance(entry, dict):
+            continue
+            
+        # Ensure date exists and is a string
+        if "date" not in entry or not entry["date"]:
+            entry["date"] = datetime.date.today().isoformat()
+            
+        # Ensure mileage exists and is an int
+        try:
+            entry["mileage"] = int(entry.get("mileage", 0))
+        except (ValueError, TypeError):
+            entry["mileage"] = 0
+            
+        # Ensure severe_mode exists and is boolean
+        entry["severe_mode"] = bool(entry.get("severe_mode", False))
+        
+        # Ensure completed_items exists and is a proper list of strings
+        completed = entry.get("completed_items")
+        if completed is None:
+            entry["completed_items"] = []
+        elif isinstance(completed, str):
+            completed_strip = completed.strip()
+            if completed_strip.startswith("[") and completed_strip.endswith("]"):
+                try:
+                    import json
+                    parsed = json.loads(completed_strip)
+                    if isinstance(parsed, list):
+                        entry["completed_items"] = [str(x) for x in parsed if x is not None]
+                    else:
                         entry["completed_items"] = [completed_strip]
-                elif ";" in completed_strip:
-                    entry["completed_items"] = [x.strip() for x in completed_strip.split(";") if x.strip()]
-                elif "," in completed_strip:
-                    entry["completed_items"] = [x.strip() for x in completed_strip.split(",") if x.strip()]
-                elif completed_strip:
+                except Exception:
                     entry["completed_items"] = [completed_strip]
-                else:
-                    entry["completed_items"] = []
-            elif isinstance(completed, list):
-                entry["completed_items"] = [str(x) for x in completed if x is not None]
+            elif ";" in completed_strip:
+                entry["completed_items"] = [x.strip() for x in completed_strip.split(";") if x.strip()]
+            elif "," in completed_strip:
+                entry["completed_items"] = [x.strip() for x in completed_strip.split(",") if x.strip()]
+            elif completed_strip:
+                entry["completed_items"] = [completed_strip]
             else:
                 entry["completed_items"] = []
+        elif isinstance(completed, list):
+            entry["completed_items"] = [str(x) for x in completed if x is not None]
+        else:
+            entry["completed_items"] = []
             
-            sanitized_data.append(entry)
-            
+        sanitized_data.append(entry)
+        
     return sanitized_data
 
 def get_cached_history():
