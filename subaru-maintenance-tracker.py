@@ -134,12 +134,12 @@ def load_history():
                 # Exists in BOTH local and cloud -> Indicator should be shown as Cloud!
                 matched_cloud_indices.add(match_index)
                 entry_copy = dict(local_entry)
-                entry_copy["_source_of_data"] = "☁ Cloud (Sheets)"
+                entry_copy["_source_of_data"] = "☁ Cloud"
                 merged_data.append(entry_copy)
             else:
                 # Exists ONLY in local
                 entry_copy = dict(local_entry)
-                entry_copy["_source_of_data"] = "📂 Local (JSON)"
+                entry_copy["_source_of_data"] = "▤ Local"
                 merged_data.append(entry_copy)
                 
         # 2. Add remaining cloud records that do not exist in local (or have been auto-synced)
@@ -147,7 +147,7 @@ def load_history():
             if idx not in matched_cloud_indices:
                 if isinstance(cloud_entry, dict):
                     entry_copy = dict(cloud_entry)
-                    entry_copy["_source_of_data"] = "☁ Cloud (Sheets)"
+                    entry_copy["_source_of_data"] = "☁ Cloud"
                     merged_data.append(entry_copy)
                     
         # Update local file with the newly merged and synced list
@@ -165,7 +165,7 @@ def load_history():
             entry_copy = dict(local_entry)
             # If the entry was previously marked as synced, keep it! Otherwise fall back to Local
             if "_source_of_data" not in entry_copy:
-                entry_copy["_source_of_data"] = "📂 Local (JSON)"
+                entry_copy["_source_of_data"] = "▤ Local"
             merged_data.append(entry_copy)
 
     # Sanitize merged_data before returning to the UI to ensure robust display
@@ -237,7 +237,7 @@ def save_history(entry):
             pass
             
     # Set dynamic source indicator for session consistency
-    entry["_source_of_data"] = "☁ Cloud (Sheets)" if api_url else "📂 Local (JSON)"
+    entry["_source_of_data"] = "☁ Cloud" if api_url else "▤ Local"
 
     if HAS_STREAMLIT:
         if "history_cache" not in st.session_state:
@@ -1285,7 +1285,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             for entry in history:
                 date_val = entry.get("date", "")
                 mi_val = entry.get("mileage", 0)
-                source_val = entry.get("_source_of_data", "📂 Local (JSON)")
+                source_val = entry.get("_source_of_data", "▤ Local")
                 for item in entry.get("completed_items", []):
                     timeline_data.append({
                         "Date": date_val,
@@ -1309,7 +1309,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                     column_config={
                         "Data Source": st.column_config.TextColumn(
                             "Data Source",
-                            help="☁ Cloud (Sheets): Pulled directly from Google Sheets. 📂 Local (JSON): Fallback loaded from local cache file."
+                            help="☁ Cloud: Pulled directly from Google Sheets. ▤ Local: Fallback loaded from local cache file."
                         )
                     }
                 )
