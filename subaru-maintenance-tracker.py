@@ -187,6 +187,10 @@ def load_history():
         # Ensure severe_mode exists and is boolean
         entry["severe_mode"] = bool(entry.get("severe_mode", False))
         
+        # Ensure time exists in HH:MM format
+        if "time" not in entry or not entry["time"]:
+            entry["time"] = "00:00"
+            
         # Ensure completed_items exists and is a proper list of strings
         completed = entry.get("completed_items")
         if completed is None:
@@ -733,8 +737,12 @@ if HAS_STREAMLIT and st.runtime.exists():
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Confirm", type="primary", use_container_width=True):
+                # Calculate current time in US/Eastern timezone
+                from zoneinfo import ZoneInfo
+                current_time_est = datetime.datetime.now(ZoneInfo("US/Eastern")).strftime("%H:%M")
                 new_entry = {
                     "date": datetime.date.today().isoformat(),
+                    "time": current_time_est,
                     "mileage": mileage,
                     "severe_mode": severe,
                     "completed_items": completed_list
@@ -1277,21 +1285,24 @@ if HAS_STREAMLIT and st.runtime.exists():
         if history:
             for entry in history:
                 date_val = entry.get("date", "")
+                time_val = entry.get("time", "00:00")
                 mi_val = entry.get("mileage", 0)
                 for item in entry.get("completed_items", []):
                     timeline_data.append({
                         "Date": date_val,
+                        "Time": time_val,
                         "Odometer Mileage (mi)": mi_val,
                         "Completed Service Item": item
                     })
         
             df_timeline = pd.DataFrame(timeline_data)
             if not df_timeline.empty:
-                df_timeline = df_timeline.sort_values(by=["Date", "Odometer Mileage (mi)"], ascending=[False, False])
+                # Always sort the timeline table descending by date and by time as default.
+                df_timeline = df_timeline.sort_values(by=["Date", "Time"], ascending=[False, False])
                 df_timeline["Odometer Mileage (mi)"] = df_timeline["Odometer Mileage (mi)"].apply(lambda x: f"{x:,} mi")
                 
-                # Reorder columns
-                df_timeline = df_timeline[["Date", "Odometer Mileage (mi)", "Completed Service Item"]]
+                # Reorder columns to place Time next to Date
+                df_timeline = df_timeline[["Date", "Time", "Odometer Mileage (mi)", "Completed Service Item"]]
                 
                 st.dataframe(
                     df_timeline, 
