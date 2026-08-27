@@ -1306,7 +1306,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 for item in entry.get("completed_items", []):
                     timeline_data.append({
                         "Date": date_val,
-                        "Time": time_val,
+                        "Time (EST)": time_val,
                         "Odometer Mileage (mi)": mi_val,
                         "Completed Service Item": item
                     })
@@ -1314,11 +1314,11 @@ if HAS_STREAMLIT and st.runtime.exists():
             df_timeline = pd.DataFrame(timeline_data)
             if not df_timeline.empty:
                 # Always sort the timeline table descending by date and by time as default.
-                df_timeline = df_timeline.sort_values(by=["Date", "Time"], ascending=[False, False])
+                df_timeline = df_timeline.sort_values(by=["Date", "Time (EST)"], ascending=[False, False])
                 df_timeline["Odometer Mileage (mi)"] = df_timeline["Odometer Mileage (mi)"].apply(lambda x: f"{x:,} mi")
                 
-                # Reorder columns to place Time next to Date
-                df_timeline = df_timeline[["Date", "Time", "Odometer Mileage (mi)", "Completed Service Item"]]
+                # Reorder columns to place Time (EST) next to Date
+                df_timeline = df_timeline[["Date", "Time (EST)", "Odometer Mileage (mi)", "Completed Service Item"]]
                 
                 st.dataframe(
                     df_timeline, 
