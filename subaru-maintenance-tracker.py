@@ -737,9 +737,25 @@ if HAS_STREAMLIT and st.runtime.exists():
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Confirm", type="primary", use_container_width=True):
-                # Calculate current time in US/Eastern timezone
-                from zoneinfo import ZoneInfo
-                current_time_est = datetime.datetime.now(ZoneInfo("US/Eastern")).strftime("%H:%M")
+                # Calculate current time in US/Eastern timezone with failsafe manual fallback
+                current_time_est = "00:00"
+                try:
+                    from zoneinfo import ZoneInfo
+                    current_time_est = datetime.datetime.now(ZoneInfo("US/Eastern")).strftime("%H:%M")
+                except Exception:
+                    try:
+                        now_utc = datetime.datetime.now(datetime.timezone.utc)
+                        year = now_utc.year
+                        mar1 = datetime.datetime(year, 3, 1, tzinfo=datetime.timezone.utc)
+                        dst_start = datetime.datetime(year, 3, 1 + (6 - mar1.weekday()) % 7 + 7, 7, tzinfo=datetime.timezone.utc)
+                        nov1 = datetime.datetime(year, 11, 1, tzinfo=datetime.timezone.utc)
+                        dst_end = datetime.datetime(year, 11, 1 + (6 - nov1.weekday()) % 7, 6, tzinfo=datetime.timezone.utc)
+                        if dst_start <= now_utc < dst_end:
+                            current_time_est = (now_utc + datetime.timedelta(hours=-4)).strftime("%H:%M")
+                        else:
+                            current_time_est = (now_utc + datetime.timedelta(hours=-5)).strftime("%H:%M")
+                    except Exception:
+                        pass
                 new_entry = {
                     "date": datetime.date.today().isoformat(),
                     "time": current_time_est,
