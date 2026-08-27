@@ -38,6 +38,7 @@ def load_history():
             pass
             
     raw_data = None
+    loaded_from_cloud = False
     if api_url:
         try:
             # Prevent caching by appending a unique Unix timestamp query parameter
@@ -47,6 +48,14 @@ def load_history():
             response = requests.get(cb_url, timeout=6)
             if response.status_code == 200:
                 raw_data = response.json()
+                if isinstance(raw_data, list):
+                    loaded_from_cloud = True
+                    # Auto-sync: Save healthy cloud data back to local JSON copy immediately
+                    try:
+                        with open(HISTORY_FILE, "w") as f:
+                            json.dump(raw_data, f, indent=4)
+                    except Exception:
+                        pass
         except Exception as e:
             # Fall back to local JSON on network timeout or DNS failure
             print(f"Error fetching Google Sheets history: {str(e)}")
@@ -82,6 +91,9 @@ def load_history():
                 
             # Ensure severe_mode exists and is boolean
             entry["severe_mode"] = bool(entry.get("severe_mode", False))
+            
+            # Set dynamic source indicator for app memory display (not written to Sheet)
+            entry["_source_of_data"] = "☁ Cloud (Sheets)" if loaded_from_cloud else "📂 Local (JSON)"
             
             # Ensure completed_items exists and is a proper list of strings
             completed = entry.get("completed_items")
@@ -124,16 +136,20 @@ def get_cached_history():
 
 def save_history(entry):
     # Dynamic Google Sheets Integration via Apps Script API
-    if HAS_STREAMLIT:
-        if "history_cache" not in st.session_state:
-            st.session_state["history_cache"] = load_history()
-        st.session_state["history_cache"].append(entry)
     api_url = None
     if HAS_STREAMLIT:
         try:
             api_url = st.secrets.get("gsheets_api_url")
         except Exception:
             pass
+            
+    # Set dynamic source indicator for session consistency
+    entry["_source_of_data"] = "☁ Cloud (Sheets)" if api_url else "📂 Local (JSON)"
+
+    if HAS_STREAMLIT:
+        if "history_cache" not in st.session_state:
+            st.session_state["history_cache"] = load_history()
+        st.session_state["history_cache"].append(entry)
             
     if api_url:
         try:
@@ -1176,22 +1192,109 @@ if HAS_STREAMLIT and st.runtime.exists():
             for entry in history:
                 date_val = entry.get("date", "")
                 mi_val = entry.get("mileage", 0)
+                source_val = entry.get("_source_of_data", "📂 Local (JSON)")
                 for item in entry.get("completed_items", []):
                     timeline_data.append({
                         "Date": date_val,
                         "Odometer Mileage (mi)": mi_val,
-                        "Completed Service Item": item
+                        "Completed Service Item": item,
+                        "Data Source": source_val
                     })
         
             df_timeline = pd.DataFrame(timeline_data)
             if not df_timeline.empty:
                 df_timeline = df_timeline.sort_values(by=["Date", "Odometer Mileage (mi)"], ascending=[False, False])
                 df_timeline["Odometer Mileage (mi)"] = df_timeline["Odometer Mileage (mi)"].apply(lambda x: f"{x:,} mi")
-                st.dataframe(df_timeline, use_container_width=True, hide_index=True)
+                
+                # Reorder columns to place Data Source neatly at the end
+                df_timeline = df_timeline[["Date", "Odometer Mileage (mi)", "Completed Service Item", "Data Source"]]
+                
+                st.dataframe(
+                    df_timeline, 
+                    use_container_width=True, 
+                    hide_index=True,
+                    column_config={
+                        "Data Source": st.column_config.TextColumn(
+                            "Data Source",
+                            help="☁ Cloud (Sheets): Pulled directly from Google Sheets. 📂 Local (JSON): Fallback loaded from local cache file."
+                        )
+                    }
+                )
             else:
                 st.info("No timeline items logged yet.")
         else:
             st.info("No timeline items logged yet.")
+
+        # --- LOCAL CACHE SYNC & RECOVERY TOOLS ---
+        api_url = None
+        if HAS_STREAMLIT:
+            try:
+                api_url = st.secrets.get("gsheets_api_url")
+            except Exception:
+                pass
+                
+        if api_url:
+            st.markdown("<hr style='margin:15px 0; border-color:#eee;'/>", unsafe_allow_html=True)
+            st.markdown("### ⚙ Local Cache Sync & Recovery Tools")
+            st.write("If you have offline records saved in your local JSON file (`subaru_maintenance_history.json`) that are missing from your Google Sheet, use this tool to synchronize them.")
+            
+            col_merge, col_spacer = st.columns([1, 2])
+            with col_merge:
+                if st.button("📤 Push Local Items to Sheets", use_container_width=True, help="Scan local file and upload any missing entries to Google Sheets"):
+                    # Load directly from local file (bypassing session state cache)
+                    local_records = []
+                    if os.path.exists(HISTORY_FILE):
+                        try:
+                            with open(HISTORY_FILE, "r") as f:
+                                local_records = json.load(f)
+                        except Exception:
+                            pass
+                    
+                    if local_records:
+                        # Fetch latest cloud records to avoid duplicates
+                        cloud_records = []
+                        try:
+                            import time
+                            cb_url = f"{api_url}&_={int(time.time())}" if "?" in api_url else f"{api_url}?_={int(time.time())}"
+                            res = requests.get(cb_url, timeout=6)
+                            if res.status_code == 200:
+                                cloud_records = res.json()
+                        except Exception:
+                            pass
+                        
+                        # Create set of cloud keys: (date, mileage, completed_items_key)
+                        cloud_keys = set()
+                        for entry in cloud_records:
+                            items_key = ";".join(sorted(entry.get("completed_items", [])))
+                            cloud_keys.add((entry.get("date"), entry.get("mileage"), items_key))
+                            
+                        # Find local records not in cloud keys
+                        to_upload = []
+                        for entry in local_records:
+                            items_key = ";".join(sorted(entry.get("completed_items", [])))
+                            key = (entry.get("date"), entry.get("mileage"), items_key)
+                            if key not in cloud_keys:
+                                to_upload.append(entry)
+                                
+                        if to_upload:
+                            uploaded_count = 0
+                            for entry in to_upload:
+                                try:
+                                    headers = {"Content-Type": "application/json"}
+                                    requests.post(api_url, json=entry, headers=headers, timeout=5)
+                                    uploaded_count += 1
+                                except Exception:
+                                    pass
+                            
+                            st.success(f"✓ Uploaded {uploaded_count} missing records to Google Sheets!")
+                            # Clear session cache to reload from cloud on rerun
+                            if HAS_STREAMLIT and "history_cache" in st.session_state:
+                                del st.session_state["history_cache"]
+                            st.rerun()
+                        else:
+                            st.info("Everything is already in sync! No missing records found in local JSON.")
+                    else:
+                        st.warning("No local backup JSON file found or file is empty.")
 
     # Manual Tab
     with tab_manual:
