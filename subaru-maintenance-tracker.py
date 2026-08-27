@@ -4,6 +4,7 @@ import json
 import datetime
 import pandas as pd
 import re
+import requests
 
 HISTORY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "subaru_maintenance_history.json")
 
@@ -28,6 +29,27 @@ except ImportError:
 
 
 def load_history():
+    # Dynamic Google Sheets Integration via Apps Script API
+    api_url = None
+    if HAS_STREAMLIT:
+        try:
+            api_url = st.secrets.get("gsheets_api_url")
+        except Exception:
+            pass
+            
+    if api_url:
+        try:
+            # Query the Google Sheets Web App
+            response = requests.get(api_url, timeout=6)
+            if response.status_code == 200:
+                data = response.json()
+                if isinstance(data, list):
+                    return data
+        except Exception as e:
+            # Fall back to local JSON on network timeout or DNS failure
+            pass
+            
+    # Local JSON Caching Fallback
     if os.path.exists(HISTORY_FILE):
         try:
             with open(HISTORY_FILE, "r") as f:
@@ -37,10 +59,36 @@ def load_history():
     return []
 
 def save_history(entry):
-    history = load_history()
+    # Dynamic Google Sheets Integration via Apps Script API
+    api_url = None
+    if HAS_STREAMLIT:
+        try:
+            api_url = st.secrets.get("gsheets_api_url")
+        except Exception:
+            pass
+            
+    if api_url:
+        try:
+            # Append row to Google Sheets via secure HTTPS POST
+            headers = {"Content-Type": "application/json"}
+            response = requests.post(api_url, json=entry, headers=headers, timeout=8)
+        except Exception as e:
+            pass
+
+    # Always maintain a complete local JSON cache as a physical backup
+    history = []
+    if os.path.exists(HISTORY_FILE):
+        try:
+            with open(HISTORY_FILE, "r") as f:
+                history = json.load(f)
+        except Exception:
+            pass
     history.append(entry)
-    with open(HISTORY_FILE, "w") as f:
-        json.dump(history, f, indent=4)
+    try:
+        with open(HISTORY_FILE, "w") as f:
+            json.dump(history, f, indent=4)
+    except Exception:
+        pass
 
 class MaintenanceScheduler:
     def __init__(self, mileage, severe=False, primary_mode=True):
