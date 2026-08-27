@@ -187,8 +187,13 @@ def load_history():
         # Ensure severe_mode exists and is boolean (always defaults to False as it is not recorded in Sheets/JSON anymore)
         entry["severe_mode"] = False
         
-        # Ensure time exists in HH:MM format
-        if "time" not in entry or not entry["time"]:
+        # Ensure time exists in HH:MM format and clean up any mixed formats (e.g., JS Date stringification)
+        time_str = str(entry.get("time", "00:00")).strip()
+        time_match = re.search(r'(\d{1,2}):(\d{2})', time_str)
+        if time_match:
+            h, m = time_match.groups()
+            entry["time"] = f"{int(h):02d}:{int(m):02d}"
+        else:
             entry["time"] = "00:00"
             
         # Ensure completed_items exists and is a proper list of strings
