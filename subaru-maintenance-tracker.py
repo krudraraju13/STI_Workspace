@@ -40,12 +40,16 @@ def load_history():
     raw_data = None
     if api_url:
         try:
+            # Prevent caching by appending a unique Unix timestamp query parameter
+            import time
+            cb_url = f"{api_url}&_={int(time.time())}" if "?" in api_url else f"{api_url}?_={int(time.time())}"
             # Query the Google Sheets Web App
-            response = requests.get(api_url, timeout=6)
+            response = requests.get(cb_url, timeout=6)
             if response.status_code == 200:
                 raw_data = response.json()
         except Exception as e:
             # Fall back to local JSON on network timeout or DNS failure
+            print(f"Error fetching Google Sheets history: {str(e)}")
             pass
             
     # Local JSON Caching Fallback if API failed
@@ -616,6 +620,13 @@ if HAS_STREAMLIT and st.runtime.exists():
                     "completed_items": completed_list
                 }
                 save_history(new_entry)
+                
+                # Force-clear checkbox states from Streamlit session_state so they are unchecked on rerun
+                for item_name in completed_list:
+                    key = f"check_{item_name}"
+                    if key in st.session_state:
+                        st.session_state[key] = False
+                        
                 st.success("✓ Service logged successfully!")
                 st.rerun()
         with col2:
