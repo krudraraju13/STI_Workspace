@@ -1366,7 +1366,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             
             col_merge, col_spacer = st.columns([1, 2])
             with col_merge:
-                if st.button("📤 Push Local Items to Sheets", use_container_width=True, help="Scan local file and upload any missing entries to Google Sheets"):
+                if st.button("☁ Push Local Items to Sheets", use_container_width=True, help="Scan local file and upload any missing entries to Google Sheets"):
                     # Load directly from local file (bypassing session state cache)
                     local_records = []
                     if os.path.exists(HISTORY_FILE):
