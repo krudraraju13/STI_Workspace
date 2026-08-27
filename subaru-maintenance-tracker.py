@@ -832,6 +832,118 @@ if HAS_STREAMLIT and st.runtime.exists():
         with col2:
             if st.button("Cancel", use_container_width=True):
                 st.rerun()
+    @st.dialog("DOHC EJ257 Head Bolt Layout & Sequence", width="large")
+    def expand_head_bolt_dialog():
+        st.markdown('''
+<div style="text-align: center;">
+<svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 600px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px;">
+  <!-- Cylinder block outline -->
+  <rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#FF007F" stroke-width="2"/>
+  <text x="225" y="24" fill="#FF007F" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
+  
+  <!-- Bolts as circles with sequence numbers inside -->
+  <!-- Bolt 1 (Center top) -->
+  <circle cx="225" cy="75" r="20" fill="#FF007F" stroke="#ffffff" stroke-width="2"/>
+  <text x="225" y="81" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="16" font-weight="bold" text-anchor="middle">1</text>
+  <text x="225" y="47" fill="#94a3b8" font-size="9" text-anchor="middle">Center Top</text>
+
+  <!-- Bolt 2 (Center bottom) -->
+  <circle cx="225" cy="145" r="20" fill="#FF007F" stroke="#ffffff" stroke-width="2"/>
+  <text x="225" y="151" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="16" font-weight="bold" text-anchor="middle">2</text>
+  <text x="225" y="181" fill="#94a3b8" font-size="9" text-anchor="middle">Center Btm</text>
+
+  <!-- Bolt 3 (Left top) -->
+  <circle cx="115" cy="75" r="20" fill="#94a3b8" stroke="#ffffff" stroke-width="2"/>
+  <text x="115" y="81" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="16" font-weight="bold" text-anchor="middle">3</text>
+  <text x="115" y="47" fill="#94a3b8" font-size="9" text-anchor="middle">Left Top</text>
+
+  <!-- Bolt 4 (Right bottom) -->
+  <circle cx="335" cy="145" r="20" fill="#94a3b8" stroke="#ffffff" stroke-width="2"/>
+  <text x="335" y="151" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="16" font-weight="bold" text-anchor="middle">4</text>
+  <text x="335" y="181" fill="#94a3b8" font-size="9" text-anchor="middle">Right Btm</text>
+
+  <!-- Bolt 5 (Left bottom) -->
+  <circle cx="115" cy="145" r="20" fill="#475569" stroke="#ffffff" stroke-width="2"/>
+  <text x="115" y="151" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="16" font-weight="bold" text-anchor="middle">5</text>
+  <text x="115" y="181" fill="#94a3b8" font-size="9" text-anchor="middle">Left Btm</text>
+
+  <!-- Bolt 6 (Right top) -->
+  <circle cx="335" cy="75" r="20" fill="#475569" stroke="#ffffff" stroke-width="2"/>
+  <text x="335" y="81" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="16" font-weight="bold" text-anchor="middle">6</text>
+  <text x="335" y="181" fill="#94a3b8" font-size="9" text-anchor="middle">Right Top</text>
+
+  <!-- Center out arrows -->
+  <path d="M 225,100 L 225,120" stroke="#ffffff" stroke-width="2" fill="none" marker-end="url(#sm-arrow)"/>
+  <path d="M 200,75 L 140,75" stroke="#ffffff" stroke-width="2" fill="none" marker-end="url(#sm-arrow)"/>
+  <path d="M 250,145 L 310,145" stroke="#ffffff" stroke-width="2" fill="none" marker-end="url(#sm-arrow)"/>
+
+  <defs>
+    <marker id="sm-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M 0,1 L 10,5 L 0,9 z" fill="#ffffff"/>
+    </marker>
+  </defs>
+</svg>
+</div>
+''', unsafe_allow_html=True)
+
+    @st.dialog("EJ257 Piston Ring End Gap Alignment", width="large")
+    def expand_piston_ring_dialog():
+        st.markdown('''
+<div style="text-align: center;">
+<svg viewBox="0 0 400 400" width="100%" height="auto" style="max-width: 500px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px;">
+  <!-- Cylinder Bore -->
+  <circle cx="200" cy="200" r="165" fill="none" stroke="rgba(128, 128, 128, 0.3)" stroke-width="4"/>
+  <circle cx="200" cy="200" r="150" fill="rgba(128, 128, 128, 0.05)" stroke="rgba(128, 128, 128, 0.2)" stroke-width="2"/>
+  
+  <!-- Wrist Pin Axis -->
+  <rect x="175" y="100" width="50" height="200" rx="6" fill="rgba(128, 128, 128, 0.1)" stroke="rgba(128, 128, 128, 0.3)" stroke-width="1.5" opacity="0.3"/>
+  <circle cx="200" cy="200" r="8" fill="#94a3b8"/>
+  <line x1="200" y1="50" x2="200" y2="350" stroke="rgba(128, 128, 128, 0.2)" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="50" y1="200" x2="350" y2="200" stroke="rgba(128, 128, 128, 0.2)" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Front of Engine Arrow -->
+  <path d="M 200,90 L 200,45" stroke="#FF007F" stroke-width="3" fill="none" marker-end="url(#front-arrow)"/>
+  <text x="200" y="32" fill="#FF007F" font-family="'Montserrat', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">FRONT OF ENGINE (→)</text>
+
+  <!-- Gap A: Top Compression Ring -->
+  <line x1="200" y1="200" x2="306" y2="94" stroke="#FF007F" stroke-width="2" stroke-dasharray="3,3"/>
+  <circle cx="306" cy="94" r="11" fill="#FF007F"/>
+  <text x="306" y="100" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="11" font-weight="bold" text-anchor="middle">A</text>
+  <text x="322" y="88" fill="#FF007F" font-size="11" font-weight="bold">Top Ring</text>
+
+  <!-- Gap B: Second Compression Ring -->
+  <line x1="200" y1="200" x2="94" y2="306" stroke="#94a3b8" stroke-width="2" stroke-dasharray="3,3"/>
+  <circle cx="94" cy="306" r="11" fill="#94a3b8"/>
+  <text x="94" y="312" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="11" font-weight="bold" text-anchor="middle">B</text>
+  <text x="45" y="325" fill="#94a3b8" font-size="11" font-weight="bold">Second Ring</text>
+
+  <!-- Gap C: Upper Side Rail -->
+  <line x1="200" y1="200" x2="94" y2="94" stroke="#48bb78" stroke-width="2" stroke-dasharray="3,3"/>
+  <circle cx="94" cy="94" r="10" fill="#48bb78"/>
+  <text x="94" y="99" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">C</text>
+  <text x="45" y="80" fill="#48bb78" font-size="11" font-weight="bold">Upper Rail</text>
+
+  <!-- Gap G: Lower Side Rail -->
+  <line x1="200" y1="200" x2="306" y2="306" stroke="#3182ce" stroke-width="2" stroke-dasharray="3,3"/>
+  <circle cx="306" cy="306" r="10" fill="#3182ce"/>
+  <text x="306" y="311" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">G</text>
+  <text x="320" y="325" fill="#3182ce" font-size="11" font-weight="bold">Lower Rail</text>
+
+  <!-- Gap F: Spacer Expander -->
+  <line x1="200" y1="200" x2="200" y2="340" stroke="#94a3b8" stroke-width="2" stroke-dasharray="3,3"/>
+  <circle cx="200" cy="340" r="10" fill="#94a3b8"/>
+  <text x="200" y="345" fill="#ffffff" font-family="'Montserrat', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">F</text>
+  <text x="200" y="365" fill="#94a3b8" font-size="9" text-anchor="middle">Spacer Expander</text>
+
+  <defs>
+    <marker id="front-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M 0,1 L 10,5 L 0,9 z" fill="#FF007F"/>
+    </marker>
+  </defs>
+</svg>
+</div>
+''', unsafe_allow_html=True)
+
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
@@ -1428,11 +1540,11 @@ if HAS_STREAMLIT and st.runtime.exists():
         if api_url:
             st.markdown("<hr style='margin:15px 0; border-color:#eee;'/>", unsafe_allow_html=True)
             st.markdown("### ⚙ Local Cache Sync & Recovery Tools")
-            st.write("If you have offline records saved in your local JSON file (`subaru_maintenance_history.json`) that are missing from your Google Sheet, use this tool to synchronize them.")
+            st.write("If you have offline records saved in your local, use this tool to synchronize them to the Cloud.")
             
             col_merge, col_spacer = st.columns([1, 2])
             with col_merge:
-                if st.button("☁ Push Local Items to Sheets", use_container_width=True, help="Scan local file and upload any missing entries to Google Sheets"):
+                if st.button("☁ Push Local Items to Cloud", use_container_width=True, help="Scan local file and upload any missing entries to the Cloud"):
                     # Load directly from local file (bypassing session state cache)
                     local_records = []
                     if os.path.exists(HISTORY_FILE):
@@ -1496,7 +1608,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         with st.expander("☰ Subaru WRX STI Powertrain & Chassis Specifications"):
             st.markdown(
                 """
-                ### ☰ Official 2016 Subaru WRX STI (GUS Model) Specifications
+                ### ☰ Official 2016 Subaru WRX STI Specifications
                 *Based strictly on official 2016 US market specifications.*
 
                 ##### ⚙ Engine & Powertrain
@@ -1714,6 +1826,8 @@ if HAS_STREAMLIT and st.runtime.exists():
     </marker>
   </defs>
 </svg>''', unsafe_allow_html=True)
+                if st.button("🔍 Click to Expand Diagram", key="btn_expand_head_bolt", use_container_width=True):
+                    expand_head_bolt_dialog()
                 st.markdown(
                     '''
                     <div style='text-align:center; padding:10px; font-size:0.9em; color:#94a3b8;'>
@@ -1827,6 +1941,8 @@ if HAS_STREAMLIT and st.runtime.exists():
     </marker>
   </defs>
 </svg>''', unsafe_allow_html=True)
+                if st.button("🔍 Click to Expand Diagram", key="btn_expand_piston_ring", use_container_width=True):
+                    expand_piston_ring_dialog()
                 st.markdown(
                     '''
                     <div style='text-align:center; padding:10px; font-size:0.9em; color:#94a3b8;'>
