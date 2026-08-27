@@ -797,8 +797,9 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
         .css-modal-content {
             position: relative;
-            /* Adaptive container background matching dark/light mode */
+            /* Adaptive container background matching dark/light mode - 100% solid, no opacity */
             background-color: var(--secondary-background-color) !important;
+            opacity: 1 !important; /* Force 100% solid opaque background */
             padding: 24px;
             border: 1px solid rgba(255, 0, 127, 0.3) !important;
             width: 90%;
@@ -810,8 +811,9 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            /* Kept 100% solid during transition - no opacity/fade translucency */
+            from { transform: scale(0.95); }
+            to { transform: scale(1); }
         }
         .css-modal-close {
             position: absolute;
