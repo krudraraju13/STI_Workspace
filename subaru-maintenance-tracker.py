@@ -774,7 +774,8 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
 
 
-        /* Direct image-clickable zoom-box system (v122) */
+
+        /* Direct image-clickable zoom-box system (v123) */
         div[data-testid="column"]:has(.head-bolt-zoom-anchor),
         div[data-testid="column"]:has(.piston-ring-zoom-anchor) {
             position: relative !important;
@@ -792,7 +793,20 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 20px rgba(255, 0, 127, 0.15) !important;
         }
         
-        /* Position the stButton container absolutely to overlay the entire column */
+        /* Position the stButton parent element-container absolutely to fill the entire column */
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[class*="element-container"]:has(div[data-testid="stButton"]),
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor) div[class*="element-container"]:has(div[data-testid="stButton"]) {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            z-index: 99 !important;
+        }
+        
+        /* Make the stButton container fill its parent absolutely */
         div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[data-testid="stButton"],
         div[data-testid="column"]:has(.piston-ring-zoom-anchor) div[data-testid="stButton"] {
             position: absolute !important;
@@ -802,7 +816,6 @@ if HAS_STREAMLIT and st.runtime.exists():
             height: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
-            z-index: 10 !important;
         }
         
         /* Make the button transparent but clickable */
@@ -811,8 +824,10 @@ if HAS_STREAMLIT and st.runtime.exists():
             width: 100% !important;
             height: 100% !important;
             background-color: transparent !important;
+            background: transparent !important;
             border: none !important;
             color: transparent !important;
+            color: rgba(0,0,0,0) !important;
             box-shadow: none !important;
             cursor: pointer !important;
             margin: 0 !important;
@@ -820,9 +835,17 @@ if HAS_STREAMLIT and st.runtime.exists():
             display: block !important;
         }
         
+        /* Hide any children inside the button to prevent text/elements from being visible */
+        div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[data-testid="stButton"] button *,
+        div[data-testid="column"]:has(.piston-ring-zoom-anchor) div[data-testid="stButton"] button * {
+            display: none !important;
+            opacity: 0 !important;
+        }
+        
         div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[data-testid="stButton"] button:hover,
         div[data-testid="column"]:has(.piston-ring-zoom-anchor) div[data-testid="stButton"] button:hover {
-            background-color: rgba(255, 0, 127, 0.05) !important;
+            background-color: transparent !important;
+            background: transparent !important;
         }
         
         div[data-testid="column"]:has(.head-bolt-zoom-anchor) div[data-testid="stButton"] button:focus,
@@ -830,7 +853,6 @@ if HAS_STREAMLIT and st.runtime.exists():
             outline: none !important;
             box-shadow: none !important;
         }
-
         </style>
         """,
         unsafe_allow_html=True
