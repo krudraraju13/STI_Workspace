@@ -810,7 +810,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             z-index: 2 !important;
             /* 100% solid, completely opaque background dynamically mixing active theme colors (no transparency) */
             /* In Light Mode: Results in a solid light grey. In Dark Mode: Results in a solid dark grey. */
-            background-color: color-mix(in srgb, var(--text-color) 12%, var(--background-color)) !important; 
+            background-color: color-mix(in srgb, var(--text-color) 12%, var(--background-color)) !important;
             padding: 24px;
             border: 1px solid var(--border-color, #94a3b8) !important;
             width: 90%;
@@ -824,7 +824,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         .modal-svg {
             /* 100% solid, completely opaque background dynamically mixing active theme colors (no transparency) */
             /* Mixes 18% text color with 82% background color to provide high visibility for white lines/strokes */
-            background-color: color-mix(in srgb, var(--text-color) 12%, var(--background-color)) !important;/*
+            background-color: color-mix(in srgb, var(--text-color) 18%, var(--background-color)) !important;
             border-radius: 8px !important;
             padding: 12px !important;
             display: block !important;
