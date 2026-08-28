@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v154) */
+        /* Pure CSS modal system for image zoom (v155) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -965,7 +965,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # Tabs layout
     tab_checklist, tab_procedures, tab_parts, tab_fluids, tab_history, tab_manual = st.tabs([
-        "⌖ Status",
+        "⌖ Maintenance",
         "⚙ Procedures",
         "⎔ OEM Parts",
         "⛢ Fluids & Grades",
@@ -1235,7 +1235,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 
                 **Preparation:**
                 *   Fasteners must be clean, dry, and lightly lubricated with engine oil on the threads and flange seating faces prior to insertion.
-                *   The sequence must be performed in the designated cross-pattern (from the center outward) [1, 3, 5, 2, 4, 6] shown on FSM diagrams.
+                *   The sequence must be performed in the designated cross-pattern (from the center outward) (1, 3, 5, 2, 4, 6) shown on FSM diagrams.
                 
                 **The 10-Stage Torque Sequence:**
                 *   **Stage 1:** Torque all bolts in sequence to **40 N-m (29.5 ft-lbs)**.
@@ -1809,16 +1809,16 @@ if HAS_STREAMLIT and st.runtime.exists():
                 """
                 | Component Class | Fastener Description | Thread Spec | Torque Value (Imperial) | Torque Value (Metric) | Notes / Application |
                 | :--- | :--- | :--- | :--- | :--- | :--- |
-                | **Engine Core** | Spark Plugs (Dry Threads) | M14 | **13 to 17 ft-lbs** | 18 to 23 N-m | Factory Standard / Subimods |
-                | | Spark Plugs (Pro Street Spec) | M14 | **15.5 ft-lbs** | 21 N-m | My Pro Street Ignition |
-                | | Ignition Coil Pack Bolt | M6 | **11.8 ft-lbs** | 16 N-m | My Pro Street Ignition |
-                | | Air Pump Duct Bolt | M6 | **6.6 ft-lbs** | 9 N-m | My Pro Street Ignition |
-                | | Oil Pan Drain Plug | M20 | **33 to 34 ft-lbs** | 44 to 46 N-m | Factory Standard / Subimods |
+                | **Engine Core** | Spark Plugs (Dry Threads) | M14 | **13 to 17 ft-lbs** | 18 to 23 N-m | Factory Standard |
+                | | Spark Plugs (Pro Street Spec) | M14 | **15.5 ft-lbs** | 21 N-m | Factory Standard |
+                | | Ignition Coil Pack Bolt | M6 | **11.8 ft-lbs** | 16 N-m | Factory Standard |
+                | | Air Pump Duct Bolt | M6 | **6.6 ft-lbs** | 9 N-m | Factory Standard |
+                | | Oil Pan Drain Plug | M20 | **33 to 34 ft-lbs** | 44 to 46 N-m | Factory Standard |
                 | | Valve Cover Fasteners | M6 | **4.7 to 5.8 ft-lbs** | 6.4 to 7.8 N-m | Factory Standard (~56-70 in-lbs) |
-                | | Valve Cover Bolts (Pro Street) | M6 | **3.3 to 4.7 ft-lbs** | 4.5 to 6.4 N-m | My Pro Street Range |
-                | | Intake Manifold-to-Head | M8 | **17 to 20 ft-lbs** | 23 to 27 N-m | Factory Standard / Subimods |
-                | | Intake Manifold Bolts (Pro Street) | M8 | **18 ft-lbs** | 24.4 N-m | My Pro Street Spec |
-                | | Exhaust Manifold-to-Head | M10 | **22 to 29 ft-lbs** | 30 to 39 N-m | Factory Standard / Subimods |
+                | | Valve Cover Bolts (Pro Street) | M6 | **3.3 to 4.7 ft-lbs** | 4.5 to 6.4 N-m | Standard Range |
+                | | Intake Manifold-to-Head | M8 | **17 to 20 ft-lbs** | 23 to 27 N-m | Factory Standard |
+                | | Intake Manifold Bolts (Pro Street) | M8 | **18 ft-lbs** | 24.4 N-m | Factory Standard |
+                | | Exhaust Manifold-to-Head | M10 | **22 to 29 ft-lbs** | 30 to 39 N-m | Factory Standard |
                 | | Crankshaft Pulley Center Bolt | M18 | **35 ft-lbs + 60° turn** | 47 N-m + 60° turn | Factory Standard |
                 | | Water Pump Mounting Bolts | M6 | **9 ft-lbs** | 12 N-m | Factory Standard |
                 | **Drivetrain** | Gearbox Fill / Drain Plugs | M18 | **37 ft-lbs** | 50 N-m | Alum Washer |
@@ -1826,8 +1826,8 @@ if HAS_STREAMLIT and st.runtime.exists():
                 | | Rear Diff Fill / Drain Plugs | M20 | **36 to 43 ft-lbs** | 49 to 58 N-m | Hypoid Housing |
                 | | Clutch Pressure Plate | M8 | **12 ft-lbs** | 16 N-m | Clutch Cover |
                 | | Flywheel Assembly Bolts | M10 | **55 ft-lbs** | 75 N-m | Crank Connection |
-                | **Chassis** | Wheel Lug Nuts (Alloy Hub) | M12 x 1.25 | **89 to 94 ft-lbs** | 120 to 127 N-m | Factory Standard / Subimods |
-                | | Wheel Lug Nuts (Pro Street) | M12 x 1.25 | **88.5 ft-lbs** | 120 N-m | My Pro Street |
+                | **Chassis** | Wheel Lug Nuts (Alloy Hub) | M12 x 1.25 | **89 to 94 ft-lbs** | 120 to 127 N-m | Factory Standard |
+                | | Wheel Lug Nuts (Pro Street) | M12 x 1.25 | **88.5 ft-lbs** | 120 N-m | Standard Spec |
                 | | Front Upper Strut Hat Nuts | M10 | **22 ft-lbs** | 30 N-m | Strut Tower |
                 | | Knuckle Lower Strut Bolts | M14 | **129 ft-lbs** | 175 N-m | Alignment Clevis |
                 | | Rear Upper Strut Hat Nuts | M10 | **22 ft-lbs** | 30 N-m | Rear Hat |
@@ -1840,35 +1840,35 @@ if HAS_STREAMLIT and st.runtime.exists():
                 """
             )
 
-        # Section 3: My Pro Street DIY Pitfall & Warning Guide
-        with st.expander("▲ My Pro Street DIY Pitfall & Warning Guide"):
+        # Section 3: Standard Spec DIY Pitfall & Warning Guide
+        with st.expander("▲ Standard Spec DIY Pitfall & Warning Guide"):
             st.markdown(
                 """
-                ### ▲ Why Torque Specs Matter on the Subaru STI (My Pro Street Guide)
+                ### ▲ Why Torque Specs Matter on the Subaru STI (Standard Spec Guide)
                 Improper torque on your horizontally opposed boxer engine is a major cause of mechanical failures due to its aluminum components, high vibration, and intense heat cycles. "Good-n-tight" is not an official Subaru engineering measurement—use calibrated torque wrenches to avoid expensive repairs!
                 
                 #### 1. Spark Plug Torque: Why It Matters
-                *   **Pro Street Target Spec:** **15.5 ft-lb (21 N·m)**.
+                *   **Alternative Target Spec:** **15.5 ft-lb (21 N·m)**.
                 *   **Over-tightening Hazards:** Can strip soft aluminum cylinder head threads, damage plug gaskets, crack the delicate ceramic insulators, or cause improper heat transfer. Thread repair on an EJ head is extremely difficult.
                 *   **Under-tightening Hazards:** Loose spark plugs can cause severe combustion leakage, engine overheating, poor ignition performance, compression loss, or burned threads. The Subaru ignition manual explicitly notes loose plugs as a cause of overheating-related plug damage.
                 
                 #### 2. Ignition Coil Torque
-                *   **Pro Street Target Spec:** **11.8 ft-lb (16 N·m)**.
+                *   **Alternative Target Spec:** **11.8 ft-lb (16 N·m)**.
                 *   **Operational Risks:** The STI uses a direct ignition coil-on-plug system. Improper installation torque can create poor coil seating, weak spark delivery, electrical vibration issues, and misfires under boost. 
                 *   *Pro Tip:* Many Subaru owners chase fueling issues for weeks only to discover the ignition coil wasn't fully seated because someone tightened it using "vibes" instead of a torque wrench!
                 
                 #### 3. Valve Cover Bolts
-                *   **Pro Street Target Spec:** **3.3 to 4.7 ft-lb**.
+                *   **Alternative Target Spec:** **3.3 to 4.7 ft-lb**.
                 *   **The Pickle Jar Pitfall:** Valve cover leaks are extremely common on EJ engines. Because these bolts thread into soft aluminum, over-tightening can easily warp the valve covers, damage the gaskets, or strip the threads completely. 
                 *   *Pro Tip:* When people see an oil leak, they instinctively tighten the bolts harder like they're trying to close a pickle jar—this is a guaranteed way to strip your engine head! Always use an **inch-pound torque wrench** for these low values.
                 
                 #### 4. Wheel Lug Nuts
-                *   **Pro Street Target Spec:** **88.5 ft-lb**.
+                *   **Alternative Target Spec:** **88.5 ft-lb**.
                 *   **Operational Risks:** Improper wheel torque can warp brake rotors, cause uneven wheel clamping, damage studs, or lead to dangerous wheel vibrations.
                 *   *Warning:* Impact guns set to "earthquake mode" are not scientific measuring or precision tools! Always do your final pass with a calibrated torque wrench.
                 
                 #### 5. Intake Manifold Bolts
-                *   **Pro Street Target Spec:** **18 ft-lb**.
+                *   **Alternative Target Spec:** **18 ft-lb**.
                 *   **Operational Risks:** Improper or uneven torque on the intake manifold can cause vacuum leaks, boost leaks, uneven airflow, rough idling, or lean AFR (air-fuel ratio) conditions.
                 *   *Note:* On turbocharged Subarus, even a tiny vacuum leak can create massive drivability problems that make it feel like your ECU suddenly developed major trust issues!
                 
@@ -2218,12 +2218,12 @@ EJ257 PISTON RING END GAP ALIGNMENT
                 """
             )
 
-        # Section 8: Wheel and Tire Fitment Guide (ThreePiece.us)
+        # Section 8: Wheel and Tire Fitment Guide
         with st.expander("⌾ VA WRX & STI Aftermarket Wheel & Tire Fitment Guide"):
             st.markdown(
                 """
                 ### ⌾ Exhaustive Wheel Sizing, Tire Fitment & Clearance Guide
-                *Sourced from official ThreePiece.us engineering fitment specs and field-tested setups for the 2015–2021 VA chassis.*
+                *An engineering reference of wheel sizing, tire fitment parameters, and clearances for the 2015–2021 VA chassis.*
 
                 #### 1. Baseline Hub & Thread Specifications
                 | Parameter | Value / Metric | Notes / Alignment |
@@ -2254,12 +2254,12 @@ EJ257 PISTON RING END GAP ALIGNMENT
                 """
             )
 
-        # Section 9: MySubaru Remote API & subarulink Reference Guide
-        with st.expander("🔌 MySubaru Connected Services & subarulink API Reference"):
+        # Section 9: MySubaru Remote API Reference Guide
+        with st.expander("🔌 MySubaru Connected Services API Reference"):
             st.markdown(
                 """
                 ### 🔌 Reverse-Engineered MySubaru Connected Services API Reference
-                *This guide documents the core parameters and best practices for communicating programmatically with the MySubaru Connected Services API via the unofficial, reverse-engineered subarulink library.*
+                *This guide documents the core parameters and best practices for communicating programmatically with the MySubaru Connected Services API.*
 
                 #### 1. Core Session Controller
                 The `subarulink.Controller` class manages an authenticated asynchronous session to Subaru's servers, allowing command-execution on multiple vehicles registered to a single MySubaru account.
