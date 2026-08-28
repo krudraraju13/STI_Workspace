@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v147) */
+        /* Pure CSS modal system for image zoom (v148) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -784,8 +784,11 @@ if HAS_STREAMLIT and st.runtime.exists():
             top: 0;
             width: 100vw;
             height: 100vh;
-            /* 100% solid, fully opaque background (solid light grey in light theme, solid dark grey in dark theme) */
-            background-color: color-mix(in srgb, var(--text-color) 18%, var(--background-color)) !important;
+            /* Translucent background overlay matching standard page color to allow blur effect underneath */
+            background-color: color-mix(in srgb, var(--background-color) 60%, transparent) !important;
+            /* High fidelity blur effect behind the modal zoom box */
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
             align-items: center;
             justify-content: center;
         }
@@ -805,8 +808,9 @@ if HAS_STREAMLIT and st.runtime.exists():
         .css-modal-content {
             position: relative;
             z-index: 2 !important;
-            /* 100% solid, fully opaque background matching active theme (no alpha/transparency leaks) */
+            /* 100% solid, 100% opaque, 0% transparency background matching active theme (no alpha/transparency leaks) */
             background-color: color-mix(in srgb, var(--text-color) 4%, var(--background-color)) !important;
+            opacity: 1 !important;
             padding: 24px;
             border: 1px solid var(--border-color, #94a3b8) !important;
             width: 90%;
