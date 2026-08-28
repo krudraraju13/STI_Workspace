@@ -650,7 +650,7 @@ if HAS_STREAMLIT and st.runtime.exists():
     # Set page layout config
     
 
-    # Dynamic Theme-aware CSS custom styling engine (v170)
+    # Dynamic Theme-aware CSS custom styling engine (v171)
     # Streamlit >= 1.46.0 supports reading the active theme dynamically on st.context.theme.get("type")
     # This prevents CSS browser media queries from overriding backgrounds on manual theme switches!
     theme_type = None
@@ -783,7 +783,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Pure CSS modal system for image zoom (v170) */
+        /* Pure CSS modal system for image zoom (v171) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -874,7 +874,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v170) */
+        /* Banner title block with clean background image (v171) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -971,95 +971,105 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
     """
 
-    # Dynamic CSS Variables & Page Background overrides utilizing Google Material Design 3 Surface-Tint Color-Mixing (v170)
-    # This matches the dynamic branding engine of notebook.google.com by mixing a small percentage (3% - 10%)
-    # of our STI Cherry Blossom Brand Pink (#FF007F) with light slate and dark charcoal bases to produce organic, cohesive theme backings.
-    # To prevent any circular reference issues in CSS variables when theme_type is None, we define --tinted-bg and --tinted-sec-bg
-    # in terms of native variables, then apply them to the background properties.
+    # Dynamic CSS Variables & Page Background overrides utilizing Google Material Design 3 Surface-Tint Color-Mixing (v171)
+    # Reverts back to v169's robust hardcoded color bases (#f8fafc for light, #121214 for dark) to avoid circular reference bugs,
+    # and patches the light-mode background color bleed by introducing comprehensive data-theme and Media Query fallback matrices.
     if theme_type == "dark":
         custom_style += """
         .stApp {
-            --tinted-bg: color-mix(in srgb, #FF007F 5%, #1f2125) !important;
-            --tinted-sec-bg: color-mix(in srgb, #FF007F 10%, #2c2f36) !important;
+            --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1a1a1c) !important;
         }
         [data-testid="stAppViewContainer"], .stApp {
-            background-color: var(--tinted-bg) !important;
+            background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
         }
         [data-testid="stHeader"] {
-            background-color: var(--tinted-bg) !important;
-        }
-        .custom-card {
-            background-color: var(--tinted-sec-bg) !important;
-        }
-        div[data-testid="stDataFrame"] {
-            background-color: var(--tinted-sec-bg) !important;
-        }
-        .streamlit-expanderHeader {
-            background-color: var(--tinted-sec-bg) !important;
-        }
-        .streamlit-expanderContent {
-            background-color: var(--tinted-bg) !important;
+            background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
         }
         """
     elif theme_type == "light":
         custom_style += """
         .stApp {
-            --tinted-bg: color-mix(in srgb, #FF007F 3%, #ffffff) !important;
-            --tinted-sec-bg: color-mix(in srgb, #FF007F 6%, #f0f2f6) !important;
+            --background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 6%, #f1f5f9) !important;
         }
         [data-testid="stAppViewContainer"], .stApp {
-            background-color: var(--tinted-bg) !important;
+            background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
         }
         [data-testid="stHeader"] {
-            background-color: var(--tinted-bg) !important;
-        }
-        .custom-card {
-            background-color: var(--tinted-sec-bg) !important;
-        }
-        div[data-testid="stDataFrame"] {
-            background-color: var(--tinted-sec-bg) !important;
-        }
-        .streamlit-expanderHeader {
-            background-color: var(--tinted-sec-bg) !important;
-        }
-        .streamlit-expanderContent {
-            background-color: var(--tinted-bg) !important;
+            background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
         }
         """
     else:
-        # Fallback to Media Query AND Dynamic variable-based color mixing if theme_type is not resolved yet during initial boot
-        # This resolves the system dark mode media query leaking into Streamlit's manual light mode toggle!
-        # By defining variables that use the native --background-color and --secondary-background-color as bases,
-        # the browser resolves them on the fly based on Streamlit's active theme.
+        # Fallback to standard selector-based theming if Streamlit theme is not fully resolved yet during initial boot
+        # This matches the dynamic theme state of the client browser on the fly.
         custom_style += """
-        .stApp {
-            --tinted-bg: color-mix(in srgb, #FF007F 3%, var(--background-color)) !important;
-            --tinted-sec-bg: color-mix(in srgb, #FF007F 6%, var(--secondary-background-color)) !important;
+        /* Manual Dark Theme Toggle */
+        [data-theme="dark"], .stApp[data-theme="dark"], html[data-theme="dark"], body[data-theme="dark"] {
+            --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1a1a1c) !important;
         }
-        [data-testid="stAppViewContainer"], .stApp {
-            background-color: var(--tinted-bg) !important;
+        [data-theme="dark"] [data-testid="stAppViewContainer"],
+        .stApp[data-theme="dark"] [data-testid="stAppViewContainer"],
+        [data-theme="dark"] .stApp,
+        .stApp[data-theme="dark"] {
+            background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
         }
-        [data-testid="stHeader"] {
-            background-color: var(--tinted-bg) !important;
+        [data-theme="dark"] [data-testid="stHeader"],
+        .stApp[data-theme="dark"] [data-testid="stHeader"] {
+            background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
         }
-        .custom-card {
-            background-color: var(--tinted-sec-bg) !important;
+
+        /* Manual Light Theme Toggle */
+        [data-theme="light"], .stApp[data-theme="light"], html[data-theme="light"], body[data-theme="light"] {
+            --background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 6%, #f1f5f9) !important;
         }
-        div[data-testid="stDataFrame"] {
-            background-color: var(--tinted-sec-bg) !important;
+        [data-theme="light"] [data-testid="stAppViewContainer"],
+        .stApp[data-theme="light"] [data-testid="stAppViewContainer"],
+        [data-theme="light"] .stApp,
+        .stApp[data-theme="light"] {
+            background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
         }
-        .streamlit-expanderHeader {
-            background-color: var(--tinted-sec-bg) !important;
+        [data-theme="light"] [data-testid="stHeader"],
+        .stApp[data-theme="light"] [data-testid="stHeader"] {
+            background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
         }
-        .streamlit-expanderContent {
-            background-color: var(--tinted-bg) !important;
+
+        /* System Dark Mode Preference (unless manual light theme is active) */
+        @media (prefers-color-scheme: dark) {
+            html:not([data-theme="light"]) body:not([data-theme="light"]) .stApp:not([data-theme="light"]) {
+                --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+                --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1a1a1c) !important;
+            }
+            html:not([data-theme="light"]) body:not([data-theme="light"]) [data-testid="stAppViewContainer"]:not([data-theme="light"]),
+            html:not([data-theme="light"]) body:not([data-theme="light"]) .stApp:not([data-theme="light"]) {
+                background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+            }
+            html:not([data-theme="light"]) body:not([data-theme="light"]) [data-testid="stHeader"]:not([data-theme="light"]) {
+                background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+            }
+        }
+
+        /* System Light Mode Preference (unless manual dark theme is active) */
+        @media (prefers-color-scheme: light) {
+            html:not([data-theme="dark"]) body:not([data-theme="dark"]) .stApp:not([data-theme="dark"]) {
+                --background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+                --secondary-background-color: color-mix(in srgb, #FF007F 6%, #f1f5f9) !important;
+            }
+            html:not([data-theme="dark"]) body:not([data-theme="dark"]) [data-testid="stAppViewContainer"]:not([data-theme="dark"]),
+            html:not([data-theme="dark"]) body:not([data-theme="dark"]) .stApp:not([data-theme="dark"]) {
+                background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+            }
+            html:not([data-theme="dark"]) body:not([data-theme="dark"]) [data-testid="stHeader"]:not([data-theme="dark"]) {
+                background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+            }
         }
         """
 
     custom_style += """
         </style>
     """
-
     @st.dialog("Confirm Service Log")
     def confirm_save_dialog(completed_list, mileage, severe):
         st.markdown("##### Are you sure you want to save the completed services to your history?")
@@ -1119,7 +1129,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v170)
+    # Responsive Brand Logo Header Block with Clean Background Image (v171)
     st.markdown(
         f"""
         <div class="header-banner">
