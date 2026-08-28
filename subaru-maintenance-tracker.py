@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v149) */
+        /* Pure CSS modal system for image zoom (v150) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -808,25 +808,64 @@ if HAS_STREAMLIT and st.runtime.exists():
         .css-modal-content {
             position: relative;
             z-index: 2 !important;
-            /* 100% solid, completely opaque background with no transparency or opacity rules */
-            background-color: var(--background-color) !important;
+            /* 100% solid, completely opaque background for light mode (0% transparency) */
+            background-color: #f1f5f9 !important; /* Solid light grey */
             padding: 24px;
-            border: 1px solid var(--border-color, #94a3b8) !important;
+            border: 1px solid #94a3b8 !important;
             width: 90%;
             max-width: 800px;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             text-align: center;
             animation: modalFadeIn 0.25s ease-out;
-            color: var(--text-color) !important; /* Dynamic high-contrast text color from active theme */
+            color: #0f172a !important; /* Solid dark text for high-contrast light mode */
         }
         .modal-svg {
-            /* 100% solid, completely opaque background with no transparency or opacity rules */
-            background-color: var(--secondary-background-color) !important;
+            /* 100% solid, completely opaque background for light mode (0% transparency) */
+            background-color: #cbd5e1 !important; /* Solid light grey for SVG */
             border-radius: 8px !important;
             padding: 12px !important;
             display: block !important;
             margin: auto !important;
+        }
+
+        /* 100% solid, completely opaque backgrounds for dark mode (0% transparency) */
+        @media (prefers-color-scheme: dark) {
+            .css-modal-content {
+                background-color: #1e293b !important; /* Solid dark grey */
+                color: #f8fafc !important; /* Solid light text */
+                border: 1px solid #475569 !important;
+            }
+            .modal-svg {
+                background-color: #0f172a !important; /* Solid dark grey for SVG */
+            }
+        }
+
+        /* Explicitly support Streamlit manual theme toggle values */
+        [data-theme="dark"] .css-modal-content,
+        .stApp[data-theme="dark"] .css-modal-content,
+        html[data-theme="dark"] .css-modal-content {
+            background-color: #1e293b !important; /* Solid dark grey */
+            color: #f8fafc !important; /* Solid light text */
+            border: 1px solid #475569 !important;
+        }
+        [data-theme="dark"] .modal-svg,
+        .stApp[data-theme="dark"] .modal-svg,
+        html[data-theme="dark"] .modal-svg {
+            background-color: #0f172a !important; /* Solid dark grey for SVG */
+        }
+
+        [data-theme="light"] .css-modal-content,
+        .stApp[data-theme="light"] .css-modal-content,
+        html[data-theme="light"] .css-modal-content {
+            background-color: #f1f5f9 !important; /* Solid light grey */
+            color: #0f172a !important; /* Solid dark text */
+            border: 1px solid #94a3b8 !important;
+        }
+        [data-theme="light"] .modal-svg,
+        .stApp[data-theme="light"] .modal-svg,
+        html[data-theme="light"] .modal-svg {
+            background-color: #cbd5e1 !important; /* Solid light grey for SVG */
         }
         @keyframes modalFadeIn {
             /* Kept structural transition */
