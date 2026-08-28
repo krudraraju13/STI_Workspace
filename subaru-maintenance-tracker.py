@@ -649,17 +649,10 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # Set page layout config
     
-    # Global CSS customization for fonts, responsiveness, align, spacing, and colors
-    # Dynamic Theme-aware CSS custom styling engine (v174)
-    # Streamlit >= 1.46.0 supports reading the active theme dynamically on st.context.theme.get("type")
-    # This prevents CSS browser media queries from overriding backgrounds on manual theme switches!
-    theme_type = None
-    try:
-        theme_type = st.context.theme.get("type")
-    except Exception:
-        pass
 
-    custom_style = """
+    # Global CSS customization for fonts, responsiveness, align, spacing, and colors
+    st.markdown(
+        """
         <style>
         /* Import premium system fonts */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap');
@@ -785,7 +778,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v174) */
+        /* Pure CSS modal system for image zoom (v162) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -819,6 +812,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             position: relative;
             z-index: 2 !important;
             /* 100% solid, completely opaque background dynamically mixing active theme colors (no transparency) */
+            /* In Light Mode: Results in a solid light grey. In Dark Mode: Results in a solid dark grey. */
             background-color: color-mix(in srgb, var(--text-color) 12%, var(--background-color)) !important;
             padding: 24px;
             border: 1px solid var(--border-color, #94a3b8) !important;
@@ -876,7 +870,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v174) */
+        /* Banner title block with clean background image (v162) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -971,69 +965,10 @@ if HAS_STREAMLIT and st.runtime.exists():
                 flex: none !important;
             }
         }
-    """
-
-    # Dynamic CSS Variables & Page Background overrides utilizing Google Material Design 3 Surface-Tint Color-Mixing (v174)
-    # If the user toggles dark mode, change the deep background to dark-slate gray #1f2125
-    # If the user toggles light mode, change the deep background to a clean platinum-rose light slate and white cards to avoid overlaps!
-    if theme_type == "dark":
-        custom_style += """
-        .stApp {
-            --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
-            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1e1e24) !important;
-        }
-        [data-testid="stAppViewContainer"], .stApp {
-            background-color: var(--background-color) !important;
-        }
-        [data-testid="stHeader"] {
-            background-color: var(--background-color) !important;
-        }
-        """
-    elif theme_type == "light":
-        custom_style += """
-        .stApp {
-            --background-color: color-mix(in srgb, #FF007F 5%, #ffffff) !important;
-            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #ffffff) !important;
-        }
-        [data-testid="stAppViewContainer"], .stApp {
-            background-color: var(--background-color) !important;
-        }
-        [data-testid="stHeader"] {
-            background-color: var(--background-color) !important;
-        }
-        """
-    else:
-        # Non-circular surface-tinting fallback based on dynamic Streamlit custom variables.
-        # This completely resolves light/dark mode bleeding without circular reference crashes!
-        custom_style += """
-        .stApp {
-            --background-color-tinted: color-mix(in srgb, #FF007F 5%, var(--background-color, #ffffff)) !important;
-            --secondary-background-color-tinted: color-mix(in srgb, #FF007F 10%, var(--secondary-background-color, #ffffff)) !important;
-        }
-        [data-testid="stAppViewContainer"], .stApp {
-            background-color: var(--background-color-tinted) !important;
-        }
-        [data-testid="stHeader"] {
-            background-color: var(--background-color-tinted) !important;
-        }
-        .custom-card {
-            background-color: var(--secondary-background-color-tinted) !important;
-        }
-        div[data-testid="stDataFrame"] {
-            background-color: var(--secondary-background-color-tinted) !important;
-        }
-        .streamlit-expanderHeader {
-            background-color: var(--secondary-background-color-tinted) !important;
-        }
-        .streamlit-expanderContent {
-            background-color: var(--background-color-tinted) !important;
-        }
-        """
-
-    custom_style += """
         </style>
-    """
-    st.markdown(custom_style, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
 
     @st.dialog("Confirm Service Log")
     def confirm_save_dialog(completed_list, mileage, severe):
@@ -1094,7 +1029,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v174)
+    # Responsive Brand Logo Header Block with Clean Background Image (v162)
     st.markdown(
         f"""
         <div class="header-banner">
