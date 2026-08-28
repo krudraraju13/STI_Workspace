@@ -784,8 +784,8 @@ if HAS_STREAMLIT and st.runtime.exists():
             top: 0;
             width: 100vw;
             height: 100vh;
-            /* Translucent background overlay matching standard page color (70% opacity) */
-            background-color: color-mix(in srgb, var(--background-color) 70%, transparent) !important;
+            /* 100% solid, fully opaque background overlay matching standard page color (no transparency) */
+            background-color: var(--background-color) !important;
             /* High fidelity blur effect behind the modal zoom box */
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
@@ -849,6 +849,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             padding: 12px !important;
             display: block !important;
             margin: auto !important;
+            opacity: 1 !important; /* Force 100% solid, fully opaque SVG canvas background */
         }
 
         /* Interactive Thumbnail hover effects */
