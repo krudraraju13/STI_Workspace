@@ -663,7 +663,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Override entire app background color to a nice dark gray in dark mode (v163) */
+        /* Override entire app background color to a nice dark gray in dark mode (v164) */
         @media (prefers-color-scheme: dark) {
             html, body, [data-testid="stAppViewContainer"], .stApp {
                 background-color: #1f2125 !important;
@@ -677,7 +677,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             }
         }
         
-        /* Keep manual theme toggle settings in sync with the new dark gray theme (v163) */
+        /* Keep manual theme toggle settings in sync with the new dark gray theme (v164) */
         [data-theme="dark"], .stApp[data-theme="dark"], html[data-theme="dark"] {
             background-color: #1f2125 !important;
             --background-color: #1f2125 !important;
@@ -690,6 +690,35 @@ if HAS_STREAMLIT and st.runtime.exists():
         [data-theme="dark"] [data-testid="stHeader"],
         .stApp[data-theme="dark"] [data-testid="stHeader"] {
             background-color: #1f2125 !important;
+        }
+
+        /* Override entire app background color to a nice light gray in light mode (v164) */
+        @media (prefers-color-scheme: light) {
+            html, body, [data-testid="stAppViewContainer"], .stApp {
+                background-color: #f1f5f9 !important;
+            }
+            [data-testid="stHeader"] {
+                background-color: #f1f5f9 !important;
+            }
+            :root {
+                --background-color: #f1f5f9 !important;
+                --secondary-background-color: #cbd5e1 !important;
+            }
+        }
+        
+        /* Keep manual theme toggle settings in sync with the new light gray theme (v164) */
+        [data-theme="light"], .stApp[data-theme="light"], html[data-theme="light"] {
+            background-color: #f1f5f9 !important;
+            --background-color: #f1f5f9 !important;
+            --secondary-background-color: #cbd5e1 !important;
+        }
+        [data-theme="light"] [data-testid="stAppViewContainer"],
+        .stApp[data-theme="light"] [data-testid="stAppViewContainer"] {
+            background-color: #f1f5f9 !important;
+        }
+        [data-theme="light"] [data-testid="stHeader"],
+        .stApp[data-theme="light"] [data-testid="stHeader"] {
+            background-color: #f1f5f9 !important;
         }
 
         h1, h2, h3, h4, h5, h6, [class*="header"] {
@@ -807,7 +836,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v163) */
+        /* Pure CSS modal system for image zoom (v164) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -899,7 +928,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v163) */
+        /* Banner title block with clean background image (v164) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1058,7 +1087,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v163)
+    # Responsive Brand Logo Header Block with Clean Background Image (v164)
     st.markdown(
         f"""
         <div class="header-banner">
