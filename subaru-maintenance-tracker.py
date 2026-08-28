@@ -889,11 +889,11 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-image: url("https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_rally_car.jpg");
             /* Optimized for 1680x1050 landscape aspect ratio to fit the banner beautifully across all device sizes */
             background-size: cover;
-            background-position: center 40%; /* Vertically re-centered to keep the rally car in the sweet-spot of the crop */
+            background-position: center 38%; /* Vertically re-centered to keep the rally car in the sweet-spot of the crop */
             background-repeat: no-repeat;
              /*filter: blur(5px);*/
             /* -webkit-filter: blur(5px);*/
-            opacity: 0.50; /* Clean visibility across both dark and light modes */
+            opacity: 0.40; /* Clean visibility across both dark and light modes */
             z-index: 1;
         }
         .header-content {
