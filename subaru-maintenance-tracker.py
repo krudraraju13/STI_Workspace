@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v151) */
+        /* Pure CSS modal system for image zoom (v152) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -1238,7 +1238,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             {"Category": "Engine and Cooling", "Part Name": "Spark Plug Tube Seal", "OEM Part Number": "10966AA040", "Quantity": 4, "Price": 7.50, "Notes": "Rubber gasket sealing spark plug wells inside valve cover."},
             {"Category": "Engine and Cooling", "Part Name": "Rocker Cover Gasket (RH)", "OEM Part Number": "13270AA27A", "Quantity": 1, "Price": 24.00, "Notes": "Premium rubber valve cover gasket (passenger side)."},
             {"Category": "Engine and Cooling", "Part Name": "Rocker Cover Gasket (LH)", "OEM Part Number": "13272AA21A", "Quantity": 1, "Price": 24.00, "Notes": "Premium rubber valve cover gasket (driver side)."},
-            {"Category": "Engine and Cooling", "Part Name": "Cam Carrier O-Ring", "OEM Part Number": "806915170", "Quantity": 4, "Price": 3.20, "Notes": "Sealing ring for EJ257 camshaft carrier housing."},
+            {"Category": "Engineand Cooling", "Part Name": "Cam Carrier O-Ring", "OEM Part Number": "806915170", "Quantity": 4, "Price": 3.20, "Notes": "Sealing ring for EJ257 camshaft carrier housing."},
             {"Category": "Engine and Cooling", "Part Name": "Cylinder Head Gasket (RH)", "OEM Part Number": "11044AA790", "Quantity": 1, "Price": 55.00, "Notes": "Multi-layer steel (MLS) head gasket for extreme combustion pressures."},
             {"Category": "Engine and Cooling", "Part Name": "Cylinder Head Gasket (LH)", "OEM Part Number": "10944AA080", "Quantity": 1, "Price": 55.00, "Notes": "Multi-layer steel (MLS) head gasket (driver side)."},
             {"Category": "Engine and Cooling", "Part Name": "Connecting Rod Bolt", "OEM Part Number": "12109AA120", "Quantity": 8, "Price": 8.50, "Notes": "High-tensile Torque-to-Yield (TTY) connecting rod bolt (must replace once used)."},
@@ -1263,11 +1263,22 @@ if HAS_STREAMLIT and st.runtime.exists():
             {"Category": "Engine and Cooling", "Part Name": "COBB SF Intake + Airbox Combo", "OEM Part Number": "COBB-Intake", "Quantity": 1, "Price": 375.00, "Notes": "Air filter intake assembly with protective composite heat shield."},
             {"Category": "Engine and Cooling", "Part Name": "GrimmSpeed StealthBox Cold Air Intake", "OEM Part Number": "GrimmSpeed-Stealth", "Quantity": 1, "Price": 325.00, "Notes": "Red cold air intake with low-profile high-flow box layout."},
             {"Category": "Engine and Cooling", "Part Name": "Perrin Top Mount Intercooler (TMIC)", "OEM Part Number": "Perrin-TMIC", "Quantity": 1, "Price": 690.00, "Notes": "Large high-capacity intercooler core resists heat soak."},
+            {"Category": "Engine and Cooling", "Part Name": "Piston Ring Set (Standard Spec)", "OEM Part Number": "12033AC390", "Quantity": 1, "Price": 115.00, "Notes": "Standard size oil-control piston rings from TSB 02-143-13R countermeasure."},
+            {"Category": "Engine and Cooling", "Part Name": "Piston Ring Set (0.25 Oversize)", "OEM Part Number": "12033AC400", "Quantity": 1, "Price": 125.00, "Notes": "0.25mm oversize piston rings used during cylinder block boring/honing."},
+            {"Category": "Engine and Cooling", "Part Name": "Piston Ring Set (0.50 Oversize)", "OEM Part Number": "12033AC410", "Quantity": 1, "Price": 125.00, "Notes": "0.50mm oversize piston rings used during cylinder block boring/honing."},
+            {"Category": "Engine and Cooling", "Part Name": "Replacement Short Block Assembly", "OEM Part Number": "10103AC410", "Quantity": 1, "Price": 2150.00, "Notes": "OEM factory-built replacement EJ257 short block assembly."},
+            {"Category": "Engine and Cooling", "Part Name": "Piston Ring Compressor Tool", "OEM Part Number": "J-50553", "Quantity": 1, "Price": 145.00, "Notes": "Subaru specified specialty engine assembly ring compression sleeve."},
+            {"Category": "Engine and Cooling", "Part Name": "ThreeBond 1280B/1217G Liquid Gasket", "OEM Part Number": "SOA635065", "Quantity": 1, "Price": 24.50, "Notes": "High-temp RTV silicone sealant for block splits, oil pans, and covers."},
+            {"Category": "Engine and Cooling", "Part Name": "Subaru Super Coolant (Blue Premix)", "OEM Part Number": "SOA635041", "Quantity": 1, "Price": 28.00, "Notes": "Amine-free pre-mixed long-life ethylene glycol engine coolant."},
+            {"Category": "Engine and Cooling", "Part Name": "Company23 Flywheel Locker Tool", "OEM Part Number": "Comp23-FlyLocker", "Quantity": 1, "Price": 45.00, "Notes": "Locks flywheel teeth during clutch or flywheel bolt torque sequences."},
+            {"Category": "Engine and Cooling", "Part Name": "Torque Solution Camlock Tool (EJ Turbo)", "OEM Part Number": "TS-Camlock-EJ", "Quantity": 1, "Price": 55.00, "Notes": "Locks left-side DOHC cams to maintain valve timing during belt swaps."},
 
             # Maintenance
             {"Category": "Maintenance", "Part Name": "Spark Plug Set (NGK Laser Iridium)", "OEM Part Number": "22401AA670", "Quantity": 4, "Price": 60.00, "Notes": "NGK SILFR6A (7913) gapped to 0.030\". Replace every 30,000 to 60,000 miles."},
             {"Category": "Maintenance", "Part Name": "Engine Cabin Air Filter", "OEM Part Number": "72880FG000", "Quantity": 1, "Price": 25.00, "Notes": "Multi-layer HEPA Active Carbon filter. Replace every 12 to 24 months."},
             {"Category": "Maintenance", "Part Name": "Subaru OEM Touch-Up Paint", "OEM Part Number": "SOA326-Paint", "Quantity": 1, "Price": 31.00, "Notes": "Color-matched touch-up brush for chip repair."},
+            {"Category": "Maintenance", "Part Name": "Engine Air Filter (Alternative OEM)", "OEM Part Number": "16546AA090", "Quantity": 1, "Price": 24.00, "Notes": "Pleated dry fiber OEM replacement air filter for stock intake boxes."},
+            {"Category": "Maintenance", "Part Name": "Torque Solution Pro Billet Gap Tool (14mm)", "OEM Part Number": "TS-Gap-14", "Quantity": 1, "Price": 45.00, "Notes": "Billet aluminum precision tool for repeatable spark plug electrode gapping."},
 
             # Suspension and Brakes
             {"Category": "Suspension and Brakes", "Part Name": "Front Brembo Brake Rotor (Each)", "OEM Part Number": "26300FE070", "Quantity": 2, "Price": 150.00, "Notes": "High-carbon vented cast iron 326mm brake rotor."},
@@ -1282,6 +1293,8 @@ if HAS_STREAMLIT and st.runtime.exists():
             {"Category": "Suspension and Brakes", "Part Name": "Front Sway Bar 24mm Stabilizer Bushing", "OEM Part Number": "20401VA000", "Quantity": 2, "Price": 14.00, "Notes": "Molded rubber bushing for front anti-roll bar."},
             {"Category": "Suspension and Brakes", "Part Name": "Rear Sway Bar 20mm Stabilizer Bushing", "OEM Part Number": "20451VA000", "Quantity": 2, "Price": 12.00, "Notes": "Molded rubber bushing for rear anti-roll bar."},
             {"Category": "Suspension and Brakes", "Part Name": "Front Stabilizer Sway Bar Endlink", "OEM Part Number": "20470AJ010", "Quantity": 2, "Price": 29.50, "Notes": "Heavy-duty connecting links for front stabilizer bar."},
+            {"Category": "Suspension and Brakes", "Part Name": "Permatex Copper Anti-Seize (#39772)", "OEM Part Number": "Permatex-39772", "Quantity": 1, "Price": 11.50, "Notes": "High-temp copper lubricant to prevent steel-to-aluminum caliper bolt galling."},
+            {"Category": "Suspension and Brakes", "Part Name": "Torque Solution Billet Subframe Lockdown", "OEM Part Number": "TS-Subframe-Lock", "Quantity": 1, "Price": 75.00, "Notes": "Rigid billet lock collars to stabilize rear subframe alignment and cradle deflection."},
 
             # Manual Transmission
             {"Category": "Manual Transmission", "Part Name": "6-Speed MT Drain Plug (T70 Torx)", "OEM Part Number": "32103AA080", "Quantity": 1, "Price": 10.00, "Notes": "Magnetic drain plug for TY856 transmission case."},
@@ -1293,45 +1306,56 @@ if HAS_STREAMLIT and st.runtime.exists():
             {"Category": "Manual Transmission", "Part Name": "Subaru Bell Housing Bolts/Studs", "OEM Part Number": "Bellhousing-Bolt", "Quantity": 1, "Price": 4.43, "Notes": "High-tensile bellhousing to manual transmission mounting stud."},
             {"Category": "Manual Transmission", "Part Name": "Exedy Stage 1 Organic Performance Clutch Kit", "OEM Part Number": "FJK1001", "Quantity": 1, "Price": 425.00, "Notes": "Includes pressure plate, organic disc, and bearings."},
             {"Category": "Manual Transmission", "Part Name": "Standard Flywheel Assembly DOHC EJ257", "OEM Part Number": "12310AA410", "Quantity": 1, "Price": 225.00, "Notes": "Factory standard single-mass flywheel assembly."},
+            {"Category": "Manual Transmission", "Part Name": "Torque Solution T70 Torx Drain Plug Socket", "OEM Part Number": "TS-T70-Socket", "Quantity": 1, "Price": 18.50, "Notes": "Specialty T70 star socket required for 6MT transaxle drain plug removal."},
 
             # Driveline and Differential
             {"Category": "Driveline and Differential", "Part Name": "Motul STI 6-Speed Transmission Fluid Kit", "OEM Part Number": "Motul-6MT-Kit", "Quantity": 1, "Price": 165.00, "Notes": "Full fluid kit with gearbox and rear differential lubricants."},
             {"Category": "Driveline and Differential", "Part Name": "Hubcentric Rings (Set of 4)", "OEM Part Number": "Hub-Rings", "Quantity": 1, "Price": 11.00, "Notes": "Custom polymer alignment rings for aftermarket wheels."},
             {"Category": "Driveline and Differential", "Part Name": "Rear Differential Rear Crossmember Bushing Insert Kit", "OEM Part Number": "KDT903", "Quantity": 1, "Price": 45.00, "Notes": "Urethane inserts to stiffen differential cradle mounting."},
             {"Category": "Driveline and Differential", "Part Name": "Torque Solution Pitch Stop Mount", "OEM Part Number": "TS-PS-002", "Quantity": 1, "Price": 110.00, "Notes": "Billet aluminum pitch stop mount to reduce drivetrain slop."},
+            {"Category": "Driveline and Differential", "Part Name": "Subaru Gear Oil STI (DCCD Center Diff)", "OEM Part Number": "SOA-GearOilSTI", "Quantity": 1, "Price": 35.00, "Notes": "Specialty high-perf gear oil required for DCCD electro-mechanical diffs."},
+            {"Category": "Driveline and Differential", "Part Name": "Torque Solution Differential Drain Socket", "OEM Part Number": "TS-DiffSocket-13", "Quantity": 1, "Price": 15.00, "Notes": "13mm square-drive socket designed to prevent rear diff plug strip-out."},
 
             # Heating and Air Conditioning
             {"Category": "Heating and Air Conditioning", "Part Name": "AC Drive Stretch Belt Kit", "OEM Part Number": "11718AA082", "Quantity": 1, "Price": 45.00, "Notes": "Replaces 11718AA081. Specialty EPDM belt (includes plastic guide installer tool)."},
+            {"Category": "Heating and Air Conditioning", "Part Name": "AC Compressor Stretch Belt Installation Guide", "OEM Part Number": "11718AA082-Tool", "Quantity": 1, "Price": 15.00, "Notes": "Specialty plastic ramp tool to guide elastic belt onto clutch assembly safely."},
 
             # Steering
             {"Category": "Steering", "Part Name": "Alternator / Power Steering Belt", "OEM Part Number": "809218460", "Quantity": 1, "Price": 28.00, "Notes": "V-Ribbed EPDM accessory drive belt."},
             {"Category": "Steering", "Part Name": "Hydraulic Power Steering Pump Assembly", "OEM Part Number": "34430FG010", "Quantity": 1, "Price": 295.00, "Notes": "Factory OEM hydraulic power steering pump."},
             {"Category": "Steering", "Part Name": "High-Durometer Steering Rack Bushing Kit", "OEM Part Number": "16.1010", "Quantity": 1, "Price": 35.00, "Notes": "Polyurethane bushings to eliminate play in the steering rack."},
             {"Category": "Steering", "Part Name": "Updated Steering Gearbox Rattle Tension Spring", "OEM Part Number": "34130VA000", "Quantity": 1, "Price": 12.50, "Notes": "TSB 04-17-17-R tension spring to fix gearbox rattle."},
+            {"Category": "Steering", "Part Name": "Power Steering Pump O-Ring Seal", "OEM Part Number": "34439FG000", "Quantity": 1, "Price": 3.00, "Notes": "Tiny connector O-ring; replaces dry seals to fix pump whine/bubbling."},
 
             # Electrical
             {"Category": "Electrical", "Part Name": "Hanshin OEM Ignition Coil Pack", "OEM Part Number": "22433AA641", "Quantity": 4, "Price": 110.00, "Notes": "Hanshin OEM Service Component. Prevents misfires under boost."},
             {"Category": "Electrical", "Part Name": "Lead-Acid Group 35 Battery", "OEM Part Number": "Battery-Group35", "Quantity": 1, "Price": 140.00, "Notes": "Cold weather starting battery with 550-640 CCA."},
             {"Category": "Electrical", "Part Name": "Starlink 3G DCM Parasitic Battery Drain Bypass Harness", "OEM Part Number": "Starlink-Bypass", "Quantity": 1, "Price": 49.00, "Notes": "Loops audio around the DCM to stop battery draw."},
+            {"Category": "Electrical", "Part Name": "WUE-90 Brake Light Switch (Sealed Update)", "OEM Part Number": "83311FJ001", "Quantity": 1, "Price": 22.50, "Notes": "Updated sealed contacts switch solving NHTSA WUE-90 switch recalls."},
 
             # Interior
             {"Category": "Interior", "Part Name": "Glovebox Damper Clip / Hinge pin", "OEM Part Number": "Glovebox-Clip", "Quantity": 1, "Price": 8.50, "Notes": "OEM dashboard glovebox damper hinge retention pin."},
             {"Category": "Interior", "Part Name": "STI Leather/Alcantara Weighted Shift Knob", "OEM Part Number": "Shift-Knob", "Quantity": 1, "Price": 125.00, "Notes": "Genuine weighted shift knob for the TY856 transmission."},
             {"Category": "Interior", "Part Name": "Updated Clutch/Brake Pedal Bracket Assembly", "OEM Part Number": "Pedal-Assembly", "Quantity": 1, "Price": 195.00, "Notes": "TSB 12-190-15 reinforced bracket to resolve creaking noise."},
+            {"Category": "Interior", "Part Name": "TSB White Lithium Clutch Fork Grease", "OEM Part Number": "TSB-Clutch-Grease", "Quantity": 1, "Price": 9.00, "Notes": "High-temp white lithium grease to solve clutch pedal/throw-out arm creaks."},
 
             # Body
             {"Category": "Body", "Part Name": "Transmission Crossmember Bolt Kit", "OEM Part Number": "Crossmember-Bolts", "Quantity": 1, "Price": 18.00, "Notes": "High-tensile fasteners for subframe crossmember mounting."},
             {"Category": "Body", "Part Name": "Bumper Vents Set", "OEM Part Number": "Bumper-Vents", "Quantity": 1, "Price": 43.63, "Notes": "Bumper outer vents trim kit."},
             {"Category": "Body", "Part Name": "Front Bumper Side Support", "OEM Part Number": "Bumper-Support", "Quantity": 1, "Price": 12.82, "Notes": "Bumper fascia side attachment guide bracket."},
             {"Category": "Body", "Part Name": "Under-Engine Shield Cover Splash Guard", "OEM Part Number": "56410VA000", "Quantity": 1, "Price": 75.00, "Notes": "Molded composite splash cover protecting the engine oil pan."},
+            {"Category": "Body", "Part Name": "Heavy-Duty Pitch Stop Firewall Bracket Brace", "OEM Part Number": "PitchStop-Brace", "Quantity": 1, "Price": 145.00, "Notes": "Structural strut brace designed to prevent firewall spot weld fatigue failures."},
 
             # Door
             {"Category": "Door", "Part Name": "Door Hinge Lubricant", "OEM Part Number": "White Lithium Grease", "Quantity": 1, "Price": 8.00, "Notes": "Applied to door hinge assemblies and latching pins."},
             {"Category": "Door", "Part Name": "Front Door Checker/Stay Assembly", "OEM Part Number": "61280VA000", "Quantity": 2, "Price": 24.50, "Notes": "OEM door checker stay to hold the door in open positions."},
             {"Category": "Door", "Part Name": "Door Outer Window Belt Weatherstrip (Front RH)", "OEM Part Number": "61280VA010", "Quantity": 1, "Price": 45.00, "Notes": "Molded window belt moulding to seal the door glass."},
+            {"Category": "Door", "Part Name": "Power Window Master Switch Assembly", "OEM Part Number": "83071VA000", "Quantity": 1, "Price": 85.00, "Notes": "OEM driver-side master console switch for door windows and locks."},
 
             # Automatic Transmission
-            {"Category": "Automatic Transmission", "Part Name": "N/A (STI is exclusively 6MT manual)", "OEM Part Number": "N/A", "Quantity": 0, "Price": 0.00, "Notes": "S4 tS CVT variant uses ATF-HP (system capacity ~7.7 Liters)."}
+            {"Category": "Automatic Transmission", "Part Name": "N/A (STI is exclusively 6MT manual)", "OEM Part Number": "N/A", "Quantity": 0, "Price": 0.00, "Notes": "S4 tS CVT variant uses ATF-HP (system capacity ~7.7 Liters)."},
+            {"Category": "Automatic Transmission", "Part Name": "Sport Lineartronic CVT Fluid (ATF-HP)", "OEM Part Number": "SOA-ATF-HP", "Quantity": 1, "Price": 18.50, "Notes": "OEM fluid for S4 tS CVT variant (system capacity ~7.7 Liters / 8.1 Quarts)."},
+            {"Category": "Automatic Transmission", "Part Name": "JDM Auxiliary Transmission Oil Cooler Assembly", "OEM Part Number": "CVT-Cooler-JDM", "Quantity": 1, "Price": 245.00, "Notes": "Auxiliary CVT cooler assembly designed for the performance S4 tS model."}
         ]
 
 
