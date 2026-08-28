@@ -1760,8 +1760,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 st.markdown('''
 <a href="#head-bolt-zoom" class="zoomable-thumb">
 <svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 420px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px; cursor: pointer;">
-  <!-- Cylinder block outline -->
-  <rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#94a3b8" stroke-width="2"/>
+  <!-- Cylinder block outline removed -->
   <text x="225" y="24" fill="#94a3b8" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
   
   <!-- Bolts as circles with sequence numbers inside -->
@@ -1815,8 +1814,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 <a href="#" class="css-modal-close">&times;</a>
 <div style="max-width: 100%; overflow: auto;">
 <svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 650px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
-<!-- Cylinder block outline -->
-<rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#94a3b8" stroke-width="2"/>
+<!-- Cylinder block outline removed -->
 <text x="225" y="24" fill="#94a3b8" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
 
 <!-- Bolts as circles with sequence numbers inside -->
