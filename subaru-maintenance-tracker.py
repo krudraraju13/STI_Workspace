@@ -650,9 +650,16 @@ if HAS_STREAMLIT and st.runtime.exists():
     # Set page layout config
     
 
-    # Global CSS customization for fonts, responsiveness, align, spacing, and colors
-    st.markdown(
-        """
+    # Dynamic Theme-aware CSS custom styling engine (v168)
+    # Streamlit >= 1.46.0 supports reading the active theme dynamically on st.context.theme.get("type")
+    # This prevents CSS browser media queries from overriding backgrounds on manual theme switches!
+    theme_type = None
+    try:
+        theme_type = st.context.theme.get("type")
+    except Exception:
+        pass
+
+    custom_style = """
         <style>
         /* Import premium system fonts */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap');
@@ -661,32 +668,6 @@ if HAS_STREAMLIT and st.runtime.exists():
         html, body, [data-testid="stAppViewContainer"] {
             font-family: 'Roboto', sans-serif;
             color: var(--text-color) !important;
-        }
-
-        /* Override entire app background color to a nice dark gray in dark mode (v167) */
-        @media (prefers-color-scheme: dark) {
-            .stApp:not([data-theme="light"]) {
-                --background-color: #1f2125 !important;
-                --secondary-background-color: #2c2f36 !important;
-            }
-            .stApp:not([data-theme="light"]) [data-testid="stAppViewContainer"] {
-                background-color: #1f2125 !important;
-            }
-            .stApp:not([data-theme="light"]) [data-testid="stHeader"] {
-                background-color: #1f2125 !important;
-            }
-        }
-        
-        /* Keep manual theme toggle settings in sync with the new dark gray theme (v167) */
-        .stApp[data-theme="dark"] {
-            --background-color: #1f2125 !important;
-            --secondary-background-color: #2c2f36 !important;
-        }
-        .stApp[data-theme="dark"] [data-testid="stAppViewContainer"] {
-            background-color: #1f2125 !important;
-        }
-        .stApp[data-theme="dark"] [data-testid="stHeader"] {
-            background-color: #1f2125 !important;
         }
 
         h1, h2, h3, h4, h5, h6, [class*="header"] {
@@ -802,9 +783,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-
-
-        /* Pure CSS modal system for image zoom (v167) */
+        /* Pure CSS modal system for image zoom (v168) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -838,7 +817,6 @@ if HAS_STREAMLIT and st.runtime.exists():
             position: relative;
             z-index: 2 !important;
             /* 100% solid, completely opaque background dynamically mixing active theme colors (no transparency) */
-            /* In Light Mode: Results in a solid light grey. In Dark Mode: Results in a solid dark grey. */
             background-color: color-mix(in srgb, var(--text-color) 12%, var(--background-color)) !important;
             padding: 24px;
             border: 1px solid var(--border-color, #94a3b8) !important;
@@ -896,7 +874,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v167) */
+        /* Banner title block with clean background image (v168) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -991,10 +969,45 @@ if HAS_STREAMLIT and st.runtime.exists():
                 flex: none !important;
             }
         }
+    """
+
+    # Dynamic CSS Variables & Page Background overrides for Dark Mode
+    # If the user toggles dark mode, change the deep background to dark-slate gray #1f2125
+    # If light mode is selected, we inject absolutely no stApp overrides, letting native white render cleanly!
+    if theme_type == "dark":
+        custom_style += """
+        .stApp {
+            --background-color: #1f2125 !important;
+            --secondary-background-color: #2c2f36 !important;
+        }
+        [data-testid="stAppViewContainer"], .stApp {
+            background-color: #1f2125 !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: #1f2125 !important;
+        }
+        """
+    elif theme_type is None:
+        # Fallback to Media Query if Streamlit theme is not fully resolved yet during initial boot
+        custom_style += """
+        @media (prefers-color-scheme: dark) {
+            .stApp {
+                --background-color: #1f2125 !important;
+                --secondary-background-color: #2c2f36 !important;
+            }
+            [data-testid="stAppViewContainer"], .stApp {
+                background-color: #1f2125 !important;
+            }
+            [data-testid="stHeader"] {
+                background-color: #1f2125 !important;
+            }
+        }
+        """
+
+    custom_style += """
         </style>
-        """,
-        unsafe_allow_html=True
-    )
+    """
+    st.markdown(custom_style, unsafe_allow_html=True)
 
     @st.dialog("Confirm Service Log")
     def confirm_save_dialog(completed_list, mileage, severe):
@@ -1055,7 +1068,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v167)
+    # Responsive Brand Logo Header Block with Clean Background Image (v168)
     st.markdown(
         f"""
         <div class="header-banner">
