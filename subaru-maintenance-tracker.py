@@ -663,67 +663,30 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Override entire app background color to a nice dark gray in dark mode (v166) */
+        /* Override entire app background color to a nice dark gray in dark mode (v167) */
         @media (prefers-color-scheme: dark) {
-            html:not([data-theme="light"]), 
-            body:not([data-theme="light"]), 
-            [data-testid="stAppViewContainer"]:not([data-theme="light"]), 
             .stApp:not([data-theme="light"]) {
-                background-color: #1f2125 !important;
-            }
-            [data-testid="stHeader"]:not([data-theme="light"]) {
-                background-color: #1f2125 !important;
-            }
-            html:not([data-theme="light"]) {
                 --background-color: #1f2125 !important;
                 --secondary-background-color: #2c2f36 !important;
             }
+            .stApp:not([data-theme="light"]) [data-testid="stAppViewContainer"] {
+                background-color: #1f2125 !important;
+            }
+            .stApp:not([data-theme="light"]) [data-testid="stHeader"] {
+                background-color: #1f2125 !important;
+            }
         }
         
-        /* Keep manual theme toggle settings in sync with the new dark gray theme (v166) */
-        [data-theme="dark"], .stApp[data-theme="dark"], html[data-theme="dark"] {
-            background-color: #1f2125 !important;
+        /* Keep manual theme toggle settings in sync with the new dark gray theme (v167) */
+        .stApp[data-theme="dark"] {
             --background-color: #1f2125 !important;
             --secondary-background-color: #2c2f36 !important;
         }
-        [data-theme="dark"] [data-testid="stAppViewContainer"],
         .stApp[data-theme="dark"] [data-testid="stAppViewContainer"] {
             background-color: #1f2125 !important;
         }
-        [data-theme="dark"] [data-testid="stHeader"],
         .stApp[data-theme="dark"] [data-testid="stHeader"] {
             background-color: #1f2125 !important;
-        }
-
-        /* Explicitly restore native Streamlit light mode colors when Light Theme is active (v166) */
-        @media (prefers-color-scheme: light) {
-            html:not([data-theme="dark"]) {
-                --background-color: #ffffff !important;
-                --secondary-background-color: #f0f2f6 !important;
-            }
-            html:not([data-theme="dark"]), 
-            body:not([data-theme="dark"]), 
-            [data-testid="stAppViewContainer"]:not([data-theme="dark"]), 
-            .stApp:not([data-theme="dark"]) {
-                background-color: #ffffff !important;
-            }
-            [data-testid="stHeader"]:not([data-theme="dark"]) {
-                background-color: #ffffff !important;
-            }
-        }
-        
-        [data-theme="light"], .stApp[data-theme="light"], html[data-theme="light"] {
-            background-color: #ffffff !important;
-            --background-color: #ffffff !important;
-            --secondary-background-color: #f0f2f6 !important;
-        }
-        [data-theme="light"] [data-testid="stAppViewContainer"],
-        .stApp[data-theme="light"] [data-testid="stAppViewContainer"] {
-            background-color: #ffffff !important;
-        }
-        [data-theme="light"] [data-testid="stHeader"],
-        .stApp[data-theme="light"] [data-testid="stHeader"] {
-            background-color: #ffffff !important;
         }
 
         h1, h2, h3, h4, h5, h6, [class*="header"] {
@@ -841,7 +804,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v166) */
+        /* Pure CSS modal system for image zoom (v167) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -933,7 +896,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v166) */
+        /* Banner title block with clean background image (v167) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1092,7 +1055,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v166)
+    # Responsive Brand Logo Header Block with Clean Background Image (v167)
     st.markdown(
         f"""
         <div class="header-banner">
