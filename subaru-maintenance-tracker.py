@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v153) */
+        /* Pure CSS modal system for image zoom (v154) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -2215,6 +2215,125 @@ EJ257 PISTON RING END GAP ALIGNMENT
                 *   **NHTSA Campaign 19V149000 (Recall WUE-90 - Brake Light Switch):** Silicone contaminants from cleaning products penetrate the brake light switch housing, preventing brake lights from illuminating and disabling push-button start. Dealers replace with a sealed unit.
                 *   **NHTSA Campaign 16V162000 (Recall WTA-62 - Turbo Air Intake Duct):** 2015–2016 WRX and Forester 2.0XT plastic turbo air ducts can crack under thermal cycles and high engine movement, causing unmetered air leaks and lean stalling conditions. Dealers replace with a reinforced compound duct.
                 *   **Recall WUT-05 (zinc-coated coils):** Zinc-coated springs replacement for vehicles in road-salt states to prevent coil spring corrosion and fracture.
+                """
+            )
+
+        # Section 8: Wheel and Tire Fitment Guide (ThreePiece.us)
+        with st.expander("⌾ VA WRX & STI Aftermarket Wheel & Tire Fitment Guide"):
+            st.markdown(
+                """
+                ### ⌾ Exhaustive Wheel Sizing, Tire Fitment & Clearance Guide
+                *Sourced from official ThreePiece.us engineering fitment specs and field-tested setups for the 2015–2021 VA chassis.*
+
+                #### 1. Baseline Hub & Thread Specifications
+                | Parameter | Value / Metric | Notes / Alignment |
+                | :--- | :--- | :--- |
+                | **Bolt Pattern** | **5x114.3 mm** | Standardized across both WRX and STI models since 2015. |
+                | **Lug Thread Pitch** | **M12 x 1.25** | High-tensile steel fasteners. |
+                | **Center Bore** | **56.1 mm** | Symmetrical alignment center bore. |
+                | **Lug Nut Torque** | **89 ft-lbs** (120 N-m) | Tighten strictly in a star pattern with a calibrated wrench. |
+                | **Factory Wheel Spec** | **18x8.5J** / **19x8.5J** | Factory offset is high at **+55 mm**. |
+                | **Factory Tire Spec** | **245/40 R18** / **245/35 R19** | Dry traction high-performance summer compound. |
+
+                #### 2. Aftermarket Sizing & Tire Upgrades
+                *   **The Golden Setup: `18x9.5 +38` (or +40):** This is the proven aftermarket baseline for a flush fender-to-tire look. It sits near-flush with the factory body lines and **does not require fender rolling or alignment adjustments** on standard suspension heights and tire sizes.
+                *   **Recommended Tire Combinations:**
+                    *   `245/40 R18` (OEM Size): Fits easily with zero rubbing issues, even at low static ride heights on coilovers.
+                    *   `255/35 R18` (The Performance Choice): Shorter overall sidewall height. This reduces rolling tire diameters slightly to prevent rubbing on lowered setups without requiring physical fender rolling.
+                    *   `255/40 R18` / `265/35 R18` (Track Widebody): Offers extreme grip, but typically requires a mild rear fender inner lip roll or additional negative camber dial-in if lowered on coilovers.
+
+                #### 3. Brembo Caliper Clearance Constraints
+                *   **15–17 WRX STI (4-Pot Front / 2-Pot Rear - Red Calipers):** These calipers are bulky and protrude outward an additional **3 to 5 mm** compared to floating brackets. Deep-dish or highly concave wheel spokes may conflict, requiring a small slip-on spacer to clear the caliper face.
+                *   **18–21 WRX STI (6-Pot Front / 2-Pot Rear - Silver or Yellow Calipers):** Standardized on massive Brembo rotors. **Minimum 17-inch wheels are required**, and only a short list of 17s will fit (e.g., ADV.1 AV06, Method 501/502, Sparco Terra). Most 18" and 19" wheel faces clear, but high-lip or deep-dished wheels (e.g., TSW Avalon) will not fit without thick spacers. High-clearance disk designs (such as Work Meister R-Disks) must be specified.
+
+                #### 4. Fender Rolling & Stance Engineering
+                *   **Metal Fenders:** Unlike the newer VB chassis with plastic flares, the 2015–2021 VA chassis features traditional sheet-metal fenders that are highly receptive to fender rolling.
+                *   **The Rear Lip:** You can easily gain 10-15 mm of tire clearance by heating the rear inner lip with a heat gun and rolling the horizontal edge flat against the inner fender well.
+                *   **The Front Lip:** The front fender has a reinforced U-shaped profile rather than an L-shape. It is stronger, and while rolling is difficult, it is highly receptive to a slight flare/pull.
+                *   **Extreme Stance Guidelines:** Running setups like `18x10 +35` on `265/35` or static `18x9.5 +12` on stretched `215/40` requires heavily rolled/pulled fenders, stretched tires, and adjustable rear lower control arms (LCAs) to prevent immediate fender-to-tire impact under load. Stretched setups should opt for tires with softer sidewalls (like Lionhart) over stiff performance tires (like Michelin).
+                """
+            )
+
+        # Section 9: MySubaru Remote API & subarulink Reference Guide
+        with st.expander("🔌 MySubaru Connected Services & subarulink API Reference"):
+            st.markdown(
+                """
+                ### 🔌 Reverse-Engineered MySubaru Connected Services API Reference
+                *This guide documents the core parameters and best practices for communicating programmatically with the MySubaru Connected Services API via the unofficial, reverse-engineered subarulink library.*
+
+                #### 1. Core Session Controller
+                The `subarulink.Controller` class manages an authenticated asynchronous session to Subaru's servers, allowing command-execution on multiple vehicles registered to a single MySubaru account.
+                ```python
+                Controller(
+                    websession,       # aiohttp.ClientSession instance
+                    username,         # MySubaru login email
+                    password,         # MySubaru account password
+                    device_id,        # Unique stable device ID (saves 2FA status)
+                    pin,              # 4-digit security PIN (for remote commands)
+                    device_name,      # Display name shown in MySubaru profile
+                    country="USA",    # MySubaru region ("USA" or "CAN")
+                    update_interval=7200,  # Minimum seconds between active vehicle updates
+                    fetch_interval=300     # Minimum seconds between server-cached fetches
+                )
+                ```
+
+                #### 2. Authentication & 2FA Flow
+                The Subaru API requires two-factor authentication (2FA) upon registering a new `device_id`. Using a different or random ID on every script execution will trigger a lockout or generate hundreds of duplicate authorized devices on your profile.
+                *   `device_registered` *(Property)*: Returns `False` if 2FA verification is still required.
+                *   `contact_methods` *(Property)*: Dictionary of registered delivery endpoints (e.g. `{'SMS': '***-***-1234', 'Email': 'u***@ex***.com'}`).
+                *   `await request_auth_code(contact_method)`: Triggers a 6-digit verification code to the selected method.
+                *   `await submit_auth_code(code)`: Submits the 6-digit code. On success, the `device_id` is permanently whitelisted and `device_registered` is set to `True`.
+
+                #### 3. Vehicle Capabilities & Hardware Discovery
+                Use the following asynchronous properties to discover which features are active on the vehicle's subscribed telematic plan (such as Security Plus or Safety Plus):
+                *   `get_api_gen(vin)`: Telematics generation. Returns `"g1"`, `"g2"`, `"g3"`, or `"g4"`.
+                *   `get_remote_status(vin)`: Returns `True` if active remote-command subscriptions exist.
+                *   `get_res_status(vin)`: Returns `True` if Remote Engine Start is supported.
+                *   `get_ev_status(vin)`: Returns `True` if the model is a Plug-in Hybrid/EV (e.g., Crosstrek Hybrid).
+                *   `has_tpms(vin)` / `has_sunroof(vin)`: Confirms tire pressure reporting and sunroof hardware integration.
+
+                #### 4. Remote Control Commands (Standard 10-Second Wait)
+                All control methods are network-bound coroutines that send actions directly to the telematic transceivers. Remote start is disabled on vehicles with manual transmissions for safety:
+                *   `await lock(vin)`: Locks all doors.
+                *   `await unlock(vin, door=ALL_DOORS)`: Options include `ALL_DOORS`, `DRIVERS_DOOR`, or `TAILGATE_DOOR`.
+                *   `await remote_start(vin, preset_name)`: Starts the engine/climate on automatic-transmission or EV models using custom climate presets.
+                *   `await remote_stop(vin)`: Safely stops the engine.
+                *   `await charge_start(vin)`: Initiates charging sequences on EV/PHEV variants.
+
+                #### 5. Throttling and 12V Battery Health Guidelines
+                *   **Fetch (`await fetch(vin, force=False)`):** Polling the Subaru API retrieves cached data from their servers, meaning it does **not** communicate with the car itself. This is safe to run frequently and does not drain the car's battery.
+                *   **Update (`await update(vin, force=False)`):** This forces the Subaru server to ping the vehicle's cell-network transceiver to request fresh sensor readouts. **Frequent use of `.update()` will completely drain the vehicle's 12V lead-acid battery.**
+                *   *Best Practice:* Set `update_interval` to at least 2 hours (`7200` seconds) and `fetch_interval` to 5 minutes (`300` seconds).
+                """
+            )
+
+        # Section 10: Brembo Caliper Galvanic Corrosion & Torque-Reduction Guide
+        with st.expander("⌿ Brembo Caliper Galvanic Corrosion & Torque-Reduction Engineering Guide"):
+            st.markdown(
+                """
+                ### ⌿ Brembo Caliper Galvanic Corrosion & Thread Seizure Guide
+                *An engineering evaluation of the chemical interaction between steel and aluminum within STI brake assemblies, and critical safety guidelines for correct clamping.*
+
+                #### 1. The Galvanic Corrosion Phenomenon
+                The STI's high-performance Brembo brake calipers are cast from lightweight **aluminum alloy**, while the high-tensile mounting bolts are constructed from **alloy steel**. 
+                *   **The Reaction:** When these two dissimilar metals are placed in direct physical contact, they form an electrochemical galvanic couple. 
+                *   **The Accelerator:** Under high heat cycling and exposure to winter road salts or moisture, the aluminum acts as the anode, generating a thick layer of white **aluminum oxide** inside the threads.
+                *   **The Damage:** This oxide layer physically binds the steel threads to the aluminum caliper ears. When a technician attempts to unscrew the caliper bolt during a standard pad or rotor swap, the bound threads seize and are sheared completely out of the caliper housing, rendering the caliper unusable.
+
+                #### 2. The 25% Torque-Reduction Rule for Lubricated Threads
+                Applying anti-seize is mandatory to isolate these dissimilar metals and prevent galvanic binding, but doing so completely alters thread physics:
+                *   **Clamping Load vs. Torque:** Standard torque specifications assume **clean, dry threads** where friction is high. 
+                *   **The Squeeze Hazard:** Applying a thread lubricant or anti-seize compound (e.g. Permatex Copper Anti-Seize #39772) significantly reduces thread friction. If you torque a lubricated bolt to the dry factory specification, you will massively increase the actual **clamping load (squeeze)** on the caliper ears.
+                *   **The Failure:** This over-clamping stretches the bolt beyond its elastic limit, over-stresses the caliper ears, and shears the soft aluminum threads immediately upon installation.
+                *   **The Engineering Solution:** As a strict rule of thumb, whenever any lubricant or anti-seize is applied to threads, **the final installation torque MUST be reduced by exactly 25%** to maintain the correct, intended clamping force without deforming the components!
+
+                #### 3. Lubricated vs. Dry Brembo Caliper Torque Targets
+                Always adhere to the correct lubricated parameters below to ensure long-term structural reliability and prevent stripped threads:
+                
+                | Caliper Location | Fastener Size | Dry Factory Spec | Lubricated Spec (With Copper Anti-Seize) | Notes / Details |
+                | :--- | :--- | :--- | :--- | :--- |
+                | **Front Brembos** | M12 x 1.5 | **80 ft-lbs** (114 N-m) | **60 ft-lbs** (81 N-m) | *Caution:* The early FSM incorrectly listed **114.3 ft-lbs** dry, which snapped bolts! Use corrected specs. |
+                | **Rear Brembos** | M10 x 1.5 | **52.8 ft-lbs** (71.5 N-m) | **36 ft-lbs** (49 N-m) | Hand-apply thread-mating compound before final sweep. |
                 """
             )
 
