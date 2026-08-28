@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v130) */
+        /* Pure CSS modal system for image zoom (v147) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -788,16 +788,6 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-color: color-mix(in srgb, var(--text-color) 18%, var(--background-color)) !important;
             align-items: center;
             justify-content: center;
-        }
-        @media (prefers-color-scheme: light) {
-            .css-modal, .css-modal-class {
-                background-color: #dedede !important;
-            }
-        }
-        @media (prefers-color-scheme: dark) {
-            .css-modal, .css-modal-class {
-                background-color: #383b42 !important;
-            }
         }
         .css-modal:target {
             display: flex !important;
@@ -835,16 +825,6 @@ if HAS_STREAMLIT and st.runtime.exists():
             display: block !important;
             margin: auto !important;
             opacity: 1 !important; /* Force 100% solid, fully opaque SVG canvas background */
-        }
-        @media (prefers-color-scheme: light) {
-            .modal-svg {
-                background-color: #dedede !important;
-            }
-        }
-        @media (prefers-color-scheme: dark) {
-            .modal-svg {
-                background-color: #383b42 !important;
-            }
         }
         @keyframes modalFadeIn {
             /* Kept structural transition */
