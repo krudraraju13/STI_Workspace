@@ -1,3 +1,9 @@
+# ==============================================================================
+# SUBARU WRX STI VEHICLE MAINTENANCE TRACKER & PERFORMANCE SUITE
+# Copyright (c) 2026. All Rights Reserved.
+# Developed as a clean-room, open-source performance reference manual.
+# Fully offline-safe, with optional dynamic cloud synchronization.
+# ==============================================================================
 import os
 import sys
 import json
@@ -5,6 +11,9 @@ import datetime
 import pandas as pd
 import re
 import requests
+import base64
+import time
+import urllib.request
 
 HISTORY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "subaru_maintenance_history.json")
 
@@ -396,7 +405,7 @@ class MaintenanceScheduler:
             ),
             (
                 "Replace Spark Plugs", 
-                6000, # Wait, check standard spark plug interval: 60,000 miles
+                60000, 
                 60000, 
                 "22401AA670 (NGK SILFR6A Laser Iridium)", 
                 "4 Spark Plugs",
@@ -420,17 +429,7 @@ class MaintenanceScheduler:
             )
         ]
         
-        # Override spark plug interval if defined wrong
-        for idx, item_def in enumerate(maintenance_defs):
-            if item_def[0] == "Replace Spark Plugs":
-                maintenance_defs[idx] = (
-                    "Replace Spark Plugs", 
-                    60000, 
-                    60000, 
-                    "22401AA670 (NGK SILFR6A Laser Iridium)", 
-                    "4 Spark Plugs",
-                    "Use dry threads. Torque strictly to 13–17 ft-lb to protect aluminum heads."
-                )
+
 
         for name, base_int, sev_int, p_num, qty, desc in maintenance_defs:
             interval = sev_int if self.severe else base_int
@@ -591,7 +590,11 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # Base64 loading logic with content-first robust MIME-type detection
     def determine_mime(filepath, file_data):
-        if file_data.startswith(b"\x89PNG") or file_data.startswith(b"\x89\x50\x4e\x47") or file_data.startswith(b"\x89PNG\r\n\x1a\n") or file_data.startswith(b"\x89PNG\r\n\x1a\n") or file_data[:4] == b"\x89PNG" or file_data[:4] == b"\x89\x50\x4e\x47":
+        """
+        Determines the correct MIME type of an asset by sniffing its file signature header.
+        This provides a robust, failsafe mechanism for handling mixed extension formats.
+        """
+        if file_data.startswith(b"\x89PNG") or file_data.startswith(b"\x89\x50\x4e\x47") or file_data.startswith(b"\x89\x50\x4e\x47\x0d\x0a\x1a\x0a"):
             return "image/png"
         elif file_data.startswith(b"GIF8"):
             return "image/gif"
@@ -775,7 +778,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v156) */
+        /* Pure CSS modal system for image zoom (v158) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -964,12 +967,12 @@ if HAS_STREAMLIT and st.runtime.exists():
     st.markdown("<hr style='margin:10px 0 20px 0; border-color:#334155;'/>", unsafe_allow_html=True)
 
     # Tabs layout
-    tab_checklist, tab_procedures, tab_parts, tab_fluids, tab_history, tab_manual = st.tabs([
+    tab_checklist, tab_history, tab_procedures, tab_parts, tab_fluids, tab_manual = st.tabs([
         "⌖ Maintenance",
+        "▤ Service Log",
         "⚙ Procedures",
         "⎔ OEM Parts",
         "⛢ Fluids & Grades",
-        "▤ Service Log",
         "☰ Reference Guide"
     ])
 
