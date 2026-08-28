@@ -847,6 +847,20 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
         
+
+        .modal-svg {
+            background-color: #cbd5e1 !important; /* Soft medium-light slate-grey for strong contrast with white elements like arrows/strokes */
+            border-radius: 8px !important;
+            padding: 12px !important;
+            display: block !important;
+            margin: auto !important;
+        }
+        @media (prefers-color-scheme: dark) {
+            .modal-svg {
+                background-color: #1a1f35 !important; /* Dark slate/navy in dark mode */
+            }
+        }
+
         /* Interactive Thumbnail hover effects */
         .zoomable-thumb {
             display: block;
@@ -1813,7 +1827,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 <div class="css-modal-content">
 <a href="#" class="css-modal-close">&times;</a>
 <div style="max-width: 100%; overflow: auto;">
-<svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 650px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
+<svg class="modal-svg" viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 650px;">
 <!-- Cylinder block outline removed -->
 <text x="225" y="24" fill="#94a3b8" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
 
@@ -1979,7 +1993,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 <div class="css-modal-content" style="max-width: 540px;">
 <a href="#" class="css-modal-close">&times;</a>
 <div style="max-width: 100%; overflow: auto;">
-<svg viewBox="0 0 400 400" width="100%" height="auto" style="max-width: 450px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
+<svg class="modal-svg" viewBox="0 0 400 400" width="100%" height="auto" style="max-width: 450px;">
 <!-- Cylinder Bore -->
 <circle cx="200" cy="200" r="165" fill="none" stroke="rgba(128, 128, 128, 0.3)" stroke-width="4"/>
 <circle cx="200" cy="200" r="150" fill="rgba(128, 128, 128, 0.05)" stroke="rgba(128, 128, 128, 0.2)" stroke-width="2"/>
