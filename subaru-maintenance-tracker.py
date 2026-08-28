@@ -797,9 +797,8 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
         .css-modal-content {
             position: relative;
-            /* Adaptive container background matching dark/light mode - 100% solid, no opacity */
+            /* Adaptive container background matching dark/light mode */
             background-color: var(--secondary-background-color) !important;
-            opacity: 1 !important; /* Force 100% solid opaque background */
             padding: 24px;
             border: 1px solid rgba(255, 0, 127, 0.3) !important;
             width: 90%;
@@ -811,7 +810,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
         @keyframes modalFadeIn {
-            /* Kept 100% solid during transition - no opacity/fade translucency */
+            /* Kept structural transition */
             from { transform: scale(0.95); }
             to { transform: scale(1); }
         }
@@ -1745,8 +1744,8 @@ if HAS_STREAMLIT and st.runtime.exists():
 <a href="#head-bolt-zoom" class="zoomable-thumb">
 <svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 420px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px; cursor: pointer;">
   <!-- Cylinder block outline -->
-  <rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#FF007F" stroke-width="2"/>
-  <text x="225" y="24" fill="#FF007F" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
+  <rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#94a3b8" stroke-width="2"/>
+  <text x="225" y="24" fill="#94a3b8" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
   
   <!-- Bolts as circles with sequence numbers inside -->
   <!-- Bolt 1 (Center top) -->
@@ -1799,8 +1798,8 @@ if HAS_STREAMLIT and st.runtime.exists():
 <div style="max-width: 100%; overflow: auto;">
 <svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 650px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; border: 1px solid rgba(128, 128, 128, 0.2); padding: 12px;">
 <!-- Cylinder block outline -->
-<rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#FF007F" stroke-width="2"/>
-<text x="225" y="24" fill="#FF007F" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
+<rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#94a3b8" stroke-width="2"/>
+<text x="225" y="24" fill="#94a3b8" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
 
 <!-- Bolts as circles with sequence numbers inside -->
 <circle cx="225" cy="75" r="20" fill="#FF007F" stroke="#ffffff" stroke-width="2"/>
@@ -1920,8 +1919,8 @@ DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
   <line x1="50" y1="200" x2="350" y2="200" stroke="rgba(128, 128, 128, 0.2)" stroke-width="1" stroke-dasharray="4,4"/>
 
   <!-- Front of Engine Arrow -->
-  <path d="M 200,90 L 200,45" stroke="#FF007F" stroke-width="3" fill="none" marker-end="url(#front-arrow)"/>
-  <text x="200" y="32" fill="#FF007F" font-family="'Montserrat', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">FRONT OF ENGINE (→)</text>
+  <path d="M 200,90 L 200,45" stroke="#94a3b8" stroke-width="3" fill="none" marker-end="url(#front-arrow)"/>
+  <text x="200" y="32" fill="#94a3b8" font-family="'Montserrat', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">FRONT OF ENGINE (→)</text>
 
   <!-- Gap A: Top Compression Ring -->
   <line x1="200" y1="200" x2="306" y2="94" stroke="#FF007F" stroke-width="2" stroke-dasharray="3,3"/>
@@ -1955,7 +1954,7 @@ DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 
   <defs>
     <marker id="front-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
-      <path d="M 0,1 L 10,5 L 0,9 z" fill="#FF007F"/>
+      <path d="M 0,1 L 10,5 L 0,9 z" fill="#94a3b8"/>
     </marker>
   </defs>
 </svg>
@@ -1978,8 +1977,8 @@ DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 <line x1="50" y1="200" x2="350" y2="200" stroke="rgba(128, 128, 128, 0.2)" stroke-width="1" stroke-dasharray="4,4"/>
 
 <!-- Front of Engine Arrow -->
-<path d="M 200,90 L 200,45" stroke="#FF007F" stroke-width="3" fill="none" marker-end="url(#front-arrow-modal)"/>
-<text x="200" y="32" fill="#FF007F" font-family="'Montserrat', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">FRONT OF ENGINE (→)</text>
+<path d="M 200,90 L 200,45" stroke="#94a3b8" stroke-width="3" fill="none" marker-end="url(#front-arrow-modal)"/>
+<text x="200" y="32" fill="#94a3b8" font-family="'Montserrat', sans-serif" font-size="10" font-weight="bold" text-anchor="middle">FRONT OF ENGINE (→)</text>
 
 <!-- Gap A: Top Compression Ring -->
 <line x1="200" y1="200" x2="306" y2="94" stroke="#FF007F" stroke-width="2" stroke-dasharray="3,3"/>
@@ -2013,7 +2012,7 @@ DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 
 <defs>
 <marker id="front-arrow-modal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
-<path d="M 0,1 L 10,5 L 0,9 z" fill="#FF007F"/>
+<path d="M 0,1 L 10,5 L 0,9 z" fill="#94a3b8"/>
 </marker>
 </defs>
 </svg>
