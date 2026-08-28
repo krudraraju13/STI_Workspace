@@ -795,8 +795,19 @@ if HAS_STREAMLIT and st.runtime.exists():
         .css-modal:target {
             display: flex !important;
         }
+        .css-modal-backdrop-close {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: default;
+            z-index: 1 !important;
+            background-color: transparent !important;
+        }
         .css-modal-content {
             position: relative;
+            z-index: 2 !important;
             /* 100% solid, fully opaque background to completely block any system transparency */
             background-color: #ffffff !important; /* Solid pure white for light mode */
             padding: 24px;
@@ -1799,6 +1810,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 <!-- Modal Overlay for Head Bolt sequence -->
 <div id="head-bolt-zoom" class="css-modal">
+<a href="#" class="css-modal-backdrop-close"></a>
 <div class="css-modal-content">
 <a href="#" class="css-modal-close">&times;</a>
 <div style="max-width: 100%; overflow: auto;">
@@ -1968,6 +1980,7 @@ DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 
 <!-- Modal Overlay for Piston Ring sequence -->
 <div id="piston-ring-zoom" class="css-modal">
+<a href="#" class="css-modal-backdrop-close"></a>
 <div class="css-modal-content" style="max-width: 540px;">
 <a href="#" class="css-modal-close">&times;</a>
 <div style="max-width: 100%; overflow: auto;">
