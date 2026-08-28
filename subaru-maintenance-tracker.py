@@ -776,7 +776,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         /* Pure CSS modal system for image zoom (v130) */
-        .css-modal {
+        .css-modal, .css-modal-class {
             display: none;
             position: fixed;
             z-index: 99999 !important;
@@ -784,13 +784,20 @@ if HAS_STREAMLIT and st.runtime.exists():
             top: 0;
             width: 100vw;
             height: 100vh;
-            /* 100% solid, fully opaque background overlay matching standard page color (no transparency) */
-            background-color: var(--background-color) !important;
-            /* High fidelity blur effect behind the modal zoom box */
-            backdrop-filter: blur(8px) !important;
-            -webkit-backdrop-filter: blur(8px) !important;
+            /* 100% solid, fully opaque background (solid light grey in light theme, solid dark grey in dark theme) */
+            background-color: color-mix(in srgb, var(--text-color) 18%, var(--background-color)) !important;
             align-items: center;
             justify-content: center;
+        }
+        @media (prefers-color-scheme: light) {
+            .css-modal, .css-modal-class {
+                background-color: #dedede !important;
+            }
+        }
+        @media (prefers-color-scheme: dark) {
+            .css-modal, .css-modal-class {
+                background-color: #383b42 !important;
+            }
         }
         .css-modal:target {
             display: flex !important;
@@ -821,13 +828,23 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important; /* Dynamic high-contrast text color from active theme */
         }
         .modal-svg {
-            /* 100% solid, fully opaque background matching active theme (no alpha/transparency leaks) */
-            background-color: color-mix(in srgb, var(--text-color) 12%, var(--background-color)) !important;
+            /* 100% solid, fully opaque background (solid light grey in light theme, solid dark grey in dark theme) */
+            background-color: color-mix(in srgb, var(--text-color) 18%, var(--background-color)) !important;
             border-radius: 8px !important;
             padding: 12px !important;
             display: block !important;
             margin: auto !important;
             opacity: 1 !important; /* Force 100% solid, fully opaque SVG canvas background */
+        }
+        @media (prefers-color-scheme: light) {
+            .modal-svg {
+                background-color: #dedede !important;
+            }
+        }
+        @media (prefers-color-scheme: dark) {
+            .modal-svg {
+                background-color: #383b42 !important;
+            }
         }
         @keyframes modalFadeIn {
             /* Kept structural transition */
