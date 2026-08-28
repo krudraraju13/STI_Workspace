@@ -650,7 +650,7 @@ if HAS_STREAMLIT and st.runtime.exists():
     # Set page layout config
     
     # Global CSS customization for fonts, responsiveness, align, spacing, and colors
-    # Dynamic Theme-aware CSS custom styling engine (v173)
+    # Dynamic Theme-aware CSS custom styling engine (v174)
     # Streamlit >= 1.46.0 supports reading the active theme dynamically on st.context.theme.get("type")
     # This prevents CSS browser media queries from overriding backgrounds on manual theme switches!
     theme_type = None
@@ -785,7 +785,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v173) */
+        /* Pure CSS modal system for image zoom (v174) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -876,7 +876,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v173) */
+        /* Banner title block with clean background image (v174) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -973,7 +973,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
     """
 
-    # Dynamic CSS Variables & Page Background overrides utilizing Google Material Design 3 Surface-Tint Color-Mixing (v173)
+    # Dynamic CSS Variables & Page Background overrides utilizing Google Material Design 3 Surface-Tint Color-Mixing (v174)
     # If the user toggles dark mode, change the deep background to dark-slate gray #1f2125
     # If the user toggles light mode, change the deep background to a clean platinum-rose light slate and white cards to avoid overlaps!
     if theme_type == "dark":
@@ -992,8 +992,8 @@ if HAS_STREAMLIT and st.runtime.exists():
     elif theme_type == "light":
         custom_style += """
         .stApp {
-            --background-color: color-mix(in srgb, #FF007F 2.5%, #f1f5f9) !important;
-            --secondary-background-color: #ffffff !important;
+            --background-color: color-mix(in srgb, #FF007F 5%, #ffffff) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #ffffff) !important;
         }
         [data-testid="stAppViewContainer"], .stApp {
             background-color: var(--background-color) !important;
@@ -1003,32 +1003,30 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
         """
     else:
-        # Fallback to Media Query AND Dynamic variable-based color mixing if theme_type is not resolved yet during initial boot
-        # Scoped to not bleed when manually toggled to light or dark mode!
+        # Non-circular surface-tinting fallback based on dynamic Streamlit custom variables.
+        # This completely resolves light/dark mode bleeding without circular reference crashes!
         custom_style += """
-        @media (prefers-color-scheme: dark) {
-            .stApp:not([data-theme="light"]) {
-                --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
-                --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1e1e24) !important;
-            }
-            .stApp:not([data-theme="light"]) [data-testid="stAppViewContainer"] {
-                background-color: var(--background-color) !important;
-            }
-            .stApp:not([data-theme="light"]) [data-testid="stHeader"] {
-                background-color: var(--background-color) !important;
-            }
+        .stApp {
+            --background-color-tinted: color-mix(in srgb, #FF007F 5%, var(--background-color, #ffffff)) !important;
+            --secondary-background-color-tinted: color-mix(in srgb, #FF007F 10%, var(--secondary-background-color, #ffffff)) !important;
         }
-        @media (prefers-color-scheme: light) {
-            .stApp:not([data-theme="dark"]) {
-                --background-color: color-mix(in srgb, #FF007F 2.5%, #f1f5f9) !important;
-                --secondary-background-color: #ffffff !important;
-            }
-            .stApp:not([data-theme="dark"]) [data-testid="stAppViewContainer"] {
-                background-color: var(--background-color) !important;
-            }
-            .stApp:not([data-theme="dark"]) [data-testid="stHeader"] {
-                background-color: var(--background-color) !important;
-            }
+        [data-testid="stAppViewContainer"], .stApp {
+            background-color: var(--background-color-tinted) !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: var(--background-color-tinted) !important;
+        }
+        .custom-card {
+            background-color: var(--secondary-background-color-tinted) !important;
+        }
+        div[data-testid="stDataFrame"] {
+            background-color: var(--secondary-background-color-tinted) !important;
+        }
+        .streamlit-expanderHeader {
+            background-color: var(--secondary-background-color-tinted) !important;
+        }
+        .streamlit-expanderContent {
+            background-color: var(--background-color-tinted) !important;
         }
         """
 
@@ -1096,7 +1094,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v173)
+    # Responsive Brand Logo Header Block with Clean Background Image (v174)
     st.markdown(
         f"""
         <div class="header-banner">
