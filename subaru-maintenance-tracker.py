@@ -663,6 +663,35 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
+        /* Override entire app background color to a nice dark gray in dark mode (v163) */
+        @media (prefers-color-scheme: dark) {
+            html, body, [data-testid="stAppViewContainer"], .stApp {
+                background-color: #1f2125 !important;
+            }
+            [data-testid="stHeader"] {
+                background-color: #1f2125 !important;
+            }
+            :root {
+                --background-color: #1f2125 !important;
+                --secondary-background-color: #2c2f36 !important;
+            }
+        }
+        
+        /* Keep manual theme toggle settings in sync with the new dark gray theme (v163) */
+        [data-theme="dark"], .stApp[data-theme="dark"], html[data-theme="dark"] {
+            background-color: #1f2125 !important;
+            --background-color: #1f2125 !important;
+            --secondary-background-color: #2c2f36 !important;
+        }
+        [data-theme="dark"] [data-testid="stAppViewContainer"],
+        .stApp[data-theme="dark"] [data-testid="stAppViewContainer"] {
+            background-color: #1f2125 !important;
+        }
+        [data-theme="dark"] [data-testid="stHeader"],
+        .stApp[data-theme="dark"] [data-testid="stHeader"] {
+            background-color: #1f2125 !important;
+        }
+
         h1, h2, h3, h4, h5, h6, [class*="header"] {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
@@ -778,7 +807,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v162) */
+        /* Pure CSS modal system for image zoom (v163) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -870,7 +899,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v162) */
+        /* Banner title block with clean background image (v163) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1029,7 +1058,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v162)
+    # Responsive Brand Logo Header Block with Clean Background Image (v163)
     st.markdown(
         f"""
         <div class="header-banner">
