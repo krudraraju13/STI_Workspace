@@ -797,14 +797,14 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
         .css-modal-content {
             position: relative;
-            /* Adaptive container background matching dark/light mode */
+            /* Adaptive solid container background with absolutely no transparency or opacity rules */
             background-color: var(--secondary-background-color) !important;
             padding: 24px;
-            border: 1px solid rgba(255, 0, 127, 0.3) !important;
+            border: 1px solid var(--border-color, #94a3b8) !important;
             width: 90%;
             max-width: 800px;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
             text-align: center;
             animation: modalFadeIn 0.25s ease-out;
             color: var(--text-color) !important;
