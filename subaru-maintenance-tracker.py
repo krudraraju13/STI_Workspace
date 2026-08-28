@@ -808,8 +808,8 @@ if HAS_STREAMLIT and st.runtime.exists():
         .css-modal-content {
             position: relative;
             z-index: 2 !important;
-            /* 100% solid, fully opaque background to completely block any system transparency */
-            background-color: #ffffff !important; /* Solid pure white for light mode */
+            /* 100% solid, fully opaque background matching active theme */
+            background-color: color-mix(in srgb, var(--secondary-background-color) 100%, var(--background-color)) !important;
             padding: 24px;
             border: 1px solid var(--border-color, #94a3b8) !important;
             width: 90%;
@@ -818,13 +818,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             text-align: center;
             animation: modalFadeIn 0.25s ease-out;
-            color: #31333f !important; /* Solid high-contrast text for light mode */
-        }
-        @media (prefers-color-scheme: dark) {
-            .css-modal-content {
-                background-color: #111525 !important; /* Solid deep navy/slate for dark mode */
-                color: #fafafa !important; /* Solid high-contrast text for dark mode */
-            }
+            color: var(--text-color) !important; /* High-contrast text color from active theme */
         }
         @keyframes modalFadeIn {
             /* Kept structural transition */
@@ -849,16 +843,12 @@ if HAS_STREAMLIT and st.runtime.exists():
         
 
         .modal-svg {
-            background-color: #cbd5e1 !important; /* Soft medium-light slate-grey for strong contrast with white elements like arrows/strokes */
+            /* Mix 12% of the active text color with the page background to get a perfect, high-contrast container (light-grey in light theme, slate-grey in dark theme) */
+            background-color: color-mix(in srgb, var(--text-color) 12%, var(--background-color)) !important;
             border-radius: 8px !important;
             padding: 12px !important;
             display: block !important;
             margin: auto !important;
-        }
-        @media (prefers-color-scheme: dark) {
-            .modal-svg {
-                background-color: #1a1f35 !important; /* Dark slate/navy in dark mode */
-            }
         }
 
         /* Interactive Thumbnail hover effects */
