@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v152) */
+        /* Pure CSS modal system for image zoom (v153) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -1120,8 +1120,8 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     # Procedures Tab
     with tab_procedures:
-        st.subheader("⚙ Maintenance Procedures Guide")
-        st.write("Step-by-step DIY instructions and crucial checks for WRX STI owners.")
+        st.subheader("⚙ Maintenance & Repair Procedures Guide")
+        st.write("Step-by-step DIY instructions, torque sequences, and critical engineering repairs for WRX STI owners.")
         
         proc_selection = st.selectbox(
             "Select Procedure:",
@@ -1131,7 +1131,13 @@ if HAS_STREAMLIT and st.runtime.exists():
                 "Manual Transmission Gear Oil Replacement",
                 "Rear Differential Oil Swap",
                 "Spark Plug Installation (DOHC Boxer)",
-                "Timing Belt (EJ257) Overview"
+                "Timing Belt (EJ257) Replacement DIY",
+                "Cylinder Head Bolt Torque Sequence (TTY)",
+                "Brembo Caliper Thread Repair (Time-Sert)",
+                "Starlink 3G DCM Parasitic Battery Drain Bypass",
+                "Clutch Pedal Creaking & Bracket Lubrication",
+                "Cam Carrier Cover Gasket Resealing (Engine Out)",
+                "EJ257 Oiling System Priming Procedure"
             ],
             label_visibility="collapsed"
         )
@@ -1148,20 +1154,21 @@ if HAS_STREAMLIT and st.runtime.exists():
                 3. Clean the drain plug threads, fit the new **Subaru Crush Washer** with its flat face against the oil pan, and hand thread. Torque to **33-34 ft-lb**.
                 4. Use a filter wrench to remove the engine oil filter. Clean the contact surface on the engine block.
                 5. Apply a light film of fresh engine oil to the rubber O-ring of the **Tokyo Roki Black Filter (15208AA100)**. Hand tighten the filter until seal contacts, then turn it exactly 3/4 to 1 full turn further.
-                6. Add **4.5 quarts** of synthetic oil (5W-30 or 5W-40). Wait 5 minutes, check dipstick, start car, and check for leaks.
+                6. Add **4.5 quarts** of synthetic oil (5W-30 or 5W-40). 
+                7. **Oil Level Check:** Waiting at least **5 minutes** after parking on a level surface before checking the oil level is critical to getting an accurate gauge of the oil level in the engine. Check the dipstick, start the car, and check for leaks.
                 """
             )
         elif proc_selection == "Manual Transmission Gear Oil Replacement":
             st.markdown(
                 """
                 ### ⚙ Manual Transmission Gear Oil Swap
-                **Target Thread Torque:** T70 Torx drain plug: `32.5 ft-lb`. Fill plug: `23.5 ft-lb`.
+                **Target Thread Torque:** T70 Torx drain plug: `32.5 ft-lb` (if using copper washer: torque to `52 ft-lb`). Fill plug: `23.5 ft-lb` (if using alum washer: torque to `37 ft-lb`).
                 
                 **Step-by-Step Instructions:**
                 1. Elevate car flat on all four jack stands.
                 2. Locate the transmission case. Remove the intercooler if filling from top, or use a fluid transfer pump from underneath.
-                3. Remove the fill plug (10mm) first to ensure you can fill, then remove the lower T70 Torx drain plug.
-                4. Clean the magnetic drain plug thoroughly of wear debris. Install with a new seal and torque to **32.5 ft-lb**.
+                3. Remove the fill plug (10mm) first using the **Torque Solution T70 Torx Drain Plug Socket** to ensure you can fill, then remove the lower T70 Torx drain plug.
+                4. Clean the magnetic drain plug thoroughly of wear debris. Install with a new seal and torque to **32.5 ft-lb** (for aluminum washers) or **52 ft-lb** (for copper washers).
                 5. Fill with **~3.5 quarts** of SAE 75W-90 GL-5 gear oil (e.g. Motul Gear 300).
                 6. Reinstall fill plug and torque to specifications.
                 """
@@ -1170,15 +1177,15 @@ if HAS_STREAMLIT and st.runtime.exists():
             st.markdown(
                 """
                 ### ⚙ Rear Differential Oil Swap
-                **Target Thread Torque:** Fill and drain plugs: `36.2 ft-lb`.
+                **Target Thread Torque:** Fill and drain plugs: `36 to 43 ft-lb`.
                 
                 **Step-by-Step Instructions:**
                 1. Elevate the rear end. Locate the rear diff case.
-                2. Remove the top fill plug (1/2\" drive or 13mm socket) to verify you can fill, then remove the lower drain plug.
-                3. Allow 1.0 quart to drain completely. Clean the magnet on the drain plug.
-                4. Apply thread sealant (like liquid Teflon) to the plug threads. Reinstall drain plug and torque to **36.2 ft-lb**.
+                2. Remove the top fill plug using a **13mm square differential drain socket** to verify you can fill, then remove the lower drain plug.
+                3. Allow 1.0 quart to drain completely. Clean the magnet on the drain plug of wear metal debris.
+                4. Apply thread sealant (like liquid Teflon) to the plug threads. Reinstall drain plug and torque to **36-43 ft-lb**.
                 5. Use a pump to inject exactly **1.0 quart** of SAE 75W-90 GL-5 hypoid gear oil into the fill hole until it begins to seep out.
-                6. Reinstall fill plug with thread sealant and torque to **36.2 ft-lb**.
+                6. Reinstall fill plug with thread sealant and torque to **36-43 ft-lb**.
                 """
             )
         elif proc_selection == "Spark Plug Installation (DOHC Boxer)":
@@ -1189,25 +1196,140 @@ if HAS_STREAMLIT and st.runtime.exists():
                 
                 **Step-by-Step Instructions:**
                 1. Disconnect battery. Remove air intake box (right side) and battery/washer fluid reservoir bracket components (left side) to access coil packs.
-                2. Remove the 10mm bolts holding the ignition coils, and pull out the coil packs.
-                3. Use a 5/8\" spark plug socket, a 3\" extension, and a swivel ratchet to carefully break loose and retrieve the old plugs.
-                4. Ensure the new spark plugs (**NGK Laser Iridium SILFR6A**) are gapped correctly. Hand thread them into the cylinder head to prevent cross-threading.
-                5. Torque strictly dry to **13-17 ft-lb**. *Do not use anti-seize*, as it acts as a lubricant and will lead to over-torquing and cylinder head strip out.
+                2. Remove the 10mm bolts holding the ignition coils, and pull out the coil packs. Torque coil pack bolts to **11.8 ft-lb (16 N-m)**.
+                3. Use a 5/8" spark plug socket, a 3" extension, and a swivel ratchet to carefully break loose and retrieve the old plugs.
+                4. Ensure the new spark plugs (**NGK Laser Iridium SILFR6A**) are gapped correctly using the **Torque Solution Pro Billet Gap Tool (14mm)**.
+                5. Hand thread them into the cylinder head to prevent cross-threading.
+                6. Torque strictly dry to **13-17 ft-lb**. *Do not use anti-seize on nickel-plated threads*, as it acts as a lubricant and will lead to over-torquing and cylinder head strip out.
                 """
             )
-        elif proc_selection == "Timing Belt (EJ257) Overview":
+        elif proc_selection == "Timing Belt (EJ257) Replacement DIY":
             st.markdown(
                 """
-                ### ⚙ Timing Belt DOHC EJ257 Overview
-                The EJ257 utilizes a DOHC layout with four camshafts. A snapped or jumped timing belt will cause instant, catastrophic valve-to-piston contact.
+                ### ⚙ Timing Belt (EJ257 DOHC) Replacement DIY
+                The EJ257 is a DOHC interference engine; any timing misalignment during belt replacement will cause the valves to strike the pistons, resulting in severe internal engine damage.
                 
-                **Key Advice:**
-                *   Interval is **105,000 miles**.
-                *   Always replace the complete assembly (Timing belt `13028AA250`, water pump, hydraulic tensioner, and all idler pulleys).
-                *   Use high quality kits such as **Aisin TKF-012** to prevent premature idler bearing lockups.
+                **Required Tools:**
+                *   1/2-inch drive impact gun or crankshaft pulley holding tool paired with a breaker bar.
+                *   22 mm socket (crankshaft bolt), 10 mm socket (timing covers).
+                *   Company23 AVCS intake and standard cam sprocket holding tools.
+                *   Bench vise to compress hydraulic tensioner.
+                
+                **Step-by-Step DIY Procedure:**
+                1.  **Drain Coolant:** Disconnect the negative battery terminal. Open the radiator petcock drain plug on the lower passenger side of the radiator, and drain the coolant.
+                2.  **Access Assembly:** Remove the plastic intake ducting and the top-mount intercooler. Loosen the alternator bracket adjustment bolt to release tension, and remove the alternator and power steering V-belts. Loosen the AC compressor bracket, and remove the AC stretch belt (P/N `11718AA082`).
+                3.  **Remove Crank Pulley:** Lock the engine's rotation using the crankshaft holding tool, and use a 22 mm socket on a breaker bar to break the crank pulley bolt loose. Remove the bolt, and wiggle the pulley off the crankshaft nose.
+                4.  **Disassemble Timing Covers:** Unbolt and remove the driver-side outer timing cover (4 bolts), the passenger-side outer cover, and finally the center timing cover.
+                5.  **Component Alignment:** Thread the crank bolt back into the crankshaft snout. Rotate the crankshaft clockwise until the timing mark on the sprocket lines up with the notch on the cylinder block or rear belt cover. Verify that the notches on the camshaft sprockets align with their corresponding timing marks on the rear timing covers and that the double alignment lines on the intake and exhaust sprockets face each other.
+                6.  **Belt Removal:** Remove the lower cogged idler pulley. Once the idler is removed, the timing belt tension is released, allowing the belt to be slipped off the remaining pulleys and sprockets.
+                7.  **Water Pump and Idlers Replacement:** Unbolt the hydraulic tensioner assembly and the remaining idlers. If replacing the water pump, remove its mounting bolts, discard the old paper gasket, clean the mating surface, and install the new water pump with a new OEM gasket (P/N `21111AA240`).
+                8.  **Hydraulic Tensioner Compression:** Position the hydraulic tensioner in a bench vise. Slowly compress the plunger over a minimum of 3 minutes to prevent damage to the internal valving. Once the plunger is fully retracted, slide a 1.5 mm hex key or drill bit through the alignment holes to lock it in place.
+                9.  **Reassembly and Alignment Check:** Bolt the compressed tensioner and new idlers onto the block. Route the new timing belt starting from the crankshaft sprocket, moving around the passenger-side sprockets, and finishing at the driver-side sprockets. Install the lower cogged idler last to apply initial tension. Double-check that all timing marks remain perfectly aligned. Pull the lockpin out of the hydraulic tensioner to apply operating tension to the belt. Finally, rotate the crankshaft clockwise two full turns by hand, and verify that the timing marks realign perfectly. Reinstall the timing covers, pulleys, accessory belts, and intercooler.
                 """
             )
-
+        elif proc_selection == "Cylinder Head Bolt Torque Sequence (TTY)":
+            st.markdown(
+                """
+                ### ⌱ Cylinder Head Bolt Torque Sequence (TTY)
+                For vehicles manufactured from 2010 onwards, the factory specifications outline a multi-step, elastic-plastic tightening sequence using factory-new torque-to-yield (TTY) cylinder head bolts. Reusing stretched head bolts is a critical DIY mistake that almost guarantees head gasket failure.
+                
+                **Preparation:**
+                *   Fasteners must be clean, dry, and lightly lubricated with engine oil on the threads and flange seating faces prior to insertion.
+                *   The sequence must be performed in the designated cross-pattern (from the center outward) [1, 3, 5, 2, 4, 6] shown on FSM diagrams.
+                
+                **The 10-Stage Torque Sequence:**
+                *   **Stage 1:** Torque all bolts in sequence to **40 N-m (29.5 ft-lbs)**.
+                *   **Stage 2:** Torque all bolts in sequence to **95 N-m (70 ft-lbs)**.
+                *   **Stage 3:** Loosen all bolts by **180°** in reverse sequence.
+                *   **Stage 4:** Loosen all bolts an additional **180°** to release pre-tension completely.
+                *   **Stage 5:** Torque all bolts in sequence to **10 N-m (7.4 ft-lbs)**.
+                *   **Stage 6:** Torque all bolts in sequence to **30 N-m (22 ft-lbs)**.
+                *   **Stage 7:** Torque all bolts in sequence to **70 N-m (51.6 ft-lbs)**.
+                *   **Stage 8:** Rotate all bolts **80° to 90°** in sequence.
+                *   **Stage 9:** Rotate all bolts an additional **40° to 45°** in sequence.
+                *   **Stage 10:** Rotate center bolts (1 and 2 only) a final **40° to 45°**.
+                """
+            )
+        elif proc_selection == "Brembo Caliper Thread Repair (Time-Sert)":
+            st.markdown(
+                """
+                ### 🛑 Brembo Caliper Thread Repair (Time-Sert)
+                The power-assisted Brembo calipers are constructed from cast aluminum, while their mounting bolts are steel. Mounting these steel fasteners directly into aluminum calipers creates a galvanic couple. Under road salt and moisture, galvanic corrosion generates an aluminum oxide layer that binds threads. Stripped threads on the caliper ears can be repaired permanently.
+                
+                **Required Tooling:**
+                *   Time-Sert M12 x 1.5 metric thread repair kit (Part Number `1215`).
+                *   31/64-inch high-speed steel drill bit and cutting oil.
+                *   Time-Sert tap and installation tool.
+                *   High-strength red threadlocker.
+                
+                **Step-by-Step Instructions:**
+                1.  **Bore Out Damaged Hole:** Secure the caliper. Bore out the damaged mounting hole on the caliper ear using a 31/64-inch high-speed steel drill bit, ensuring it is drilled perfectly straight and lubricated with cutting oil.
+                2.  **Counterbore:** Counterbore the top of the hole using the Time-Sert counterbore tool to allow the insert flange to sit flush with the caliper ear surface.
+                3.  **Tap the Hole:** Tap the prepared hole using the specialized Time-Sert tap, lubricating heavily with cutting oil. Clean out all metal shavings thoroughly.
+                4.  **Install Steel Insert:** Apply high-strength red threadlocker to the external threads of the steel insert. Thread the insert onto the installation tool, then drive it into the newly tapped hole.
+                5.  **Expand Threads:** Continue driving the insertion tool through the sleeve. The tool will expand the lower threads of the insert, cold-locking it permanently into the aluminum ear.
+                6.  **Prevention:** When installing calipers, always apply a light coat of copper anti-seize compound (e.g. Permatex #39772) to the steel bolts and restrict mounting torque to **80 ft-lbs** (corrected from the erroneous 114.3 ft-lbs listed in some factory service manuals).
+                """
+            )
+        elif proc_selection == "Starlink 3G DCM Parasitic Battery Drain Bypass":
+            st.markdown(
+                """
+                ### ⚡ Starlink 3G DCM Parasitic Battery Drain Bypass
+                When 3G networks were decommissioned, early Starlink DCMs lost cellular signal permanently, entering an infinite boot-loop. This causes a parasitic draw of **120 to 140 mA** from a constant 12V battery source, draining the battery within 24 to 48 hours.
+                
+                **Step-by-Step Instructions:**
+                1.  **Measure Parasitic Draw:** Set a digital multimeter to measure current (Amps) in series with the negative battery terminal. Wait for modules to enter sleep mode (usually 20-30 minutes). Confirm draw exceeds **70 mA** (standard draw is 30-35 mA).
+                2.  **Verify Fuse:** Pull the dedicated Starlink fuse. If the draw immediately drops down to ~30 mA, the DCM is the culprit.
+                3.  **Install Bypass Harness:** Access the back of the head unit under the dashboard. Disconnect the wire harness from the DCM module.
+                4.  **Loop Audio:** Install a **Starlink wireless bypass harness** to bridge the disconnected lines. This loops the audio signals from the head unit directly to the speakers, bypassing the failed DCM module.
+                5.  **Restore Hands-Free:** Ground Pin 6 on the head unit side of the bypass harness to restore standard voice commands and hands-free microphone functionality.
+                6.  **Alternative Scan Tool Fix:** Alternatively, use a dealer scan tool to program the DCM into 'Factory Mode' per TSB 15-312-23R, which permanently disables the cellular transceiver.
+                """
+            )
+        elif proc_selection == "Clutch Pedal Creaking & Bracket Lubrication":
+            st.markdown(
+                """
+                ### ⛘ Clutch Pedal Creaking & Bracket Lubrication
+                Many 2015 and 2016 models develop an audible creaking or clicking sound upon depressing the clutch pedal, typically associated with clevis/pivot pin wear and lack of lubrication.
+                
+                **Step-by-Step Instructions:**
+                1.  **Access Release Fork:** Remove the top-mount intercooler to gain clear access to the clutch slave cylinder.
+                2.  **Expose Pivot Ball:** Unbolt the slave cylinder and peel back the rubber boot on the transmission case to expose the clutch release fork and pivot ball.
+                3.  **Apply Grease:** Using a long-reach brush, apply high-temperature white lithium grease (or specialized clutch fork grease) directly to the pivot socket and the clutch release fork contact points.
+                4.  **Inspect Pedal Bracket:** If the creak persists, check under the dashboard. Inspect the clutch pedal bracket assembly for worn clevis pins, snapped pivot pins, or structural bracket cracks.
+                5.  **TSB Update:** If the bracket is cracked, replace the pedal bracket assembly with a reinforced unit in accordance with **TSB 12-190-15** and **TSB 03-79-18R**.
+                """
+            )
+        elif proc_selection == "Cam Carrier Cover Gasket Resealing (Engine Out)":
+            st.markdown(
+                """
+                ### ⛢ Cam Carrier Cover Gasket Resealing
+                Because of the flat 'Boxer' layout, engine oil continuously pools along the lower edges of the cylinder head gaskets and cam carrier covers. Over time, high temperatures degrade the liquid sealant, leading to oil leaks, smoky manifolds, and a burning smell.
+                
+                **Step-by-Step Instructions:**
+                1.  **Remove Engine:** Due to clearance constraints against the frame rails, the engine must be removed from the vehicle and secured on an engine stand.
+                2.  **Disassemble Timing & Cams:** Remove the timing belt assembly, camshaft sprockets, and camshafts to access the cam carrier covers.
+                3.  **Clean Mating Surfaces:** Thoroughly scrape old silicone sealer from all mating channels. Use brass wire brushes and brake parts cleaner to remove all debris and oxidation.
+                4.  **Clean Filter Screens:** Locate and clean (without removing) the small internal oil filter screens housed inside each cam carrier.
+                5.  **Apply Silicone Sealant:** Apply a precise **1.5 mm** bead of high-grade **ThreeBond Gray RTV silicone sealant (Part Number TB1200GAU / TB1217G)** along the cam carrier mating channels.
+                6.  **Reassemble:** Reinstall the cam carrier covers and torque fasteners in a cross pattern. Reassemble the camshafts, sprockets, and timing belt. Rotate crankshaft two full turns by hand to verify valve clearance before engine re-installation.
+                """
+            )
+        elif proc_selection == "EJ257 Oiling System Priming Procedure":
+            st.markdown(
+                """
+                ### ⛢ EJ257 Oiling System Priming Procedure
+                After engine rebuilds, oil changes, or any major timing belt/head gasket work, priming the oiling system is vital to establish oil pressure before initial engine startup and prevent severe bearing damage.
+                
+                **Step-by-Step Instructions:**
+                1.  **Add Fluids:** Ensure the crankcase is filled with fresh SAE 5W-30 or 5W-40 full synthetic engine oil and that the coolant is topped off.
+                2.  **Keep Original Filter:** When draining the engine oil during repairs, leave the existing oil filter in place. Keep this filter installed through initial reassembly, installation, and priming.
+                3.  **Disable Fuel System:** Locate the fuse block and remove the **fuel pump fuse** to prevent the engine from firing up during cranking.
+                4.  **Prime the System:** Insert the key and crank the engine over in short bursts (no more than **10 seconds** at a time). Monitor the dashboard. Continue cranking until the **engine oil low-pressure warning light extinguishes**, signaling that oil pressure has been successfully built.
+                5.  **Debris Catch Run:** Re-install the fuel pump fuse. Start the engine and let it idle for approximately **5 minutes** with the old filter installed to catch any remaining sealant or assembly debris. Check for external leaks.
+                6.  **Replace Filter & Top Off:** Shut off the engine and let it cool for at least **5 minutes**. Remove the old oil filter and install a fresh **Tokyo Roki Black Filter (P/N 15208AA100)** pre-lubricated with oil. Top off the engine oil level to the upper hole on the dipstick.
+                """
+            )
 
     # OEM Parts Tab
     with tab_parts:
