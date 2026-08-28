@@ -891,9 +891,9 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-size: cover;
             background-position: center 38%; /* Vertically re-centered to keep the rally car in the sweet-spot of the crop */
             background-repeat: no-repeat;
-            filter: blur(8px);
-            -webkit-filter: blur(8px);
-            /*opacity: 0.65;  Clean visibility across both dark and light modes */
+            filter: blur(3px);
+            -webkit-filter: blur(3px);
+            opacity: 0.65; /* Clean visibility across both dark and light modes */
             z-index: 1;
         }
         .header-content {
