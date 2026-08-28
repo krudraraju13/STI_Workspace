@@ -651,8 +651,16 @@ if HAS_STREAMLIT and st.runtime.exists():
     
 
     # Global CSS customization for fonts, responsiveness, align, spacing, and colors
-    st.markdown(
-        """
+    # Dynamic Theme-aware CSS custom styling engine (v175)
+    # Streamlit >= 1.46.0 supports reading the active theme dynamically on st.context.theme.get("type")
+    # This prevents CSS browser media queries from overriding backgrounds on manual theme switches!
+    theme_type = None
+    try:
+        theme_type = st.context.theme.get("type")
+    except Exception:
+        pass
+
+    custom_style = """
         <style>
         /* Import premium system fonts */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap');
@@ -778,7 +786,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v162) */
+        /* Pure CSS modal system for image zoom (v175) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -870,7 +878,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v162) */
+        /* Banner title block with clean background image (v175) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -965,10 +973,73 @@ if HAS_STREAMLIT and st.runtime.exists():
                 flex: none !important;
             }
         }
+    """
+
+    # Dynamic CSS Variables & Page Background overrides utilizing Google Material Design 3 Surface-Tint Color-Mixing (v175)
+    # If the user toggles dark mode, change the deep background to dark-slate gray #121214 base
+    # If the user toggles light mode, change the deep background to a clean platinum-rose light slate and white cards to avoid overlaps!
+    if theme_type == "dark":
+        custom_style += """
+        .stApp {
+            --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1e1e24) !important;
+        }
+        [data-testid="stAppViewContainer"], .stApp {
+            background-color: var(--background-color) !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: var(--background-color) !important;
+        }
+        """
+    elif theme_type == "light":
+        custom_style += """
+        .stApp {
+            --background-color: color-mix(in srgb, #FF007F 5%, #ffffff) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #ffffff) !important;
+        }
+        [data-testid="stAppViewContainer"], .stApp {
+            background-color: var(--background-color) !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: var(--background-color) !important;
+        }
+        """
+    else:
+        # Fallback to Media Query AND Dynamic variable-based color mixing if theme_type is not resolved yet during initial boot
+        # Scoped to prevent overlaps when theme_type is none
+        custom_style += """
+        @media (prefers-color-scheme: dark) {
+            .stApp:not([data-theme="light"]) {
+                --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+                --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1e1e24) !important;
+            }
+            .stApp:not([data-theme="light"]) [data-testid="stAppViewContainer"], 
+            .stApp:not([data-theme="light"]) {
+                background-color: var(--background-color) !important;
+            }
+            .stApp:not([data-theme="light"]) [data-testid="stHeader"] {
+                background-color: var(--background-color) !important;
+            }
+        }
+        @media (prefers-color-scheme: light) {
+            .stApp:not([data-theme="dark"]) {
+                --background-color: color-mix(in srgb, #FF007F 5%, #ffffff) !important;
+                --secondary-background-color: color-mix(in srgb, #FF007F 10%, #ffffff) !important;
+            }
+            .stApp:not([data-theme="dark"]) [data-testid="stAppViewContainer"], 
+            .stApp:not([data-theme="dark"]) {
+                background-color: var(--background-color) !important;
+            }
+            .stApp:not([data-theme="dark"]) [data-testid="stHeader"] {
+                background-color: var(--background-color) !important;
+            }
+        }
+        """
+
+    custom_style += """
         </style>
-        """,
-        unsafe_allow_html=True
-    )
+    """
+    st.markdown(custom_style, unsafe_allow_html=True)
 
     @st.dialog("Confirm Service Log")
     def confirm_save_dialog(completed_list, mileage, severe):
@@ -1029,7 +1100,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v162)
+    # Responsive Brand Logo Header Block with Clean Background Image (v175)
     st.markdown(
         f"""
         <div class="header-banner">
