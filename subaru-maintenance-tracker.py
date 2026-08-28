@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v148) */
+        /* Pure CSS modal system for image zoom (v149) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -808,9 +808,8 @@ if HAS_STREAMLIT and st.runtime.exists():
         .css-modal-content {
             position: relative;
             z-index: 2 !important;
-            /* 100% solid, 100% opaque, 0% transparency background matching active theme (no alpha/transparency leaks) */
-            background-color: color-mix(in srgb, var(--text-color) 4%, var(--background-color)) !important;
-            opacity: 1 !important;
+            /* 100% solid, completely opaque background with no transparency or opacity rules */
+            background-color: var(--background-color) !important;
             padding: 24px;
             border: 1px solid var(--border-color, #94a3b8) !important;
             width: 90%;
@@ -822,13 +821,12 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important; /* Dynamic high-contrast text color from active theme */
         }
         .modal-svg {
-            /* 100% solid, fully opaque background (solid light grey in light theme, solid dark grey in dark theme) */
-            background-color: color-mix(in srgb, var(--text-color) 18%, var(--background-color)) !important;
+            /* 100% solid, completely opaque background with no transparency or opacity rules */
+            background-color: var(--secondary-background-color) !important;
             border-radius: 8px !important;
             padding: 12px !important;
             display: block !important;
             margin: auto !important;
-            opacity: 1 !important; /* Force 100% solid, fully opaque SVG canvas background */
         }
         @keyframes modalFadeIn {
             /* Kept structural transition */
