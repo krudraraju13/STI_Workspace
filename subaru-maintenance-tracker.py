@@ -819,6 +819,11 @@ if HAS_STREAMLIT and st.runtime.exists():
             text-align: center;
             animation: modalFadeIn 0.25s ease-out;
             color: #31333f !important; /* Solid high-contrast text for light mode */
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: auto !important;
         }
         @media (prefers-color-scheme: dark) {
             .css-modal-content {
@@ -1813,7 +1818,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 <a href="#" class="css-modal-backdrop-close"></a>
 <div class="css-modal-content">
 <a href="#" class="css-modal-close">&times;</a>
-<div style="max-width: 100%; overflow: auto;">
+<div style="max-width: 100%; overflow: auto; display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; margin: 0 auto !important;">
 <svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 650px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
 <!-- Cylinder block outline -->
 <rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#94a3b8" stroke-width="2"/>
@@ -1855,9 +1860,6 @@ if HAS_STREAMLIT and st.runtime.exists():
 </marker>
 </defs>
 </svg>
-</div>
-<div style='text-align:center; padding-top:15px; font-size:1.15em; color:var(--text-color) !important; font-family:"Montserrat", sans-serif; font-weight:700;'>
-DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 </div>
 </div>
 </div>
@@ -1983,7 +1985,7 @@ DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 <a href="#" class="css-modal-backdrop-close"></a>
 <div class="css-modal-content" style="max-width: 540px;">
 <a href="#" class="css-modal-close">&times;</a>
-<div style="max-width: 100%; overflow: auto;">
+<div style="max-width: 100%; overflow: auto; display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; margin: 0 auto !important;">
 <svg viewBox="0 0 400 400" width="100%" height="auto" style="max-width: 450px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
 <!-- Cylinder Bore -->
 <circle cx="200" cy="200" r="165" fill="none" stroke="rgba(128, 128, 128, 0.3)" stroke-width="4"/>
@@ -2035,9 +2037,6 @@ DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE
 </marker>
 </defs>
 </svg>
-</div>
-<div style='text-align:center; padding-top:15px; font-size:1.15em; color:var(--text-color) !important; font-family:"Montserrat", sans-serif; font-weight:700;'>
-EJ257 PISTON RING END GAP ALIGNMENT
 </div>
 </div>
 </div>
