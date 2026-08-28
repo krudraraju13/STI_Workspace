@@ -650,7 +650,7 @@ if HAS_STREAMLIT and st.runtime.exists():
     # Set page layout config
     
 
-    # Dynamic Theme-aware CSS custom styling engine (v168)
+    # Dynamic Theme-aware CSS custom styling engine (v169)
     # Streamlit >= 1.46.0 supports reading the active theme dynamically on st.context.theme.get("type")
     # This prevents CSS browser media queries from overriding backgrounds on manual theme switches!
     theme_type = None
@@ -783,7 +783,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Pure CSS modal system for image zoom (v168) */
+        /* Pure CSS modal system for image zoom (v169) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -874,7 +874,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v168) */
+        /* Banner title block with clean background image (v169) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -971,35 +971,60 @@ if HAS_STREAMLIT and st.runtime.exists():
         }
     """
 
-    # Dynamic CSS Variables & Page Background overrides for Dark Mode
-    # If the user toggles dark mode, change the deep background to dark-slate gray #1f2125
-    # If light mode is selected, we inject absolutely no stApp overrides, letting native white render cleanly!
+    # Dynamic CSS Variables & Page Background overrides utilizing Google Material Design 3 Surface-Tint Color-Mixing (v169)
+    # This matches the dynamic branding engine of notebook.google.com by mixing a small percentage (3% - 10%)
+    # of our STI Cherry Blossom Brand Pink (#FF007F) with light slate and dark charcoal bases to produce organic, cohesive theme backings.
     if theme_type == "dark":
         custom_style += """
         .stApp {
-            --background-color: #1f2125 !important;
-            --secondary-background-color: #2c2f36 !important;
+            --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1a1a1c) !important;
         }
         [data-testid="stAppViewContainer"], .stApp {
-            background-color: #1f2125 !important;
+            background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
         }
         [data-testid="stHeader"] {
-            background-color: #1f2125 !important;
+            background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
         }
         """
-    elif theme_type is None:
+    elif theme_type == "light":
+        custom_style += """
+        .stApp {
+            --background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+            --secondary-background-color: color-mix(in srgb, #FF007F 6%, #f1f5f9) !important;
+        }
+        [data-testid="stAppViewContainer"], .stApp {
+            background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+        }
+        """
+    else:
         # Fallback to Media Query if Streamlit theme is not fully resolved yet during initial boot
         custom_style += """
         @media (prefers-color-scheme: dark) {
             .stApp {
-                --background-color: #1f2125 !important;
-                --secondary-background-color: #2c2f36 !important;
+                --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+                --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1a1a1c) !important;
             }
             [data-testid="stAppViewContainer"], .stApp {
-                background-color: #1f2125 !important;
+                background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
             }
             [data-testid="stHeader"] {
-                background-color: #1f2125 !important;
+                background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
+            }
+        }
+        @media (prefers-color-scheme: light) {
+            .stApp {
+                --background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+                --secondary-background-color: color-mix(in srgb, #FF007F 6%, #f1f5f9) !important;
+            }
+            [data-testid="stAppViewContainer"], .stApp {
+                background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
+            }
+            [data-testid="stHeader"] {
+                background-color: color-mix(in srgb, #FF007F 3%, #f8fafc) !important;
             }
         }
         """
@@ -1068,7 +1093,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v168)
+    # Responsive Brand Logo Header Block with Clean Background Image (v169)
     st.markdown(
         f"""
         <div class="header-banner">
