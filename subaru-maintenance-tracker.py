@@ -778,7 +778,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v160) */
+        /* Pure CSS modal system for image zoom (v162) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -870,7 +870,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with blurred background image (v160) */
+        /* Banner title block with clean background image (v162) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -886,14 +886,12 @@ if HAS_STREAMLIT and st.runtime.exists():
         .header-banner-blur {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url("https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_rally_car.jpg");
+            background-image: url("https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_rally_car.png");
             /* Optimized for 1680x1050 landscape aspect ratio to fit the banner beautifully across all device sizes */
             background-size: cover;
             background-position: center 38%; /* Vertically re-centered to keep the rally car in the sweet-spot of the crop */
             background-repeat: no-repeat;
-             /*filter: blur(5px);*/
-            /* -webkit-filter: blur(5px);*/
-            opacity: 0.40; /* Clean visibility across both dark and light modes */
+            opacity: 0.45; /* Clean visibility across both dark and light modes */
             z-index: 1;
         }
         .header-content {
@@ -1031,7 +1029,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Blurred Background Image (v160)
+    # Responsive Brand Logo Header Block with Clean Background Image (v162)
     st.markdown(
         f"""
         <div class="header-banner">
