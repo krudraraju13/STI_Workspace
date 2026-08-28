@@ -775,7 +775,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v155) */
+        /* Pure CSS modal system for image zoom (v156) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -1523,33 +1523,53 @@ if HAS_STREAMLIT and st.runtime.exists():
         fluids_data = [
             {
                 "Compartment": "Engine Crankcase (EJ257)",
-                "Fluid Type / Specification": "API SM / SN Full Synthetic (SAE 5W-30 or 5W-40)",
-                "Capacity": "4.5 Quarts (4.3 Liters) with filter"
+                "Fluid Type / Specification": "API SM / SN Full Synthetic (SAE 5W-30 standard, or SAE 5W-40 for high-load and extreme shear protection)",
+                "Capacity": "4.5 Quarts (4.3 Liters) with filter | Checked every 1,000 miles"
+            },
+            {
+                "Compartment": "Engine Crankcase (FA20DIT / JDM FA20F)",
+                "Fluid Type / Specification": "API SN / SP or ILSAC GF-5/GF-6 Full Synthetic (SAE 0W-20 standard, or SAE 5W-30 for modified and high-heat environments)",
+                "Capacity": "5.1 Quarts (4.8 Liters) with filter"
             },
             {
                 "Compartment": "Manual Transmission & Front Diff (6-Speed Transaxle)",
-                "Fluid Type / Specification": "API GL-5 High Performance Gear Oil (SAE 75W-90)",
-                "Capacity": "Dry Fill: 4.1 Quarts (4.1 Liters / 8.7 Pints) | Service Fill: ~3.5 Quarts (3.3 Liters)"
+                "Fluid Type / Specification": "API GL-5 High Performance Gear Oil (SAE 75W-90, e.g., Motul Gear 300 / Motul Gear 300 LS)",
+                "Capacity": "Dry Fill: 4.1 Quarts (4.1 Liters / 8.7 Pints) | Service Fill: ~3.5 Quarts (3.3 Liters) due to gear trapping"
             },
             {
-                "Compartment": "Rear Differential",
-                "Fluid Type / Specification": "API GL-5 Hypoid Gear Oil (SAE 75W-90 / Motul 90PA for track)",
+                "Compartment": "Rear Differential (Torsen or Mechanical LSD)",
+                "Fluid Type / Specification": "API GL-5 Hypoid Gear Oil (SAE 75W-90, or Motul 90PA for mechanical or extreme track use)",
                 "Capacity": "1.0 Quart (0.95 Liters / 2.1 Pints)"
             },
             {
+                "Compartment": "DCCD Center Differential (STI-specific)",
+                "Fluid Type / Specification": "Subaru Gear Oil STI (Part Number K0305Y0002) or specialty high-performance gear oil",
+                "Capacity": "Required for center electromagnetic multi-plate clutch to prevent differential chatter"
+            },
+            {
+                "Compartment": "Automatic / Sport Lineartronic CVT (JDM S4 tS)",
+                "Fluid Type / Specification": "Subaru High-Torque CVT Fluid (Orange/Linear, P/N K0415Y0700) or Subaru ATF-HP",
+                "Capacity": "~7.7 Liters (8.1 Quarts) System capacity"
+            },
+            {
                 "Compartment": "Engine Cooling System",
-                "Fluid Type / Specification": "Subaru Super Coolant (Pre-Mixed Blue)",
+                "Fluid Type / Specification": "Subaru Super Coolant (Pre-Mixed Blue Ethylene Glycol, Amine-free)",
                 "Capacity": "8.1 Quarts (7.7 Liters / 2.025 Gallons)"
             },
             {
                 "Compartment": "Brake & Clutch Reservoirs",
-                "Fluid Type / Specification": "DOT 3 or DOT 4 Hydraulic Fluid",
+                "Fluid Type / Specification": "DOT 3 or DOT 4 Hydraulic Fluid (DOT 4 or DOT 5.1 for heavy track and performance use)",
                 "Capacity": "Fill to Max Reservoir Line (~1.0 Liter)"
             },
             {
                 "Compartment": "Power Steering System (Hydraulic)",
-                "Fluid Type / Specification": "Dexron III / Subaru ATF-HP",
+                "Fluid Type / Specification": "Dexron III Automatic Transmission Fluid / Subaru ATF-HP",
                 "Capacity": "~0.8 Liters (System capacity)"
+            },
+            {
+                "Compartment": "A/C Refrigerant & Compressor Lubricant",
+                "Fluid Type / Specification": "HFC-134a (R-134a) Refrigerant & DH-PR Compressor Oil or equivalent",
+                "Capacity": "System charge capacity: ~400g to 500g"
             }
         ]
         
