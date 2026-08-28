@@ -808,8 +808,8 @@ if HAS_STREAMLIT and st.runtime.exists():
         .css-modal-content {
             position: relative;
             z-index: 2 !important;
-            /* 100% solid, completely opaque background color for light mode */
-            background-color: #ffffff !important;
+            /* 100% solid, fully opaque background matching active theme (no alpha/transparency leaks) */
+            background-color: color-mix(in srgb, var(--text-color) 4%, var(--background-color)) !important;
             padding: 24px;
             border: 1px solid var(--border-color, #94a3b8) !important;
             width: 90%;
@@ -818,27 +818,16 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             text-align: center;
             animation: modalFadeIn 0.25s ease-out;
-            color: #31333f !important; /* Solid high-contrast text for light mode */
+            color: var(--text-color) !important; /* Dynamic high-contrast text color from active theme */
         }
         .modal-svg {
-            /* 100% solid, completely opaque background color for light mode */
-            background-color: #cbd5e1 !important;
+            /* 100% solid, fully opaque background matching active theme (no alpha/transparency leaks) */
+            background-color: color-mix(in srgb, var(--text-color) 12%, var(--background-color)) !important;
             border-radius: 8px !important;
             padding: 12px !important;
             display: block !important;
             margin: auto !important;
-            opacity: 1 !important;
-        }
-        @media (prefers-color-scheme: dark) {
-            .css-modal-content {
-                /* 100% solid, completely opaque background color for dark mode */
-                background-color: #111525 !important;
-                color: #fafafa !important; /* Solid high-contrast text for dark mode */
-            }
-            .modal-svg {
-                /* 100% solid, completely opaque background color for dark mode */
-                background-color: #1a1f35 !important;
-            }
+            opacity: 1 !important; /* Force 100% solid, fully opaque SVG canvas background */
         }
         @keyframes modalFadeIn {
             /* Kept structural transition */
