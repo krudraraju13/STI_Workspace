@@ -893,7 +893,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-repeat: no-repeat;
             filter: blur(8px);
             -webkit-filter: blur(8px);
-            opacity: 0.65; /* Clean visibility across both dark and light modes */
+            /*opacity: 0.65;  Clean visibility across both dark and light modes */
             z-index: 1;
         }
         .header-content {
