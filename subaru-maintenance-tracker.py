@@ -778,7 +778,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v158) */
+        /* Pure CSS modal system for image zoom (v160) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -869,6 +869,104 @@ if HAS_STREAMLIT and st.runtime.exists():
             transform: scale(1.025) !important;
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
+
+        /* Banner title block with blurred background image (v160) */
+        .header-banner {
+            position: relative;
+            width: 100%;
+            min-height: 140px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            background-color: var(--secondary-background-color);
+            border: 1px solid rgba(128, 128, 128, 0.2);
+        }
+        .header-banner-blur {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("https://raw.githubusercontent.com/krudraraju13/STI_Workspace/main/sti_rally_car.jpg");
+            /* Optimized for 1680x1050 landscape aspect ratio to fit the banner beautifully across all device sizes */
+            background-size: cover;
+            background-position: center 38%; /* Vertically re-centered to keep the rally car in the sweet-spot of the crop */
+            background-repeat: no-repeat;
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            opacity: 0.45; /* Clean visibility across both dark and light modes */
+            z-index: 1;
+        }
+        .header-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 30px;
+            flex-wrap: wrap; /* Ensure responsiveness on mobile devices */
+        }
+        .header-logo-left {
+            display: flex;
+            justify-content: flex-start;
+            flex: 1;
+            min-width: 150px;
+        }
+        .header-logo-left img {
+            max-width: 180px;
+            height: auto;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        .header-title {
+            text-align: center;
+            flex: 3.4;
+            min-width: 280px;
+            padding: 10px 0;
+        }
+        .header-title h1 {
+            font-size: 2.1em !important;
+            margin: 0 !important;
+            line-height: 1.2 !important;
+            letter-spacing: -0.5px !important;
+            color: var(--text-color) !important;
+        }
+        .header-title p {
+            color: #FF007F !important;
+            margin: 5px 0 0 0 !important;
+            font-size: 1.1em !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 700 !important;
+        }
+        .header-logo-right {
+            display: flex;
+            justify-content: flex-end;
+            flex: 1.6;
+            min-width: 200px;
+        }
+        .header-logo-right img {
+            max-width: 280px;
+            height: auto;
+            max-height: 90px;
+            object-fit: contain;
+        }
+
+        /* Responsive styling for small viewports */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 15px !important;
+            }
+            .header-logo-left, .header-logo-right {
+                justify-content: center !important;
+                flex: none !important;
+            }
+            .header-title {
+                flex: none !important;
+            }
+        }
         </style>
         """,
         unsafe_allow_html=True
@@ -933,37 +1031,29 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    logo_left_col, title_col, logo_right_col = st.columns([1.0, 3.4, 1.6], vertical_alignment="center")
-    with logo_left_col:
-        st.markdown(
-            f"""
-            <div style="display: flex; justify-content: flex-start; align-items: center; height: auto; min-height: 100px; max-height: 140px; width: 100%;">
-                <img src="{sti_src}" style="width: 100%; max-width: 200px; height: auto; max-height: 100px; object-fit: contain; display: block;"/>
+    # Responsive Brand Logo Header Block with Blurred Background Image (v160)
+    st.markdown(
+        f"""
+        <div class="header-banner">
+            <div class="header-banner-blur"></div>
+            <div class="header-content">
+                <div class="header-logo-left">
+                    <img src="{sti_src}"/>
+                </div>
+                <div class="header-title">
+                    <h1><svg viewBox='0 0 100 100' width='36' height='36' style='vertical-align: middle; margin-right: 10px; display: inline-block;'><circle cx='50' cy='50' r='14' fill='none' stroke='#FF007F' stroke-width='4'/><circle cx='50' cy='50' r='7' fill='#FF007F'/><rect x='20' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='6' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='4' y1='32' x2='24' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='4' y1='68' x2='24' y2='68' stroke='#94a3b8' stroke-width='3'/><rect x='60' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='80' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='76' y1='32' x2='96' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='76' y1='68' x2='96' y2='68' stroke='#94a3b8' stroke-width='3'/></svg>Subaru STI Maintenance Tracker<svg viewBox='0 0 100 100' width='36' height='36' style='vertical-align: middle; margin-left: 10px; display: inline-block;'><circle cx='50' cy='50' r='14' fill='none' stroke='#FF007F' stroke-width='4'/><circle cx='50' cy='50' r='7' fill='#FF007F'/><rect x='20' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='6' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='4' y1='32' x2='24' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='4' y1='68' x2='24' y2='68' stroke='#94a3b8' stroke-width='3'/><rect x='60' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='80' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='76' y1='32' x2='96' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='76' y1='68' x2='96' y2='68' stroke='#94a3b8' stroke-width='3'/></svg></h1>
+                    <p>
+                        Performance Suite &bull; Factory Specifications &bull; Interactive Log
+                    </p>
+                </div>
+                <div class="header-logo-right">
+                    <img src="{subaru_src}"/>
+                </div>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
-    with title_col:
-        st.markdown(
-            """
-            <div style='padding-top:10px; text-align: center;'>
-                <h1 style='color:var(--text-color);margin:0;font-size:2.2em;letter-spacing:-0.5px;'><svg viewBox='0 0 100 100' width='36' height='36' style='vertical-align: middle; margin-right: 10px; display: inline-block;'><circle cx='50' cy='50' r='14' fill='none' stroke='#FF007F' stroke-width='4'/><circle cx='50' cy='50' r='7' fill='#FF007F'/><rect x='20' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='6' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='4' y1='32' x2='24' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='4' y1='68' x2='24' y2='68' stroke='#94a3b8' stroke-width='3'/><rect x='60' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='80' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='76' y1='32' x2='96' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='76' y1='68' x2='96' y2='68' stroke='#94a3b8' stroke-width='3'/></svg>Subaru STI Maintenance Tracker<svg viewBox='0 0 100 100' width='36' height='36' style='vertical-align: middle; margin-left: 10px; display: inline-block;'><circle cx='50' cy='50' r='14' fill='none' stroke='#FF007F' stroke-width='4'/><circle cx='50' cy='50' r='7' fill='#FF007F'/><rect x='20' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='6' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='4' y1='32' x2='24' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='4' y1='68' x2='24' y2='68' stroke='#94a3b8' stroke-width='3'/><rect x='60' y='46' width='20' height='8' fill='#FF007F' rx='2'/><rect x='80' y='36' width='14' height='28' fill='#FF007F' rx='3'/><line x1='76' y1='32' x2='96' y2='32' stroke='#94a3b8' stroke-width='3'/><line x1='76' y1='68' x2='96' y2='68' stroke='#94a3b8' stroke-width='3'/></svg></h1>
-                <p style='color:#FF007F;margin:5px 0 0 0;font-size:1.15em;font-family:"Montserrat",sans-serif;font-weight:700;'>
-                    Performance Suite &bull; Factory Specifications &bull; Interactive Log
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-    with logo_right_col:
-        st.markdown(
-            f"""
-            <div style="display: flex; justify-content: flex-end; align-items: center; height: auto; min-height: 100px; max-height: 140px; width: 100%;">
-                <img src="{subaru_src}" style="width: 100%; max-width: 320px; height: auto; max-height: 115px; object-fit: contain; display: block; margin-left: auto;"/>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     st.markdown("<hr style='margin:10px 0 20px 0; border-color:#334155;'/>", unsafe_allow_html=True)
 
     # Tabs layout
