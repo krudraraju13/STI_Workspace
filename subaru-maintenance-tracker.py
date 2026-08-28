@@ -813,7 +813,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             padding: 24px;
             border: 1px solid var(--border-color, #94a3b8) !important;
             width: 90%;
-            max-width: 800px;
+            max-width: 1000px;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             text-align: center;
@@ -1819,7 +1819,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 <div class="css-modal-content">
 <a href="#" class="css-modal-close">&times;</a>
 <div style="max-width: 100%; overflow: auto; display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; margin: 0 auto !important;">
-<svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 650px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
+<svg viewBox="0 0 450 220" width="100%" height="auto" style="max-width: 900px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
 <!-- Cylinder block outline -->
 <rect x="15" y="35" width="420" height="150" rx="8" fill="rgba(128, 128, 128, 0.05)" stroke="#94a3b8" stroke-width="2"/>
 <text x="225" y="24" fill="#94a3b8" font-family="'Montserrat', sans-serif" font-size="12" font-weight="bold" text-anchor="middle">DOHC EJ257 HEAD BOLT LAYOUT & SEQUENCE</text>
@@ -1983,10 +1983,10 @@ if HAS_STREAMLIT and st.runtime.exists():
 <!-- Modal Overlay for Piston Ring sequence -->
 <div id="piston-ring-zoom" class="css-modal">
 <a href="#" class="css-modal-backdrop-close"></a>
-<div class="css-modal-content" style="max-width: 540px;">
+<div class="css-modal-content" style="max-width: 800px;">
 <a href="#" class="css-modal-close">&times;</a>
 <div style="max-width: 100%; overflow: auto; display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; margin: 0 auto !important;">
-<svg viewBox="0 0 400 400" width="100%" height="auto" style="max-width: 450px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
+<svg viewBox="0 0 400 400" width="100%" height="auto" style="max-width: 700px; display:block; margin:auto; background-color: var(--secondary-background-color); border-radius: 8px; padding: 12px;">
 <!-- Cylinder Bore -->
 <circle cx="200" cy="200" r="165" fill="none" stroke="rgba(128, 128, 128, 0.3)" stroke-width="4"/>
 <circle cx="200" cy="200" r="150" fill="rgba(128, 128, 128, 0.05)" stroke="rgba(128, 128, 128, 0.2)" stroke-width="2"/>
