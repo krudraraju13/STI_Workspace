@@ -663,6 +663,18 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
+        /* Blurs the rest of the app background when any popup/dialog is opened (v178) */
+        div[data-testid="stDialog"] {
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            background-color: rgba(0, 0, 0, 0.45) !important;
+        }
+        div[data-baseweb="modal"] {
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            background-color: rgba(0, 0, 0, 0.45) !important;
+        }
+
         h1, h2, h3, h4, h5, h6, [class*="header"] {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
@@ -778,7 +790,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v177) */
+        /* Pure CSS modal system for image zoom (v178) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -870,7 +882,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v177) */
+        /* Banner title block with clean background image (v178) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1026,7 +1038,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     @st.dialog("Manual Service Log Entry")
     def manual_log_dialog():
-        st.markdown("##### ➕ Create Manual Service History Record")
+        # Removed: ➕ Create Manual Service History Record header
         st.write("Manually log a maintenance service entry directly into your Google Sheets and local history file.")
         
         # 1. Date Input
@@ -1107,7 +1119,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v177)
+    # Responsive Brand Logo Header Block with Clean Background Image (v178)
     st.markdown(
         f"""
         <div class="header-banner">
@@ -1152,9 +1164,14 @@ if HAS_STREAMLIT and st.runtime.exists():
                 height: 52px !important;
                 font-weight: bold !important;
             }
-            /* Clean up any default spacing since label is removed */
+            /* Style the label beautifully instead of hiding it */
             div[data-testid="stNumberInput"] label {
-                display: none !important;
+                font-family: 'Montserrat', sans-serif !important;
+                font-weight: bold !important;
+                font-size: 14px !important;
+                color: var(--text-color) !important;
+                margin-bottom: 8px !important;
+                display: block !important;
             }
             div[data-testid="stNumberInput"] {
                 margin-top: 0px !important;
@@ -1165,7 +1182,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         )
         col_mil, col_sev = st.columns(2, vertical_alignment="center")
         with col_mil:
-            mileage = st.number_input("", min_value=0, max_value=500000, value=None, step=1000, placeholder="Enter current mileage")
+            mileage = st.number_input("Odometer Mileage (mi)", min_value=0, max_value=500000, value=None, step=1000, placeholder="Enter current mileage")
         with col_sev:
             severe = st.checkbox(
                 "Severe Driving Conditions", 
