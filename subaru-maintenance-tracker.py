@@ -663,7 +663,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Blurs the rest of the app background when any popup/dialog is opened (v180) */
+        /* Blurs the rest of the app background when any popup/dialog is opened (v181) */
         div[data-testid="stDialog"] {
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
@@ -675,16 +675,26 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-color: rgba(0, 0, 0, 0.45) !important;
         }
 
-        /* Add border for the popup box card itself (v180) */
-        div[data-testid="stDialog"] div[role="dialog"],
-        div[data-baseweb="modal"] div[role="dialog"],
-        div[role="dialog"] {
+        /* Complete robust border coverage for the inner st.dialog / st.modal card panel itself (v181) */
+        div[data-testid="stDialog"] [role="dialog"] > div,
+        div[data-testid="stDialog"] [class*="StyledDialogPanel"],
+        div[data-testid="stDialog"] [class*="StyledModal"],
+        div[data-baseweb="modal"] [role="dialog"] > div,
+        div[data-baseweb="modal"] [class*="StyledDialogPanel"],
+        div[data-baseweb="modal"] [class*="StyledModal"] {
             border: 2px solid #FF007F !important;
             border-radius: 12px !important;
             box-shadow: 0 10px 30px rgba(255, 0, 127, 0.25) !important;
         }
+        
+        /* Clean up any default border on the outermost overlay (v181) */
+        div[data-testid="stDialog"] [role="dialog"],
+        div[data-baseweb="modal"] [role="dialog"] {
+            border: none !important;
+            box-shadow: none !important;
+        }
 
-        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v180) */
+        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v181) */
         div[data-testid="stDialog"] div[data-testid="stNumberInput"] input,
         div[data-baseweb="modal"] div[data-testid="stNumberInput"] input,
         div[role="dialog"] div[data-testid="stNumberInput"] input {
@@ -826,7 +836,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v180) */
+        /* Pure CSS modal system for image zoom (v181) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -918,7 +928,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v180) */
+        /* Banner title block with clean background image (v181) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1156,7 +1166,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v180)
+    # Responsive Brand Logo Header Block with Clean Background Image (v181)
     st.markdown(
         f"""
         <div class="header-banner">
@@ -1196,13 +1206,14 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             """
             <style>
-            div[data-testid="stNumberInput"] input {
+            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v181) */
+            div[data-testid="stAppViewContainer"] div[data-testid="stNumberInput"] input {
                 font-size: 22px !important;
                 height: 52px !important;
                 font-weight: bold !important;
             }
-            /* Style the label beautifully instead of hiding it */
-            div[data-testid="stNumberInput"] label {
+            /* Style the label beautifully instead of hiding it on the main page */
+            div[data-testid="stAppViewContainer"] div[data-testid="stNumberInput"] label {
                 font-family: 'Montserrat', sans-serif !important;
                 font-weight: bold !important;
                 font-size: 14px !important;
@@ -1210,7 +1221,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 margin-bottom: 8px !important;
                 display: block !important;
             }
-            div[data-testid="stNumberInput"] {
+            div[data-testid="stAppViewContainer"] div[data-testid="stNumberInput"] {
                 margin-top: 0px !important;
             }
             </style>
