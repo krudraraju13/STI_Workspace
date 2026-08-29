@@ -663,7 +663,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Blurs the rest of the app background when any popup/dialog is opened (v184) */
+        /* Blurs the rest of the app background when any popup/dialog is opened (v185) */
         div[data-testid="stDialog"] {
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
@@ -675,7 +675,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-color: rgba(0, 0, 0, 0.45) !important;
         }
 
-        /* Border on st-emotion-cache-cpuwpc e1mymz5c2 class matching cross-app lines (v184) */
+        /* Border on st-emotion-cache-cpuwpc e1mymz5c2 class matching cross-app lines (v185) */
         .st-emotion-cache-cpuwpc.e1mymz5c2,
         .st-emotion-cache-cpuwpc {
             border: 1px solid rgba(128, 128, 128, 0.2) !important;
@@ -689,7 +689,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             }
         }
 
-        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v184) */
+        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v185) */
         div[data-testid="stDialog"] div[data-testid="stNumberInput"] input,
         div[data-baseweb="modal"] div[data-testid="stNumberInput"] input,
         div[role="dialog"] div[data-testid="stNumberInput"] input {
@@ -831,7 +831,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v184) */
+        /* Pure CSS modal system for image zoom (v185) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -923,7 +923,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v184) */
+        /* Banner title block with clean background image (v185) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1082,28 +1082,31 @@ if HAS_STREAMLIT and st.runtime.exists():
         # Removed: ✚ Create Manual Service History Record header
         st.write("Manually log a maintenance service entry.")
         
-        # 1. Date Input
-        log_date = st.date_input("Date of Service", value=datetime.date.today())
-        
-        # 2. Time Input (Eastern timezone with math failsafe)
-        current_time_est = "00:00"
+        # Calculate current US/Eastern date and time for default values and max limits
+        now_utc = datetime.datetime.now(datetime.timezone.utc)
+        year = now_utc.year
+        current_time_est_dt = now_utc + datetime.timedelta(hours=-5) # default EST
         try:
             from zoneinfo import ZoneInfo
-            current_time_est = datetime.datetime.now(ZoneInfo("US/Eastern")).strftime("%H:%M")
+            current_time_est_dt = datetime.datetime.now(ZoneInfo("US/Eastern"))
         except Exception:
             try:
-                now_utc = datetime.datetime.now(datetime.timezone.utc)
-                year = now_utc.year
                 mar1 = datetime.datetime(year, 3, 1, tzinfo=datetime.timezone.utc)
                 dst_start = datetime.datetime(year, 3, 1 + (6 - mar1.weekday()) % 7 + 7, 7, tzinfo=datetime.timezone.utc)
                 nov1 = datetime.datetime(year, 11, 1, tzinfo=datetime.timezone.utc)
                 dst_end = datetime.datetime(year, 11, 1 + (6 - nov1.weekday()) % 7, 6, tzinfo=datetime.timezone.utc)
                 if dst_start <= now_utc < dst_end:
-                    current_time_est = (now_utc + datetime.timedelta(hours=-4)).strftime("%H:%M")
-                else:
-                    current_time_est = (now_utc + datetime.timedelta(hours=-5)).strftime("%H:%M")
+                    current_time_est_dt = now_utc + datetime.timedelta(hours=-4) # EDT
             except Exception:
                 pass
+                
+        current_est_date = current_time_est_dt.date()
+        current_time_est = current_time_est_dt.strftime("%H:%M")
+        
+        # 1. Date Input - max_value sets the limit, preventing future dates from being selected in calendar picker
+        log_date = st.date_input("Date of Service", value=current_est_date, max_value=current_est_date)
+        
+        # 2. Time Input
         log_time = st.text_input("Time (HH:MM / US Eastern)", value=current_time_est)
         
         # 3. Mileage Input - Always blank when popup opens as per user request (value=None)
@@ -1253,7 +1256,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v184)
+    # Responsive Brand Logo Header Block with Clean Background Image (v185)
     st.markdown(
         f"""
         <div class="header-banner">
@@ -1293,7 +1296,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             """
             <style>
-            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v184) */
+            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v185) */
             div[data-testid="stAppViewContainer"] div[data-testid="stNumberInput"] input {
                 font-size: 22px !important;
                 height: 52px !important;
