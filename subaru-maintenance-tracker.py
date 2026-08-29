@@ -663,7 +663,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Blurs the rest of the app background when any popup/dialog is opened (v183) */
+        /* Blurs the rest of the app background when any popup/dialog is opened (v184) */
         div[data-testid="stDialog"] {
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
@@ -675,7 +675,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-color: rgba(0, 0, 0, 0.45) !important;
         }
 
-        /* Border on st-emotion-cache-cpuwpc e1mymz5c2 class matching cross-app lines (v183) */
+        /* Border on st-emotion-cache-cpuwpc e1mymz5c2 class matching cross-app lines (v184) */
         .st-emotion-cache-cpuwpc.e1mymz5c2,
         .st-emotion-cache-cpuwpc {
             border: 1px solid rgba(128, 128, 128, 0.2) !important;
@@ -689,7 +689,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             }
         }
 
-        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v183) */
+        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v184) */
         div[data-testid="stDialog"] div[data-testid="stNumberInput"] input,
         div[data-baseweb="modal"] div[data-testid="stNumberInput"] input,
         div[role="dialog"] div[data-testid="stNumberInput"] input {
@@ -831,7 +831,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v183) */
+        /* Pure CSS modal system for image zoom (v184) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -923,7 +923,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v183) */
+        /* Banner title block with clean background image (v184) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1142,11 +1142,11 @@ if HAS_STREAMLIT and st.runtime.exists():
                 
                 # Check for XSS, SQL injection, or control characters that fail validation
                 if custom_item_cleaned and (custom_sanitized != custom_item_cleaned):
-                    st.error("⚠️ Invalid characters detected in Custom Item. Only letters, numbers, spaces, and safe punctuation (- _ . ( ) / + ,) are allowed.")
+                    st.error("▲ Invalid characters detected in Custom Item. Only letters, numbers, spaces, and safe punctuation (- _ . ( ) / + ,) are allowed.")
                     return
                 
                 if len(custom_item_cleaned) > 100:
-                    st.error("⚠️ Custom service item name is too long (maximum 100 characters).")
+                    st.error("▲ Custom service item name is too long (maximum 100 characters).")
                     return
 
                 # Standardize logging list
@@ -1177,7 +1177,7 @@ if HAS_STREAMLIT and st.runtime.exists():
                 # 3. Time input validation (HH:MM regex check)
                 time_clean = log_time.strip()
                 if not re.match(r"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", time_clean):
-                    st.error("⚠️ Invalid time format. Please enter as HH:MM in 24-hour format (e.g., 14:30).")
+                    st.error("▲ Invalid time format. Please enter as HH:MM in 24-hour format (e.g., 14:30).")
                     return
                 
                 # Parse entered hours and minutes
@@ -1185,51 +1185,51 @@ if HAS_STREAMLIT and st.runtime.exists():
 
                 # Date Bounds Checks
                 if log_date is None:
-                    st.error("⚠️ Please select a valid date.")
+                    st.error("▲ Please select a valid date.")
                     return
                 
                 if log_date < datetime.date(2000, 1, 1):
-                    st.error("⚠️ Date is out of reasonable bounds. Please enter a year after 2000.")
+                    st.error("▲ Date is out of reasonable bounds. Please enter a year after 2000.")
                     return
                 
                 # 4. Check for Future Date or Future Time
                 if log_date > current_est_date:
-                    st.error(f"⚠️ Cannot log a future date entry. Current date is {current_est_date.isoformat()}.")
+                    st.error(f"▲ Cannot log a future date entry. Current date is {current_est_date.isoformat()}.")
                     return
                 elif log_date == current_est_date:
                     if log_h > current_est_hour or (log_h == current_est_hour and log_m > current_est_minute):
-                        st.error(f"⚠️ Cannot log a future time entry. Current time is {current_est_hour:02d}:{current_est_minute:02d} US Eastern.")
+                        st.error(f"▲ Cannot log a future time entry. Current time is {current_est_hour:02d}:{current_est_minute:02d} US Eastern.")
                         return
 
                 # 5. Mileage bounds & type validation
                 if log_mileage is None:
-                    st.error("⚠️ Please enter the odometer mileage.")
+                    st.error("▲ Please enter the odometer mileage.")
                     return
                 
                 # Check for decimals/integers
                 try:
                     mileage_val = float(log_mileage)
                     if not mileage_val.is_integer():
-                        st.error("⚠️ Odometer mileage must be a whole number.")
+                        st.error("▲ Odometer mileage must be a whole number.")
                         return
                     mileage_int = int(mileage_val)
                 except ValueError:
-                    st.error("⚠️ Please enter a valid number for odometer mileage.")
+                    st.error("▲ Please enter a valid number for odometer mileage.")
                     return
 
                 if mileage_int < 0 or mileage_int > 500000:
-                    st.error("⚠️ Odometer mileage must be between 0 and 500,000 miles.")
+                    st.error("▲ Odometer mileage must be between 0 and 500,000 miles.")
                     return
                 
                 # 6. Service items checklist validation
                 if not log_items:
-                    st.error("⚠️ Please select or type at least one completed service item.")
+                    st.error("▲ Please select or type at least one completed service item.")
                     return
                 
                 # Ensure selected standard options are 100% matched against the whitelist to prevent spoofing
                 for standard_opt in selected_standard:
                     if standard_opt not in all_options:
-                        st.error("⚠️ Invalid standard maintenance option selected.")
+                        st.error("▲ Invalid standard maintenance option selected.")
                         return
 
                 # Standard verification passed - prepare transaction entry
@@ -1253,7 +1253,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v183)
+    # Responsive Brand Logo Header Block with Clean Background Image (v184)
     st.markdown(
         f"""
         <div class="header-banner">
@@ -1293,7 +1293,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             """
             <style>
-            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v183) */
+            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v184) */
             div[data-testid="stAppViewContainer"] div[data-testid="stNumberInput"] input {
                 font-size: 22px !important;
                 height: 52px !important;
