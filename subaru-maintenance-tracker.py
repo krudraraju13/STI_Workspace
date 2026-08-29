@@ -651,13 +651,8 @@ if HAS_STREAMLIT and st.runtime.exists():
     
 
     # Global CSS customization for fonts, responsiveness, align, spacing, and colors
-    # Dynamic Theme-aware CSS custom styling engine (v176)
-    # Streamlit >= 1.46.0 supports reading the active theme dynamically on st.context.theme.get("type")
-    # This prevents CSS browser media queries from overriding backgrounds on manual theme switches!
-    # Browser-native Unified Theme Engine (v176)
-    # Handles both Light and Dark mode surface tints natively in CSS
-    # Completely resolves circular references and light/dark theme conflicts!
-    custom_style = """
+    st.markdown(
+        """
         <style>
         /* Import premium system fonts */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap');
@@ -783,7 +778,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v176) */
+        /* Pure CSS modal system for image zoom (v177) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -875,7 +870,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v176) */
+        /* Banner title block with clean background image (v177) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -970,61 +965,10 @@ if HAS_STREAMLIT and st.runtime.exists():
                 flex: none !important;
             }
         }
-
-        /* ========================================================== */
-        /* 1. DIRECT AND ANCESTRAL LIGHT MODE SELECTORS (v176) */
-        /* ========================================================== */
-        [data-theme="light"] .stApp,
-        [data-theme="light"].stApp,
-        html[data-theme="light"] .stApp,
-        body[data-theme="light"] .stApp {
-            --background-color: color-mix(in srgb, #FF007F 5%, #ffffff) !important;
-            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #ffffff) !important;
-        }
-
-        @media (prefers-color-scheme: light) {
-            html:not([data-theme="dark"]) body:not([data-theme="dark"]) .stApp:not([data-theme="dark"]) {
-                --background-color: color-mix(in srgb, #FF007F 5%, #ffffff) !important;
-                --secondary-background-color: color-mix(in srgb, #FF007F 10%, #ffffff) !important;
-            }
-        }
-
-        /* ========================================================== */
-        /* 2. DIRECT AND ANCESTRAL DARK MODE SELECTORS (v176) */
-        /* ========================================================== */
-        [data-theme="dark"] .stApp,
-        [data-theme="dark"].stApp,
-        html[data-theme="dark"] .stApp,
-        body[data-theme="dark"] .stApp {
-            --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
-            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1e1e24) !important;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            html:not([data-theme="light"]) body:not([data-theme="light"]) .stApp:not([data-theme="light"]) {
-                --background-color: color-mix(in srgb, #FF007F 5%, #121214) !important;
-                --secondary-background-color: color-mix(in srgb, #FF007F 10%, #1e1e24) !important;
-            }
-        }
-
-        /* Default fallback (Light theme) */
-        .stApp {
-            --background-color: color-mix(in srgb, #FF007F 5%, #ffffff);
-            --secondary-background-color: color-mix(in srgb, #FF007F 10%, #ffffff);
-        }
-
-        /* ========================================================== */
-        /* 3. CORE BACKGROUND OVERRIDES */
-        /* ========================================================== */
-        [data-testid="stAppViewContainer"], .stApp {
-            background-color: var(--background-color) !important;
-        }
-        [data-testid="stHeader"] {
-            background-color: var(--background-color) !important;
-        }
         </style>
-    """
-    st.markdown(custom_style, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True
+    )
 
     @st.dialog("Confirm Service Log")
     def confirm_save_dialog(completed_list, mileage, severe):
@@ -1079,13 +1023,91 @@ if HAS_STREAMLIT and st.runtime.exists():
         with col2:
             if st.button("Cancel", use_container_width=True):
                 st.rerun()
+
+    @st.dialog("Manual Service Log Entry")
+    def manual_log_dialog():
+        st.markdown("##### ➕ Create Manual Service History Record")
+        st.write("Manually log a maintenance service entry directly into your Google Sheets and local history file.")
+        
+        # 1. Date Input
+        log_date = st.date_input("Date of Service", value=datetime.date.today())
+        
+        # 2. Time Input (Eastern timezone with math failsafe)
+        current_time_est = "00:00"
+        try:
+            from zoneinfo import ZoneInfo
+            current_time_est = datetime.datetime.now(ZoneInfo("US/Eastern")).strftime("%H:%M")
+        except Exception:
+            try:
+                now_utc = datetime.datetime.now(datetime.timezone.utc)
+                year = now_utc.year
+                mar1 = datetime.datetime(year, 3, 1, tzinfo=datetime.timezone.utc)
+                dst_start = datetime.datetime(year, 3, 1 + (6 - mar1.weekday()) % 7 + 7, 7, tzinfo=datetime.timezone.utc)
+                nov1 = datetime.datetime(year, 11, 1, tzinfo=datetime.timezone.utc)
+                dst_end = datetime.datetime(year, 11, 1 + (6 - nov1.weekday()) % 7, 6, tzinfo=datetime.timezone.utc)
+                if dst_start <= now_utc < dst_end:
+                    current_time_est = (now_utc + datetime.timedelta(hours=-4)).strftime("%H:%M")
+                else:
+                    current_time_est = (now_utc + datetime.timedelta(hours=-5)).strftime("%H:%M")
+            except Exception:
+                pass
+        log_time = st.text_input("Time (HH:MM / US Eastern)", value=current_time_est)
+        
+        # 3. Mileage Input
+        default_mileage = mileage if mileage is not None else 0
+        log_mileage = st.number_input("Odometer Mileage (mi)", min_value=0, max_value=500000, value=default_mileage, step=1000)
+        
+        # 4. Completed Service Items
+        all_options = [
+            "Replace Engine Oil & Filter",
+            "Rotate Tires & Check Pressures",
+            "Replace Cabin Air Filter",
+            "Inspect Front & Rear Brake Pads & Rotors",
+            "Replace Engine Air Filter",
+            "Replace Brake Fluid",
+            "Replace Manual Transmission Gear Oil",
+            "Replace Rear Differential Gear Oil",
+            "Inspect Fuel Lines and Connections",
+            "Inspect Steering & Suspension Systems",
+            "Replace Spark Plugs",
+            "Replace Timing Belt (EJ257 DOHC)",
+            "Replace Engine Coolant (Super Coolant)"
+        ]
+        selected_standard = st.multiselect("Select Completed Standard Items", options=all_options)
+        custom_item = st.text_input("Add Custom/Other Service Item (Optional)")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        col_ok, col_can = st.columns(2)
+        with col_ok:
+            if st.button("Save Manual Entry", type="primary", use_container_width=True):
+                log_items = [str(x) for x in selected_standard]
+                if custom_item.strip():
+                    log_items.append(custom_item.strip())
+                
+                if not log_items:
+                    st.error("⚠️ Please select or type at least one completed service item.")
+                else:
+                    new_entry = {
+                        "date": log_date.isoformat(),
+                        "time": log_time,
+                        "mileage": int(log_mileage),
+                        "completed_items": log_items
+                    }
+                    save_history(new_entry)
+                    st.success("✓ Manual service log entry saved!")
+                    if "history_cache" in st.session_state:
+                        del st.session_state["history_cache"]
+                    st.rerun()
+        with col_can:
+            if st.button("Close Window", use_container_width=True):
+                st.rerun()
     
 
 
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v176)
+    # Responsive Brand Logo Header Block with Clean Background Image (v177)
     st.markdown(
         f"""
         <div class="header-banner">
@@ -1789,7 +1811,12 @@ if HAS_STREAMLIT and st.runtime.exists():
         )
 
         st.markdown("<hr style='margin:15px 0; border-color:#eee;'/>", unsafe_allow_html=True)
-        st.markdown("### ▤ Chronological Service History Timeline")
+        col_title, col_btn = st.columns([2.2, 1], vertical_alignment="center")
+        with col_title:
+            st.markdown("### ▤ Chronological Service History Timeline")
+        with col_btn:
+            if st.button("➕ Manual Log Entry", use_container_width=True, key="manual_log_btn_trigger"):
+                manual_log_dialog()
         st.write("Below is a detailed timeline showing each completed service item in chronological order as logged from your checklist.")
     
         timeline_data = []
