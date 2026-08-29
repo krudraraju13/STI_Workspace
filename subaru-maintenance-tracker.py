@@ -663,7 +663,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Blurs the rest of the app background when any popup/dialog is opened (v179) */
+        /* Blurs the rest of the app background when any popup/dialog is opened (v180) */
         div[data-testid="stDialog"] {
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
@@ -673,6 +673,27 @@ if HAS_STREAMLIT and st.runtime.exists():
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
             background-color: rgba(0, 0, 0, 0.45) !important;
+        }
+
+        /* Add border for the popup box card itself (v180) */
+        div[data-testid="stDialog"] div[role="dialog"],
+        div[data-baseweb="modal"] div[role="dialog"],
+        div[role="dialog"] {
+            border: 2px solid #FF007F !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.25) !important;
+        }
+
+        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v180) */
+        div[data-testid="stDialog"] div[data-testid="stNumberInput"] input,
+        div[data-baseweb="modal"] div[data-testid="stNumberInput"] input,
+        div[role="dialog"] div[data-testid="stNumberInput"] input {
+            font-weight: normal !important;
+        }
+        div[data-testid="stDialog"] div[data-testid="stNumberInput"] input::placeholder,
+        div[data-baseweb="modal"] div[data-testid="stNumberInput"] input::placeholder,
+        div[role="dialog"] div[data-testid="stNumberInput"] input::placeholder {
+            font-weight: normal !important;
         }
         
         /* Ensure the dialog titles match the cherry blossom pink (#FF007F) of "Factory Specifications" in all modes */
@@ -805,7 +826,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v179) */
+        /* Pure CSS modal system for image zoom (v180) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -897,7 +918,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v179) */
+        /* Banner title block with clean background image (v180) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1054,7 +1075,7 @@ if HAS_STREAMLIT and st.runtime.exists():
     @st.dialog("Manual Service Log Entry")
     def manual_log_dialog():
         # Removed: ✚ Create Manual Service History Record header
-        st.write("Manually log a maintenance service entry directly into your Google Sheets and local history file.")
+        st.write("Manually log a maintenance service entry.")
         
         # 1. Date Input
         log_date = st.date_input("Date of Service", value=datetime.date.today())
@@ -1081,7 +1102,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         log_time = st.text_input("Time (HH:MM / US Eastern)", value=current_time_est)
         
         # 3. Mileage Input - Always blank when popup opens as per user request (value=None)
-        log_mileage = st.number_input("Odometer Mileage (mi)", min_value=0, max_value=500000, value=None, step=1000, placeholder="Enter mileage")
+        log_mileage = st.number_input("Odometer Mileage (mi)", min_value=0, max_value=500000, value=None, step=1000, placeholder="Enter Mileage")
         
         # 4. Completed Service Items
         all_options = [
@@ -1135,7 +1156,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v179)
+    # Responsive Brand Logo Header Block with Clean Background Image (v180)
     st.markdown(
         f"""
         <div class="header-banner">
