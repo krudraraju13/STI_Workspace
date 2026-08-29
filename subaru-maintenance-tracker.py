@@ -663,7 +663,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Blurs the rest of the app background when any popup/dialog is opened (v181) */
+        /* Blurs the rest of the app background when any popup/dialog is opened (v182) */
         div[data-testid="stDialog"] {
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
@@ -675,26 +675,21 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-color: rgba(0, 0, 0, 0.45) !important;
         }
 
-        /* Complete robust border coverage for the inner st.dialog / st.modal card panel itself (v181) */
-        div[data-testid="stDialog"] [role="dialog"] > div,
-        div[data-testid="stDialog"] [class*="StyledDialogPanel"],
-        div[data-testid="stDialog"] [class*="StyledModal"],
-        div[data-baseweb="modal"] [role="dialog"] > div,
-        div[data-baseweb="modal"] [class*="StyledDialogPanel"],
-        div[data-baseweb="modal"] [class*="StyledModal"] {
-            border: 2px solid #FF007F !important;
+        /* Border on st-emotion-cache-cpuwpc e1mymz5c2 class matching cross-app lines (v182) */
+        .st-emotion-cache-cpuwpc.e1mymz5c2,
+        .st-emotion-cache-cpuwpc {
+            border: 1px solid rgba(128, 128, 128, 0.2) !important;
             border-radius: 12px !important;
-            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.25) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
         }
-        
-        /* Clean up any default border on the outermost overlay (v181) */
-        div[data-testid="stDialog"] [role="dialog"],
-        div[data-baseweb="modal"] [role="dialog"] {
-            border: none !important;
-            box-shadow: none !important;
+        @media (prefers-color-scheme: dark) {
+            .st-emotion-cache-cpuwpc.e1mymz5c2,
+            .st-emotion-cache-cpuwpc {
+                border-color: #334155 !important;
+            }
         }
 
-        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v181) */
+        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v182) */
         div[data-testid="stDialog"] div[data-testid="stNumberInput"] input,
         div[data-baseweb="modal"] div[data-testid="stNumberInput"] input,
         div[role="dialog"] div[data-testid="stNumberInput"] input {
@@ -836,7 +831,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v181) */
+        /* Pure CSS modal system for image zoom (v182) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -928,7 +923,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v181) */
+        /* Banner title block with clean background image (v182) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1166,7 +1161,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v181)
+    # Responsive Brand Logo Header Block with Clean Background Image (v182)
     st.markdown(
         f"""
         <div class="header-banner">
@@ -1206,7 +1201,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             """
             <style>
-            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v181) */
+            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v182) */
             div[data-testid="stAppViewContainer"] div[data-testid="stNumberInput"] input {
                 font-size: 22px !important;
                 height: 52px !important;
