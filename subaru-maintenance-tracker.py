@@ -663,7 +663,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Blurs the rest of the app background when any popup/dialog is opened (v178) */
+        /* Blurs the rest of the app background when any popup/dialog is opened (v179) */
         div[data-testid="stDialog"] {
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
@@ -673,6 +673,21 @@ if HAS_STREAMLIT and st.runtime.exists():
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
             background-color: rgba(0, 0, 0, 0.45) !important;
+        }
+        
+        /* Ensure the dialog titles match the cherry blossom pink (#FF007F) of "Factory Specifications" in all modes */
+        div[data-testid="stDialog"] h1,
+        div[data-testid="stDialog"] h2,
+        div[data-testid="stDialog"] h3,
+        div[data-testid="stDialog"] [role="dialog"] h1,
+        div[data-testid="stDialog"] [role="dialog"] h2,
+        div[data-baseweb="modal"] h1,
+        div[data-baseweb="modal"] h2,
+        div[role="dialog"] h1,
+        div[role="dialog"] h2,
+        div[role="dialog"] h3 {
+            color: #FF007F !important;
+            font-family: 'Montserrat', sans-serif !important;
         }
 
         h1, h2, h3, h4, h5, h6, [class*="header"] {
@@ -790,7 +805,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v178) */
+        /* Pure CSS modal system for image zoom (v179) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -882,7 +897,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v178) */
+        /* Banner title block with clean background image (v179) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1038,7 +1053,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
     @st.dialog("Manual Service Log Entry")
     def manual_log_dialog():
-        # Removed: ➕ Create Manual Service History Record header
+        # Removed: ✚ Create Manual Service History Record header
         st.write("Manually log a maintenance service entry directly into your Google Sheets and local history file.")
         
         # 1. Date Input
@@ -1065,9 +1080,8 @@ if HAS_STREAMLIT and st.runtime.exists():
                 pass
         log_time = st.text_input("Time (HH:MM / US Eastern)", value=current_time_est)
         
-        # 3. Mileage Input
-        default_mileage = mileage if mileage is not None else 0
-        log_mileage = st.number_input("Odometer Mileage (mi)", min_value=0, max_value=500000, value=default_mileage, step=1000)
+        # 3. Mileage Input - Always blank when popup opens as per user request (value=None)
+        log_mileage = st.number_input("Odometer Mileage (mi)", min_value=0, max_value=500000, value=None, step=1000, placeholder="Enter mileage")
         
         # 4. Completed Service Items
         all_options = [
@@ -1096,7 +1110,9 @@ if HAS_STREAMLIT and st.runtime.exists():
                 if custom_item.strip():
                     log_items.append(custom_item.strip())
                 
-                if not log_items:
+                if log_mileage is None:
+                    st.error("⚠️ Please enter the odometer mileage.")
+                elif not log_items:
                     st.error("⚠️ Please select or type at least one completed service item.")
                 else:
                     new_entry = {
@@ -1119,7 +1135,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v178)
+    # Responsive Brand Logo Header Block with Clean Background Image (v179)
     st.markdown(
         f"""
         <div class="header-banner">
@@ -1832,7 +1848,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         with col_title:
             st.markdown("### ▤ Chronological Service History Timeline")
         with col_btn:
-            if st.button("➕ Manual Log Entry", use_container_width=True, key="manual_log_btn_trigger"):
+            if st.button("✚ Manual Log Entry", use_container_width=True, key="manual_log_btn_trigger"):
                 manual_log_dialog()
         st.write("Below is a detailed timeline showing each completed service item in chronological order as logged from your checklist.")
     
