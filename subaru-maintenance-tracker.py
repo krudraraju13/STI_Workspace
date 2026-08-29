@@ -663,7 +663,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             color: var(--text-color) !important;
         }
 
-        /* Blurs the rest of the app background when any popup/dialog is opened (v182) */
+        /* Blurs the rest of the app background when any popup/dialog is opened (v183) */
         div[data-testid="stDialog"] {
             backdrop-filter: blur(8px) !important;
             -webkit-backdrop-filter: blur(8px) !important;
@@ -675,7 +675,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             background-color: rgba(0, 0, 0, 0.45) !important;
         }
 
-        /* Border on st-emotion-cache-cpuwpc e1mymz5c2 class matching cross-app lines (v182) */
+        /* Border on st-emotion-cache-cpuwpc e1mymz5c2 class matching cross-app lines (v183) */
         .st-emotion-cache-cpuwpc.e1mymz5c2,
         .st-emotion-cache-cpuwpc {
             border: 1px solid rgba(128, 128, 128, 0.2) !important;
@@ -689,7 +689,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             }
         }
 
-        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v182) */
+        /* Unbold the Odometer Input placeholder/typed text "Enter Mileage" inside popup boxes (v183) */
         div[data-testid="stDialog"] div[data-testid="stNumberInput"] input,
         div[data-baseweb="modal"] div[data-testid="stNumberInput"] input,
         div[role="dialog"] div[data-testid="stNumberInput"] input {
@@ -831,7 +831,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
 
-        /* Pure CSS modal system for image zoom (v182) */
+        /* Pure CSS modal system for image zoom (v183) */
         .css-modal, .css-modal-class {
             display: none;
             position: fixed;
@@ -923,7 +923,7 @@ if HAS_STREAMLIT and st.runtime.exists():
             box-shadow: 0 10px 25px rgba(255, 0, 127, 0.2) !important;
         }
 
-        /* Banner title block with clean background image (v182) */
+        /* Banner title block with clean background image (v183) */
         .header-banner {
             position: relative;
             width: 100%;
@@ -1132,26 +1132,118 @@ if HAS_STREAMLIT and st.runtime.exists():
         col_ok, col_can = st.columns(2)
         with col_ok:
             if st.button("Save Manual Entry", type="primary", use_container_width=True):
-                log_items = [str(x) for x in selected_standard]
-                if custom_item.strip():
-                    log_items.append(custom_item.strip())
+                # 1. Clean and sanitize Custom Item (SQL Injection, HTML, and Script Injection Defense)
+                custom_item_cleaned = custom_item.strip()
                 
+                # Sanitization for Custom Item: Whitelist alphanumeric and basic safe punctuation/separators
+                # Allowed punctuation: spaces, hyphens, underscores, periods, parentheses, slash, plus, comma.
+                import re
+                custom_sanitized = re.sub(r"[^A-Za-z0-9\s\-_()./+,]", "", custom_item_cleaned)
+                
+                # Check for XSS, SQL injection, or control characters that fail validation
+                if custom_item_cleaned and (custom_sanitized != custom_item_cleaned):
+                    st.error("⚠️ Invalid characters detected in Custom Item. Only letters, numbers, spaces, and safe punctuation (- _ . ( ) / + ,) are allowed.")
+                    return
+                
+                if len(custom_item_cleaned) > 100:
+                    st.error("⚠️ Custom service item name is too long (maximum 100 characters).")
+                    return
+
+                # Standardize logging list
+                log_items = [str(x) for x in selected_standard]
+                if custom_item_cleaned:
+                    log_items.append(custom_item_cleaned)
+                
+                # 2. Date / Time Validation (Avoid Future Entries)
+                # Mathematical US Eastern timezone calculator to get current date/time
+                now_utc = datetime.datetime.now(datetime.timezone.utc)
+                year = now_utc.year
+                current_time_est_dt = now_utc + datetime.timedelta(hours=-5) # default EST
+                try:
+                    # Let's perform precise US Eastern DST calculation
+                    mar1 = datetime.datetime(year, 3, 1, tzinfo=datetime.timezone.utc)
+                    dst_start = datetime.datetime(year, 3, 1 + (6 - mar1.weekday()) % 7 + 7, 7, tzinfo=datetime.timezone.utc)
+                    nov1 = datetime.datetime(year, 11, 1, tzinfo=datetime.timezone.utc)
+                    dst_end = datetime.datetime(year, 11, 1 + (6 - nov1.weekday()) % 7, 6, tzinfo=datetime.timezone.utc)
+                    if dst_start <= now_utc < dst_end:
+                        current_time_est_dt = now_utc + datetime.timedelta(hours=-4) # EDT
+                except Exception:
+                    pass
+                
+                current_est_date = current_time_est_dt.date()
+                current_est_hour = current_time_est_dt.hour
+                current_est_minute = current_time_est_dt.minute
+
+                # 3. Time input validation (HH:MM regex check)
+                time_clean = log_time.strip()
+                if not re.match(r"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", time_clean):
+                    st.error("⚠️ Invalid time format. Please enter as HH:MM in 24-hour format (e.g., 14:30).")
+                    return
+                
+                # Parse entered hours and minutes
+                log_h, log_m = map(int, time_clean.split(":"))
+
+                # Date Bounds Checks
+                if log_date is None:
+                    st.error("⚠️ Please select a valid date.")
+                    return
+                
+                if log_date < datetime.date(2000, 1, 1):
+                    st.error("⚠️ Date is out of reasonable bounds. Please enter a year after 2000.")
+                    return
+                
+                # 4. Check for Future Date or Future Time
+                if log_date > current_est_date:
+                    st.error(f"⚠️ Cannot log a future date entry. Current date is {current_est_date.isoformat()}.")
+                    return
+                elif log_date == current_est_date:
+                    if log_h > current_est_hour or (log_h == current_est_hour and log_m > current_est_minute):
+                        st.error(f"⚠️ Cannot log a future time entry. Current time is {current_est_hour:02d}:{current_est_minute:02d} US Eastern.")
+                        return
+
+                # 5. Mileage bounds & type validation
                 if log_mileage is None:
                     st.error("⚠️ Please enter the odometer mileage.")
-                elif not log_items:
+                    return
+                
+                # Check for decimals/integers
+                try:
+                    mileage_val = float(log_mileage)
+                    if not mileage_val.is_integer():
+                        st.error("⚠️ Odometer mileage must be a whole number.")
+                        return
+                    mileage_int = int(mileage_val)
+                except ValueError:
+                    st.error("⚠️ Please enter a valid number for odometer mileage.")
+                    return
+
+                if mileage_int < 0 or mileage_int > 500000:
+                    st.error("⚠️ Odometer mileage must be between 0 and 500,000 miles.")
+                    return
+                
+                # 6. Service items checklist validation
+                if not log_items:
                     st.error("⚠️ Please select or type at least one completed service item.")
-                else:
-                    new_entry = {
-                        "date": log_date.isoformat(),
-                        "time": log_time,
-                        "mileage": int(log_mileage),
-                        "completed_items": log_items
-                    }
-                    save_history(new_entry)
-                    st.success("✓ Manual service log entry saved!")
-                    if "history_cache" in st.session_state:
-                        del st.session_state["history_cache"]
-                    st.rerun()
+                    return
+                
+                # Ensure selected standard options are 100% matched against the whitelist to prevent spoofing
+                for standard_opt in selected_standard:
+                    if standard_opt not in all_options:
+                        st.error("⚠️ Invalid standard maintenance option selected.")
+                        return
+
+                # Standard verification passed - prepare transaction entry
+                new_entry = {
+                    "date": log_date.isoformat(),
+                    "time": time_clean,
+                    "mileage": mileage_int,
+                    "completed_items": log_items
+                }
+                save_history(new_entry)
+                st.success("✓ Manual service log entry saved!")
+                if "history_cache" in st.session_state:
+                    del st.session_state["history_cache"]
+                st.rerun()
         with col_can:
             if st.button("Close Window", use_container_width=True):
                 st.rerun()
@@ -1161,7 +1253,7 @@ if HAS_STREAMLIT and st.runtime.exists():
 
 
         # Responsive Brand Logo Header Block (STI & Subaru Logos flanking the Title)
-    # Responsive Brand Logo Header Block with Clean Background Image (v182)
+    # Responsive Brand Logo Header Block with Clean Background Image (v183)
     st.markdown(
         f"""
         <div class="header-banner">
@@ -1201,7 +1293,7 @@ if HAS_STREAMLIT and st.runtime.exists():
         st.markdown(
             """
             <style>
-            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v182) */
+            /* Scope large mileage inputs strictly to the main app container so they don't leak into popup boxes (v183) */
             div[data-testid="stAppViewContainer"] div[data-testid="stNumberInput"] input {
                 font-size: 22px !important;
                 height: 52px !important;
